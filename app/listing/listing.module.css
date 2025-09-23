@@ -1,0 +1,466 @@
+/* CSS Module cho trang Listing - RadioCabs.in */
+
+.listingContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.listingHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(0, 0, 0, 0.9) 100%);
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.listingHeader::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 193, 7, 0.1), transparent 70%);
+  z-index: 0;
+}
+
+.listingHeaderContent {
+  position: relative;
+  z-index: 1;
+}
+
+.listingHeader h1 {
+  font-size: 3.5rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, #fbbf24, #f59e0b, #fbbf24);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.listingHeader p {
+  font-size: 1.25rem;
+  color: #e5e7eb;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.tabsContainer {
+  margin-bottom: 2rem;
+}
+
+.tabsList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.tabTrigger {
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  background: transparent;
+  color: #fbbf24;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.tabTrigger.active {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.formCard {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  box-shadow: 0 20px 40px rgba(251, 191, 36, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.formCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 20% 80%, rgba(251, 191, 36, 0.05), transparent 50%);
+  z-index: 0;
+}
+
+.formContent {
+  position: relative;
+  z-index: 1;
+}
+
+.formHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.formTitle {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #fbbf24, #f59e0b, #fbbf24);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.formDescription {
+  font-size: 1.1rem;
+  color: #e5e7eb;
+  line-height: 1.6;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.formSection {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.formSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.formSection:hover::before {
+  transform: scaleX(1);
+}
+
+.sectionTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formLabel {
+  display: block;
+  color: #fbbf24;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.formInput {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.formInput:focus {
+  outline: none;
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.formInput::placeholder {
+  color: #9ca3af;
+}
+
+.formSelect {
+  width: 100%;
+  padding: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.formSelect:focus {
+  outline: none;
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+.priceDisplay {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  margin: 2rem 0;
+}
+
+.priceText {
+  color: #fbbf24;
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.priceAmount {
+  color: #fbbf24;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-left: 0.5rem;
+}
+
+.buttonGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.submitButton {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.submitButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+}
+
+.resetButton {
+  background: transparent;
+  color: #fbbf24;
+  padding: 1rem 2rem;
+  border: 2px solid rgba(251, 191, 36, 0.5);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.resetButton:hover {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: #fbbf24;
+}
+
+.searchSection {
+  background: rgba(31, 41, 55, 0.8);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+  margin-bottom: 2rem;
+}
+
+.searchInputGroup {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 1rem;
+  border: 2px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #fbbf24;
+  box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+}
+
+.searchButton {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+}
+
+.searchButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(251, 191, 36, 0.4);
+}
+
+.searchResults {
+  margin-top: 2rem;
+}
+
+.searchResultsTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.searchPlaceholder {
+  text-align: center;
+  padding: 3rem;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  background: rgba(251, 191, 36, 0.05);
+  color: #e5e7eb;
+}
+
+.searchPlaceholderIcon {
+  width: 3rem;
+  height: 3rem;
+  color: #fbbf24;
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+}
+
+.companyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.companyCard {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 2px solid rgba(251, 191, 36, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.companyCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b, #fbbf24);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.companyCard:hover::before {
+  transform: scaleX(1);
+}
+
+.companyCard:hover {
+  border-color: #fbbf24;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(251, 191, 36, 0.3);
+}
+
+.companyLogo {
+  width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  object-fit: cover;
+  border: 2px solid #fbbf24;
+}
+
+.companyName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fbbf24;
+  margin-bottom: 1rem;
+}
+
+.companyDescription {
+  color: #d1d5db;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.companyFeatures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.featureTag {
+  background: rgba(251, 191, 36, 0.1);
+  color: #fbbf24;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.contactButton {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #1f2937;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  transition: all 0.3s ease;
+  width: 100%;
+  text-align: center;
+  border: none;
+  cursor: pointer;
+}
+
+.contactButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
+  color: #1f2937;
+}

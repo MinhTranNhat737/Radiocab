@@ -25,7 +25,7 @@ import {
 
 function HeroSection() {
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden">
+    <section className="relative py-12 lg:py-16 overflow-hidden">
       <div className="absolute inset-0 gradient-black-yellow opacity-80" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -41,35 +41,35 @@ function HeroSection() {
       </div>
 
       <div className="container relative">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-8 animate-slide-in-left">
+        <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[50vh]">
+          <div className="space-y-6 animate-slide-in-left flex flex-col justify-center text-center lg:text-left lg:pl-12">
             <div className="space-y-4">
-              <h1 className="text-4xl lg:text-6xl font-bold text-balance leading-tight">
+              <h1 className="text-3xl lg:text-5xl font-bold text-balance leading-tight">
                 Kết nối{" "}
                 <span className="text-primary bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-pulse-yellow">
                   Taxi
                 </span>{" "}
                 dễ dàng hơn bao giờ hết
               </h1>
-              <p className="text-xl text-muted-foreground text-pretty max-w-lg">
+              <p className="text-lg text-muted-foreground text-pretty max-w-md">
                 Cổng thông tin hàng đầu cho công ty taxi, tài xế và khách hàng. Đăng ký dịch vụ, quảng cáo và tìm kiếm
                 thông tin một cách nhanh chóng.
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <Link href="/listing">
                 <Button
-                  size="lg"
+                  size="default"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 animate-glow hover-lift w-full sm:w-auto"
                 >
-                  <Zap className="h-5 w-5 mr-2" />
+                  <Zap className="h-4 w-4 mr-2" />
                   Đăng Ký Công Ty Taxi
                 </Button>
               </Link>
               <Link href="/drivers">
                 <Button
-                  size="lg"
+                  size="default"
                   variant="outline"
                   className="border-primary text-primary hover:bg-primary hover:text-primary-foreground hover-glow bg-transparent w-full sm:w-auto"
                 >
@@ -165,7 +165,7 @@ function FeaturesSection() {
 
   return (
     <section id="features" className="py-20 bg-background/50">
-      <div className="container">
+      <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16 animate-fade-in-up">
           <h2 className="text-3xl lg:text-4xl font-bold text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Tại sao chọn RadioCabs.in?
@@ -175,7 +175,7 @@ function FeaturesSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
           {features.map((feature, index) => (
             <Card
               key={index}
@@ -256,7 +256,7 @@ function PricingSection() {
 
   return (
     <section id="pricing" className="py-20">
-      <div className="container">
+      <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-balance">Bảng giá linh hoạt</h2>
           <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
@@ -264,11 +264,11 @@ function PricingSection() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-7xl mx-auto justify-items-center">
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative border-border/50 bg-card/50 backdrop-blur ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
+              className={`relative border-border/50 bg-card/50 backdrop-blur w-full max-w-sm ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
             >
               {plan.popular && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
@@ -277,34 +277,35 @@ function PricingSection() {
                 </Badge>
               )}
 
-              <CardHeader className="text-center pb-8">
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+              <CardHeader className="text-center pb-6 px-4">
+                <CardTitle className="text-xl">{plan.name}</CardTitle>
                 <div className="space-y-2">
                   <div className="flex items-baseline justify-center gap-1">
-                    <span className="text-4xl font-bold text-primary">{plan.price}</span>
-                    <span className="text-sm text-muted-foreground">/{plan.period}</span>
+                    <span className="text-3xl font-bold text-primary">{plan.price}</span>
+                    <span className="text-xs text-muted-foreground">/{plan.period}</span>
                   </div>
                   {plan.quarterlyPrice && (
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-xs text-muted-foreground">
                       Hoặc {plan.quarterlyPrice} {plan.quarterlyPeriod} (tiết kiệm 10%)
                     </div>
                   )}
                 </div>
-                <CardDescription className="text-base">{plan.description}</CardDescription>
+                <CardDescription className="text-sm leading-relaxed">{plan.description}</CardDescription>
               </CardHeader>
 
-              <CardContent className="space-y-6">
-                <ul className="space-y-3">
+              <CardContent className="space-y-4 px-4">
+                <ul className="space-y-2">
                   {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-accent mt-0.5 flex-shrink-0" />
-                      <span className="text-sm leading-relaxed">{feature}</span>
+                    <li key={featureIndex} className="flex items-start gap-2">
+                      <Check className="h-4 w-4 text-accent mt-0.5 flex-shrink-0" />
+                      <span className="text-xs leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <Button
-                  className={`w-full ${plan.popular ? "bg-primary text-primary-foreground hover:bg-primary/90" : ""}`}
+                  size="sm"
+                  className={`w-full text-sm ${plan.popular ? "bg-primary text-primary-foreground hover:bg-primary/90" : ""}`}
                   variant={plan.popular ? "default" : "outline"}
                 >
                   {plan.buttonText}
@@ -332,7 +333,7 @@ function PartnersSection() {
 
   return (
     <section id="partners" className="py-20 bg-muted/30">
-      <div className="container">
+      <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
           <h2 className="text-3xl lg:text-4xl font-bold text-balance">Đối tác tin cậy</h2>
           <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
@@ -340,8 +341,8 @@ function PartnersSection() {
           </p>
         </div>
 
-        <Card className="p-8 bg-card/50 backdrop-blur border-border/50">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center">
+        <Card className="p-12 bg-card/50 backdrop-blur border-border/50 max-w-full mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10 items-center justify-items-center">
             {partners.map((partner, index) => (
               <div
                 key={index}
@@ -350,14 +351,14 @@ function PartnersSection() {
                 <img
                   src={partner.logo || "/placeholder.svg"}
                   alt={`${partner.name} logo`}
-                  className="h-12 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
+                  className="h-24 w-auto object-contain opacity-60 hover:opacity-100 transition-opacity"
                 />
               </div>
             ))}
           </div>
         </Card>
 
-        <div className="grid md:grid-cols-3 gap-8 mt-16">
+        <div className="grid md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
           <div className="text-center">
             <div className="text-4xl font-bold text-primary mb-2">500+</div>
             <div className="text-muted-foreground">Công ty taxi</div>
@@ -379,7 +380,7 @@ function PartnersSection() {
 function Footer() {
   return (
     <footer id="contact" className="bg-secondary text-secondary-foreground">
-      <div className="container py-16">
+      <div className="container max-w-7xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="space-y-4">
             <div className="flex items-center gap-2">

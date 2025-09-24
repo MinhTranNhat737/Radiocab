@@ -111,17 +111,17 @@ export default function ServicesPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-yellow-400">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400">
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-black via-yellow-900/10 to-black relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_60%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
             Dịch vụ & Thông tin
           </h1>
-          <p className="text-xl text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Khám phá các dịch vụ toàn diện của RadioCabs.in - nền tảng kết nối hàng đầu trong ngành taxi tại Việt Nam
           </p>
         </div>
@@ -133,8 +133,8 @@ export default function ServicesPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-yellow-400 mb-2">{stat.number}</div>
-                <div className="text-yellow-200">{stat.label}</div>
+                <div className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-yellow-400 mb-2">{stat.number}</div>
+                <div className="text-gray-600 dark:text-yellow-200">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -144,7 +144,7 @@ export default function ServicesPage() {
       {/* Services Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-yellow-400 mb-12">Các dịch vụ của chúng tôi</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Các dịch vụ của chúng tôi</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
               <Card
@@ -157,21 +157,21 @@ export default function ServicesPage() {
                       <service.icon className="w-6 h-6 text-black" />
                     </div>
                     <div>
-                      <CardTitle className="text-2xl text-yellow-400">{service.title}</CardTitle>
-                      <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 mt-1">
+                      <CardTitle className="text-2xl text-gray-900 dark:text-yellow-400">{service.title}</CardTitle>
+                      <Badge className="bg-yellow-500/20 text-gray-900 dark:text-yellow-400 border-yellow-500/30 mt-1">
                         {service.pricing}
                       </Badge>
                     </div>
                   </div>
-                  <CardDescription className="text-yellow-200 text-base">{service.description}</CardDescription>
+                  <CardDescription className="text-gray-600 dark:text-yellow-200 text-base">{service.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="text-yellow-400 font-semibold mb-2">Tính năng chính:</h4>
+                      <h4 className="text-gray-900 dark:text-yellow-400 font-semibold mb-2">Tính năng chính:</h4>
                       <ul className="space-y-2">
                         {service.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-center space-x-2 text-yellow-200">
+                          <li key={idx} className="flex items-center space-x-2 text-gray-600 dark:text-yellow-200">
                             <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
                             <span>{feature}</span>
                           </li>
@@ -195,7 +195,7 @@ export default function ServicesPage() {
       {/* Benefits Section */}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-yellow-400 mb-12">Tại sao chọn RadioCabs.in?</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Tại sao chọn RadioCabs.in?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
               <Card
@@ -206,8 +206,8 @@ export default function ServicesPage() {
                   <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <benefit.icon className="w-8 h-8 text-black" />
                   </div>
-                  <h3 className="text-xl font-semibold text-yellow-400 mb-2">{benefit.title}</h3>
-                  <p className="text-yellow-200 text-sm">{benefit.description}</p>
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">{benefit.title}</h3>
+                  <p className="text-gray-600 dark:text-yellow-200 text-sm">{benefit.description}</p>
                 </CardContent>
               </Card>
             ))}
@@ -218,7 +218,7 @@ export default function ServicesPage() {
       {/* Testimonials Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-yellow-400 mb-12">Khách hàng nói gì về chúng tôi</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Khách hàng nói gì về chúng tôi</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
@@ -227,14 +227,14 @@ export default function ServicesPage() {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${i < testimonial.rating ? "text-yellow-400 fill-current" : "text-yellow-600"}`}
+                        className={`w-4 h-4 ${i < testimonial.rating ? "text-gray-900 dark:text-yellow-400 fill-current" : "text-gray-600 dark:text-yellow-600"}`}
                       />
                     ))}
                   </div>
-                  <p className="text-yellow-200 mb-4 italic">"{testimonial.content}"</p>
+                  <p className="text-gray-600 dark:text-yellow-200 mb-4 italic">"{testimonial.content}"</p>
                   <div>
-                    <p className="text-yellow-400 font-semibold">{testimonial.name}</p>
-                    <p className="text-yellow-300 text-sm">{testimonial.role}</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">{testimonial.name}</p>
+                    <p className="text-gray-700 dark:text-yellow-300 text-sm">{testimonial.role}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -246,35 +246,35 @@ export default function ServicesPage() {
       {/* How it Works Section */}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-yellow-400 mb-12">Cách thức hoạt động</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Cách thức hoạt động</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">1</span>
               </div>
-              <h3 className="text-xl font-semibold text-yellow-400 mb-2">Đăng ký</h3>
-              <p className="text-yellow-200 text-sm">Tạo tài khoản và điền thông tin cần thiết</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Đăng ký</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Tạo tài khoản và điền thông tin cần thiết</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">2</span>
               </div>
-              <h3 className="text-xl font-semibold text-yellow-400 mb-2">Xác thực</h3>
-              <p className="text-yellow-200 text-sm">Chúng tôi xác thực thông tin và phê duyệt</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Xác thực</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Chúng tôi xác thực thông tin và phê duyệt</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">3</span>
               </div>
-              <h3 className="text-xl font-semibold text-yellow-400 mb-2">Kích hoạt</h3>
-              <p className="text-yellow-200 text-sm">Tài khoản được kích hoạt và sẵn sàng sử dụng</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Kích hoạt</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Tài khoản được kích hoạt và sẵn sàng sử dụng</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">4</span>
               </div>
-              <h3 className="text-xl font-semibold text-yellow-400 mb-2">Kết nối</h3>
-              <p className="text-yellow-200 text-sm">Bắt đầu kết nối và sử dụng dịch vụ</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Kết nối</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Bắt đầu kết nối và sử dụng dịch vụ</p>
             </div>
           </div>
         </div>
@@ -285,8 +285,8 @@ export default function ServicesPage() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-4xl font-bold text-yellow-400 mb-6">Liên hệ với chúng tôi</h2>
-              <p className="text-yellow-200 mb-8 text-lg">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-yellow-400 mb-6">Liên hệ với chúng tôi</h2>
+              <p className="text-gray-600 dark:text-yellow-200 mb-8 text-lg">
                 Có câu hỏi hoặc cần hỗ trợ? Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng giúp đỡ bạn 24/7.
               </p>
               <div className="space-y-6">
@@ -295,8 +295,8 @@ export default function ServicesPage() {
                     <Phone className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-yellow-400 font-semibold">Hotline</p>
-                    <p className="text-yellow-200">1900-xxxx (24/7)</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Hotline</p>
+                    <p className="text-gray-600 dark:text-yellow-200">1900-xxxx (24/7)</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -304,8 +304,8 @@ export default function ServicesPage() {
                     <Mail className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-yellow-400 font-semibold">Email</p>
-                    <p className="text-yellow-200">support@radiocabs.in</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Email</p>
+                    <p className="text-gray-600 dark:text-yellow-200">support@radiocabs.in</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -313,8 +313,8 @@ export default function ServicesPage() {
                     <MapPin className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-yellow-400 font-semibold">Địa chỉ</p>
-                    <p className="text-yellow-200">123 Đường ABC, Quận 1, TP.HCM</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Địa chỉ</p>
+                    <p className="text-gray-600 dark:text-yellow-200">123 Đường ABC, Quận 1, TP.HCM</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -322,8 +322,8 @@ export default function ServicesPage() {
                     <Clock className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-yellow-400 font-semibold">Giờ làm việc</p>
-                    <p className="text-yellow-200">24/7 - Hỗ trợ không ngừng nghỉ</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Giờ làm việc</p>
+                    <p className="text-gray-600 dark:text-yellow-200">24/7 - Hỗ trợ không ngừng nghỉ</p>
                   </div>
                 </div>
               </div>
@@ -331,8 +331,8 @@ export default function ServicesPage() {
 
             <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
               <CardHeader>
-                <CardTitle className="text-2xl text-yellow-400">Bắt đầu ngay hôm nay</CardTitle>
-                <CardDescription className="text-yellow-200">Chọn dịch vụ phù hợp với nhu cầu của bạn</CardDescription>
+                <CardTitle className="text-2xl text-gray-900 dark:text-yellow-400">Bắt đầu ngay hôm nay</CardTitle>
+                <CardDescription className="text-gray-600 dark:text-yellow-200">Chọn dịch vụ phù hợp với nhu cầu của bạn</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Button
@@ -365,7 +365,7 @@ export default function ServicesPage() {
                 <Button
                   asChild
                   variant="outline"
-                  className="w-full border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
+                  className="w-full border-yellow-500/50 text-gray-700 dark:text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
                 >
                   <Link href="/feedback">
                     <MessageSquare className="w-4 h-4 mr-2" />
@@ -378,98 +378,6 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-black via-yellow-900/20 to-black border-t border-yellow-500/30 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                  <Info className="w-5 h-5 text-black" />
-                </div>
-                <span className="text-xl font-bold text-yellow-400">RadioCabs.in</span>
-              </div>
-              <p className="text-yellow-200 text-sm leading-relaxed">
-                Cổng thông tin kết nối công ty taxi, tài xế và khách hàng tại Việt Nam.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Dịch vụ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/listing" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký công ty
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/drivers" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký tài xế
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/advertise" className="hover:text-yellow-300 transition-colors">
-                    Quảng cáo
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services" className="hover:text-yellow-300 transition-colors">
-                    Thông tin dịch vụ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Hỗ trợ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/feedback" className="hover:text-yellow-300 transition-colors">
-                    Góp ý
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className="hover:text-yellow-300 transition-colors">
-                    Đăng nhập
-                  </Link>
-                </li>
-                <li>
-                  <a href="tel:1900-xxxx" className="hover:text-yellow-300 transition-colors">
-                    Hotline: 1900-xxxx
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@radiocabs.in" className="hover:text-yellow-300 transition-colors">
-                    Email: info@radiocabs.in
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Liên hệ</h4>
-              <div className="space-y-2 text-yellow-200 text-sm">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-yellow-400" />
-                  <span>123 Đường ABC, Quận 1, TP.HCM</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="w-4 h-4 text-yellow-400" />
-                  <span>0123-456-789</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-yellow-400" />
-                  <span>contact@radiocabs.in</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-yellow-500/30 mt-8 pt-8 text-center">
-            <p className="text-yellow-200 text-sm">© 2025 RadioCabs.in. Tất cả quyền được bảo lưu.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

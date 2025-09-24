@@ -71,11 +71,11 @@ export default function ListingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-yellow-400">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400">
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-black via-yellow-900/10 to-black relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
@@ -105,9 +105,9 @@ export default function ListingPage() {
 
             {/* Registration Form */}
             <TabsContent value="register">
-              <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
+              <Card className="bg-gradient-to-br from-yellow-200/80 to-yellow-300/80 dark:from-yellow-900/20 dark:to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-3xl text-yellow-400 mb-2">Đăng ký công ty taxi</CardTitle>
+                  <CardTitle className="text-3xl text-gray-900 dark:text-yellow-400 mb-2">Đăng ký công ty taxi</CardTitle>
                   <CardDescription className="text-yellow-200">
                     Điền thông tin để đăng ký công ty taxi của bạn
                   </CardDescription>
@@ -130,7 +130,7 @@ export default function ListingPage() {
                             id="companyName"
                             value={formData.companyName}
                             onChange={(e) => handleInputChange("companyName", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -143,7 +143,7 @@ export default function ListingPage() {
                             id="companyId"
                             value={formData.companyId}
                             onChange={(e) => handleInputChange("companyId", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -157,7 +157,7 @@ export default function ListingPage() {
                             type="password"
                             value={formData.password}
                             onChange={(e) => handleInputChange("password", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -170,7 +170,7 @@ export default function ListingPage() {
                             id="contactPerson"
                             value={formData.contactPerson}
                             onChange={(e) => handleInputChange("contactPerson", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -183,7 +183,7 @@ export default function ListingPage() {
                             id="designation"
                             value={formData.designation}
                             onChange={(e) => handleInputChange("designation", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                           />
                         </div>
                       </div>
@@ -203,7 +203,7 @@ export default function ListingPage() {
                             id="address"
                             value={formData.address}
                             onChange={(e) => handleInputChange("address", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -216,7 +216,7 @@ export default function ListingPage() {
                             id="mobile"
                             value={formData.mobile}
                             onChange={(e) => handleInputChange("mobile", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -229,7 +229,7 @@ export default function ListingPage() {
                             id="telephone"
                             value={formData.telephone}
                             onChange={(e) => handleInputChange("telephone", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                           />
                         </div>
 
@@ -241,7 +241,7 @@ export default function ListingPage() {
                             id="fax"
                             value={formData.fax}
                             onChange={(e) => handleInputChange("fax", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                           />
                         </div>
 
@@ -254,7 +254,7 @@ export default function ListingPage() {
                             type="email"
                             value={formData.email}
                             onChange={(e) => handleInputChange("email", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -272,11 +272,11 @@ export default function ListingPage() {
                           value={formData.membershipType}
                           onValueChange={(value) => handleInputChange("membershipType", value)}
                         >
-                          <SelectTrigger className="bg-black/50 border-yellow-500/50 text-yellow-100">
+                          <SelectTrigger className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100">
                             <SelectValue placeholder="Chọn loại thành viên" />
                           </SelectTrigger>
-                          <SelectContent className="bg-black border-yellow-500/50">
-                            <SelectItem value="Premium" className="text-yellow-100">
+                          <SelectContent className="bg-white dark:bg-black border-yellow-500/50">
+                            <SelectItem value="Premium" className="text-gray-900 dark:text-yellow-100">
                               Premium
                             </SelectItem>
                             <SelectItem value="Basic" className="text-yellow-100">
@@ -298,10 +298,10 @@ export default function ListingPage() {
                           value={formData.paymentType}
                           onValueChange={(value) => handleInputChange("paymentType", value)}
                         >
-                          <SelectTrigger className="bg-black/50 border-yellow-500/50 text-yellow-100">
+                          <SelectTrigger className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100">
                             <SelectValue placeholder="Chọn hình thức thanh toán" />
                           </SelectTrigger>
-                          <SelectContent className="bg-black border-yellow-500/50">
+                          <SelectContent className="bg-white dark:bg-black border-yellow-500/50">
                             <SelectItem value="monthly" className="text-yellow-100">
                               Theo tháng
                             </SelectItem>
@@ -349,9 +349,9 @@ export default function ListingPage() {
 
             {/* Search Section */}
             <TabsContent value="search">
-              <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
+              <Card className="bg-gradient-to-br from-yellow-200/80 to-yellow-300/80 dark:from-yellow-900/20 dark:to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-3xl text-yellow-400 mb-2">Tìm kiếm công ty taxi</CardTitle>
+                  <CardTitle className="text-3xl text-gray-900 dark:text-yellow-400 mb-2">Tìm kiếm công ty taxi</CardTitle>
                   <CardDescription className="text-yellow-200">
                     Tìm kiếm các công ty taxi đã đăng ký trên hệ thống
                   </CardDescription>
@@ -365,7 +365,7 @@ export default function ListingPage() {
                           placeholder="Nhập tên công ty, mã công ty hoặc địa chỉ..."
                           value={searchQuery}
                           onChange={(e) => setSearchQuery(e.target.value)}
-                          className="pl-10 bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                          className="pl-10 bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                         />
                       </div>
                       <Button className="bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-semibold px-8">
@@ -389,98 +389,6 @@ export default function ListingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-black via-yellow-900/20 to-black border-t border-yellow-500/30 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                  <Building2 className="w-5 h-5 text-black" />
-                </div>
-                <span className="text-xl font-bold text-yellow-400">RadioCabs.in</span>
-              </div>
-              <p className="text-yellow-200 text-sm leading-relaxed">
-                Cổng thông tin kết nối công ty taxi, tài xế và khách hàng tại Việt Nam.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Dịch vụ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/listing" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký công ty
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/drivers" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký tài xế
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/advertise" className="hover:text-yellow-300 transition-colors">
-                    Quảng cáo
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services" className="hover:text-yellow-300 transition-colors">
-                    Thông tin dịch vụ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Hỗ trợ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/feedback" className="hover:text-yellow-300 transition-colors">
-                    Góp ý
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className="hover:text-yellow-300 transition-colors">
-                    Đăng nhập
-                  </Link>
-                </li>
-                <li>
-                  <a href="tel:1900-xxxx" className="hover:text-yellow-300 transition-colors">
-                    Hotline: 1900-xxxx
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@radiocabs.in" className="hover:text-yellow-300 transition-colors">
-                    Email: info@radiocabs.in
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Liên hệ</h4>
-              <div className="space-y-2 text-yellow-200 text-sm">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-yellow-400" />
-                  <span>123 Đường ABC, Quận 1, TP.HCM</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="w-4 h-4 text-yellow-400" />
-                  <span>0123-456-789</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-yellow-400" />
-                  <span>contact@radiocabs.in</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-yellow-500/30 mt-8 pt-8 text-center">
-            <p className="text-yellow-200 text-sm">© 2025 RadioCabs.in. Tất cả quyền được bảo lưu.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

@@ -60,17 +60,17 @@ export default function AdvertisePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-yellow-400">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400">
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-black via-yellow-900/10 to-black relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
             Quảng cáo Dịch vụ Taxi
           </h1>
-          <p className="text-xl text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Đăng ký quảng cáo dịch vụ taxi của bạn để tiếp cận nhiều khách hàng hơn trên RadioCabs.in
           </p>
         </div>
@@ -81,8 +81,8 @@ export default function AdvertisePage() {
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10 max-w-4xl mx-auto">
             <CardHeader className="text-center">
-              <CardTitle className="text-3xl text-yellow-400 mb-2">Đăng ký quảng cáo</CardTitle>
-              <CardDescription className="text-yellow-200">
+              <CardTitle className="text-3xl text-gray-900 dark:text-yellow-400 mb-2">Đăng ký quảng cáo</CardTitle>
+              <CardDescription className="text-gray-600 dark:text-yellow-200">
                 Điền thông tin để đăng ký quảng cáo dịch vụ taxi của bạn
               </CardDescription>
             </CardHeader>
@@ -91,13 +91,13 @@ export default function AdvertisePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Company Information */}
                   <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                       <Building2 className="w-5 h-5" />
                       Thông tin công ty
                     </h3>
 
                     <div className="space-y-2">
-                      <Label htmlFor="companyName" className="text-yellow-300">
+                      <Label htmlFor="companyName" className="text-gray-700 dark:text-yellow-300">
                         Tên công ty *
                       </Label>
                       <Input
@@ -110,7 +110,7 @@ export default function AdvertisePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="designation" className="text-yellow-300">
+                      <Label htmlFor="designation" className="text-gray-700 dark:text-yellow-300">
                         Chức vụ người liên hệ
                       </Label>
                       <Input
@@ -122,7 +122,7 @@ export default function AdvertisePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="address" className="text-yellow-300">
+                      <Label htmlFor="address" className="text-gray-700 dark:text-yellow-300">
                         Địa chỉ *
                       </Label>
                       <Input
@@ -137,13 +137,13 @@ export default function AdvertisePage() {
 
                   {/* Contact Information */}
                   <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                       <Phone className="w-5 h-5" />
                       Thông tin liên hệ
                     </h3>
 
                     <div className="space-y-2">
-                      <Label htmlFor="mobile" className="text-yellow-300">
+                      <Label htmlFor="mobile" className="text-gray-700 dark:text-yellow-300">
                         Số điện thoại *
                       </Label>
                       <Input
@@ -156,7 +156,7 @@ export default function AdvertisePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="telephone" className="text-yellow-300">
+                      <Label htmlFor="telephone" className="text-gray-700 dark:text-yellow-300">
                         Điện thoại bàn
                       </Label>
                       <Input
@@ -168,7 +168,7 @@ export default function AdvertisePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="fax" className="text-yellow-300">
+                      <Label htmlFor="fax" className="text-gray-700 dark:text-yellow-300">
                         Fax
                       </Label>
                       <Input
@@ -180,7 +180,7 @@ export default function AdvertisePage() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="text-yellow-300">
+                      <Label htmlFor="email" className="text-gray-700 dark:text-yellow-300">
                         Email *
                       </Label>
                       <Input
@@ -197,12 +197,12 @@ export default function AdvertisePage() {
 
                 {/* Description */}
                 <div className="space-y-4 pt-6 border-t border-yellow-500/30">
-                  <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                     <FileText className="w-5 h-5" />
                     Mô tả dịch vụ
                   </h3>
                   <div className="space-y-2">
-                    <Label htmlFor="description" className="text-yellow-300">
+                    <Label htmlFor="description" className="text-gray-700 dark:text-yellow-300">
                       Mô tả chi tiết về dịch vụ *
                     </Label>
                     <Textarea
@@ -219,7 +219,7 @@ export default function AdvertisePage() {
                 {/* Payment */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-yellow-500/30">
                   <div className="space-y-4">
-                    <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                       <CreditCard className="w-5 h-5" />
                       Hình thức thanh toán
                     </h3>
@@ -244,11 +244,11 @@ export default function AdvertisePage() {
                   {/* Price Display */}
                   {formData.paymentType && (
                     <div className="space-y-4">
-                      <h3 className="text-xl font-semibold text-yellow-400">Chi phí quảng cáo</h3>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400">Chi phí quảng cáo</h3>
                       <div className="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 p-4 rounded-lg border border-yellow-500/30">
-                        <p className="text-yellow-300 text-lg">
+                        <p className="text-gray-700 dark:text-yellow-300 text-lg">
                           Phí {formData.paymentType === "monthly" ? "hàng tháng" : "hàng quý"}:
-                          <span className="text-yellow-400 font-bold ml-2">
+                          <span className="text-gray-900 dark:text-yellow-400 font-bold ml-2">
                             {getPrice().toLocaleString("vi-VN")} VNĐ
                           </span>
                         </p>
@@ -259,8 +259,8 @@ export default function AdvertisePage() {
 
                 {/* Benefits Section */}
                 <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/20 p-6 rounded-lg border border-yellow-500/30">
-                  <h3 className="text-xl font-semibold text-yellow-400 mb-4">Lợi ích khi quảng cáo với RadioCabs.in</h3>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-yellow-200">
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-4">Lợi ích khi quảng cáo với RadioCabs.in</h3>
+                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-600 dark:text-yellow-200">
                     <li className="flex items-center gap-2">
                       <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
                       Hiển thị thông tin công ty nổi bật
@@ -292,7 +292,7 @@ export default function AdvertisePage() {
                     type="button"
                     variant="outline"
                     onClick={handleReset}
-                    className="flex-1 border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
+                    className="flex-1 border-yellow-500/50 text-gray-700 dark:text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
                   >
                     Đặt lại
                   </Button>
@@ -303,98 +303,6 @@ export default function AdvertisePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-black via-yellow-900/20 to-black border-t border-yellow-500/30 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                  <Megaphone className="w-5 h-5 text-black" />
-                </div>
-                <span className="text-xl font-bold text-yellow-400">RadioCabs.in</span>
-              </div>
-              <p className="text-yellow-200 text-sm leading-relaxed">
-                Cổng thông tin kết nối công ty taxi, tài xế và khách hàng tại Việt Nam.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Dịch vụ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/listing" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký công ty
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/drivers" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký tài xế
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/advertise" className="hover:text-yellow-300 transition-colors">
-                    Quảng cáo
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services" className="hover:text-yellow-300 transition-colors">
-                    Thông tin dịch vụ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Hỗ trợ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/feedback" className="hover:text-yellow-300 transition-colors">
-                    Góp ý
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className="hover:text-yellow-300 transition-colors">
-                    Đăng nhập
-                  </Link>
-                </li>
-                <li>
-                  <a href="tel:1900-xxxx" className="hover:text-yellow-300 transition-colors">
-                    Hotline: 1900-xxxx
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@radiocabs.in" className="hover:text-yellow-300 transition-colors">
-                    Email: info@radiocabs.in
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Liên hệ</h4>
-              <div className="space-y-2 text-yellow-200 text-sm">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-yellow-400" />
-                  <span>123 Đường ABC, Quận 1, TP.HCM</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="w-4 h-4 text-yellow-400" />
-                  <span>0123-456-789</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-yellow-400" />
-                  <span>contact@radiocabs.in</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-yellow-500/30 mt-8 pt-8 text-center">
-            <p className="text-yellow-200 text-sm">© 2025 RadioCabs.in. Tất cả quyền được bảo lưu.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

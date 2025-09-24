@@ -52,17 +52,17 @@ export default function FeedbackPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-black text-yellow-400">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400">
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-black via-yellow-900/10 to-black relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
             Góp ý & Đánh giá
           </h1>
-          <p className="text-xl text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
             Chia sẻ ý kiến của bạn để giúp chúng tôi cải thiện dịch vụ RadioCabs.in ngày càng tốt hơn
           </p>
         </div>
@@ -74,10 +74,10 @@ export default function FeedbackPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Feedback Form */}
             <div className="lg:col-span-2">
-              <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
+              <Card className="bg-gradient-to-br from-yellow-200/80 to-yellow-300/80 dark:from-yellow-900/20 dark:to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
                 <CardHeader className="text-center">
-                  <CardTitle className="text-3xl text-yellow-400 mb-2">Gửi góp ý của bạn</CardTitle>
-                  <CardDescription className="text-yellow-200">
+                  <CardTitle className="text-3xl text-gray-900 dark:text-yellow-400 mb-2">Gửi góp ý của bạn</CardTitle>
+                  <CardDescription className="text-gray-600 dark:text-yellow-200">
                     Chúng tôi luôn lắng nghe và trân trọng mọi ý kiến từ khách hàng
                   </CardDescription>
                 </CardHeader>
@@ -86,39 +86,39 @@ export default function FeedbackPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Personal Information */}
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                           <User className="w-5 h-5" />
                           Thông tin cá nhân
                         </h3>
 
                         <div className="space-y-2">
-                          <Label htmlFor="name" className="text-yellow-300">
+                          <Label htmlFor="name" className="text-gray-700 dark:text-yellow-300">
                             Họ và tên *
                           </Label>
                           <Input
                             id="name"
                             value={formData.name}
                             onChange={(e) => handleInputChange("name", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="mobile" className="text-yellow-300">
+                          <Label htmlFor="mobile" className="text-gray-700 dark:text-yellow-300">
                             Số điện thoại *
                           </Label>
                           <Input
                             id="mobile"
                             value={formData.mobile}
                             onChange={(e) => handleInputChange("mobile", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="email" className="text-yellow-300">
+                          <Label htmlFor="email" className="text-gray-700 dark:text-yellow-300">
                             Email *
                           </Label>
                           <Input
@@ -126,20 +126,20 @@ export default function FeedbackPage() {
                             type="email"
                             value={formData.email}
                             onChange={(e) => handleInputChange("email", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="city" className="text-yellow-300">
+                          <Label htmlFor="city" className="text-gray-700 dark:text-yellow-300">
                             Thành phố *
                           </Label>
                           <Input
                             id="city"
                             value={formData.city}
                             onChange={(e) => handleInputChange("city", e.target.value)}
-                            className="bg-black/50 border-yellow-500/50 text-yellow-100 focus:border-yellow-400"
+                            className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
                             required
                           />
                         </div>
@@ -147,13 +147,13 @@ export default function FeedbackPage() {
 
                       {/* Feedback Type & Description */}
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-yellow-400 flex items-center gap-2">
+                        <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                           <FileText className="w-5 h-5" />
                           Nội dung góp ý
                         </h3>
 
                         <div className="space-y-2">
-                          <Label htmlFor="type" className="text-yellow-300">
+                          <Label htmlFor="type" className="text-gray-700 dark:text-yellow-300">
                             Loại góp ý *
                           </Label>
                           <Select value={formData.type} onValueChange={(value) => handleInputChange("type", value)}>
@@ -171,7 +171,7 @@ export default function FeedbackPage() {
                         </div>
 
                         <div className="space-y-2">
-                          <Label htmlFor="description" className="text-yellow-300">
+                          <Label htmlFor="description" className="text-gray-700 dark:text-yellow-300">
                             Mô tả chi tiết *
                           </Label>
                           <Textarea
@@ -198,7 +198,7 @@ export default function FeedbackPage() {
                         type="button"
                         variant="outline"
                         onClick={handleReset}
-                        className="flex-1 border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
+                        className="flex-1 border-yellow-500/50 text-gray-700 dark:text-yellow-400 hover:bg-yellow-500/10 py-3 bg-transparent"
                       >
                         Đặt lại
                       </Button>
@@ -213,31 +213,31 @@ export default function FeedbackPage() {
               {/* Contact Info */}
               <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
                 <CardHeader>
-                  <CardTitle className="text-xl text-yellow-400 flex items-center gap-2">
+                  <CardTitle className="text-xl text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                     <Phone className="w-5 h-5" />
                     Liên hệ trực tiếp
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <Phone className="w-4 h-4 text-yellow-400" />
+                    <Phone className="w-4 h-4 text-gray-700 dark:text-yellow-400" />
                     <div>
-                      <p className="text-yellow-300 font-medium">Hotline</p>
-                      <p className="text-yellow-200">1900-xxxx</p>
+                      <p className="text-gray-700 dark:text-yellow-300 font-medium">Hotline</p>
+                      <p className="text-gray-600 dark:text-yellow-200">1900-xxxx</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <Mail className="w-4 h-4 text-yellow-400" />
+                    <Mail className="w-4 h-4 text-gray-700 dark:text-yellow-400" />
                     <div>
-                      <p className="text-yellow-300 font-medium">Email</p>
-                      <p className="text-yellow-200">feedback@radiocabs.in</p>
+                      <p className="text-gray-700 dark:text-yellow-300 font-medium">Email</p>
+                      <p className="text-gray-600 dark:text-yellow-200">feedback@radiocabs.in</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <MapPin className="w-4 h-4 text-yellow-400" />
+                    <MapPin className="w-4 h-4 text-gray-700 dark:text-yellow-400" />
                     <div>
-                      <p className="text-yellow-300 font-medium">Địa chỉ</p>
-                      <p className="text-yellow-200">123 Đường ABC, Quận 1, TP.HCM</p>
+                      <p className="text-gray-700 dark:text-yellow-300 font-medium">Địa chỉ</p>
+                      <p className="text-gray-600 dark:text-yellow-200">123 Đường ABC, Quận 1, TP.HCM</p>
                     </div>
                   </div>
                 </CardContent>
@@ -246,22 +246,22 @@ export default function FeedbackPage() {
               {/* Feedback Stats */}
               <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
                 <CardHeader>
-                  <CardTitle className="text-xl text-yellow-400 flex items-center gap-2">
+                  <CardTitle className="text-xl text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                     <Star className="w-5 h-5" />
                     Thống kê góp ý
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
-                    <span className="text-yellow-300">Tổng góp ý:</span>
-                    <span className="text-yellow-400 font-bold">1,234</span>
+                    <span className="text-gray-700 dark:text-yellow-300">Tổng góp ý:</span>
+                    <span className="text-gray-900 dark:text-yellow-400 font-bold">1,234</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-yellow-300">Đã xử lý:</span>
+                    <span className="text-gray-700 dark:text-yellow-300">Đã xử lý:</span>
                     <span className="text-green-400 font-bold">1,180</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-yellow-300">Đang xử lý:</span>
+                    <span className="text-gray-700 dark:text-yellow-300">Đang xử lý:</span>
                     <span className="text-orange-400 font-bold">54</span>
                   </div>
                   <div className="w-full bg-yellow-900/30 rounded-full h-2">
@@ -270,17 +270,17 @@ export default function FeedbackPage() {
                       style={{ width: "95.6%" }}
                     ></div>
                   </div>
-                  <p className="text-yellow-200 text-sm text-center">95.6% tỷ lệ xử lý</p>
+                  <p className="text-gray-600 dark:text-yellow-200 text-sm text-center">95.6% tỷ lệ xử lý</p>
                 </CardContent>
               </Card>
 
               {/* Guidelines */}
               <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
                 <CardHeader>
-                  <CardTitle className="text-xl text-yellow-400">Hướng dẫn góp ý</CardTitle>
+                  <CardTitle className="text-xl text-gray-900 dark:text-yellow-400">Hướng dẫn góp ý</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2 text-yellow-200 text-sm">
+                  <ul className="space-y-2 text-gray-600 dark:text-yellow-200 text-sm">
                     <li className="flex items-start gap-2">
                       <div className="w-1.5 h-1.5 bg-yellow-400 rounded-full mt-2 flex-shrink-0"></div>
                       Mô tả rõ ràng vấn đề hoặc đề xuất
@@ -305,98 +305,6 @@ export default function FeedbackPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-r from-black via-yellow-900/20 to-black border-t border-yellow-500/30 py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                  <MessageSquare className="w-5 h-5 text-black" />
-                </div>
-                <span className="text-xl font-bold text-yellow-400">RadioCabs.in</span>
-              </div>
-              <p className="text-yellow-200 text-sm leading-relaxed">
-                Cổng thông tin kết nối công ty taxi, tài xế và khách hàng tại Việt Nam.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Dịch vụ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/listing" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký công ty
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/drivers" className="hover:text-yellow-300 transition-colors">
-                    Đăng ký tài xế
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/advertise" className="hover:text-yellow-300 transition-colors">
-                    Quảng cáo
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/services" className="hover:text-yellow-300 transition-colors">
-                    Thông tin dịch vụ
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Hỗ trợ</h4>
-              <ul className="space-y-2 text-yellow-200 text-sm">
-                <li>
-                  <Link href="/feedback" className="hover:text-yellow-300 transition-colors">
-                    Góp ý
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/login" className="hover:text-yellow-300 transition-colors">
-                    Đăng nhập
-                  </Link>
-                </li>
-                <li>
-                  <a href="tel:1900-xxxx" className="hover:text-yellow-300 transition-colors">
-                    Hotline: 1900-xxxx
-                  </a>
-                </li>
-                <li>
-                  <a href="mailto:info@radiocabs.in" className="hover:text-yellow-300 transition-colors">
-                    Email: info@radiocabs.in
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-4">
-              <h4 className="text-yellow-400 font-semibold">Liên hệ</h4>
-              <div className="space-y-2 text-yellow-200 text-sm">
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4 text-yellow-400" />
-                  <span>123 Đường ABC, Quận 1, TP.HCM</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Phone className="w-4 h-4 text-yellow-400" />
-                  <span>0123-456-789</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-yellow-400" />
-                  <span>contact@radiocabs.in</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="border-t border-yellow-500/30 mt-8 pt-8 text-center">
-            <p className="text-yellow-200 text-sm">© 2025 RadioCabs.in. Tất cả quyền được bảo lưu.</p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
 }

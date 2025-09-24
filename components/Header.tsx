@@ -4,74 +4,70 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Image from "next/image"
 import { Menu, Download, User, UserPlus } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 w-full bg-black shadow-lg border-b border-yellow-500/20">
-      <div className="max-w-7xl mx-auto flex items-center justify-between h-24 px-6">
-        <div className="flex items-center">
-          <Link href="/" className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 w-full bg-background shadow-lg border-b border-primary/20">
+      <div className="w-full flex items-center h-24 px-4 md:px-8">
+        <div className="flex items-center flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-r from-black/30 via-primary/20 to-black/30 backdrop-blur-sm border-2 border-black/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 ring-2 ring-white/50">
             <Image
-              src="logo1.png"
+              src="logo2.png"
               alt="RadioCabs Logo"
               width={200}
               height={75}
-              className="h-32 w-auto"
+              className="h-32 w-auto drop-shadow-lg dark:drop-shadow-none"
             />
           </Link>
         </div>
 
-        <nav className="hidden md:flex items-center justify-center gap-8 flex-1 mx-8">
+        <nav className="flex items-center justify-between flex-1 max-w-4xl mx-8 overflow-x-auto hide-scrollbar" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
           <Link
             href="/"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Trang Chủ
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href="/listing"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Công Ty Taxi
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href="/drivers"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Tài Xế
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href="/advertise"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Quảng Cáo
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href="/services"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Dịch Vụ
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
           <Link
             href="/feedback"
-            className="text-sm font-medium text-yellow-400 hover:text-yellow-300 transition-all duration-300 hover:scale-105 relative group"
+            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
             Góp Ý
-            <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-yellow-400 transition-all duration-300 group-hover:w-full"></span>
           </Link>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-shrink-0">
+          <ThemeToggle />
           <Link href="/login">
             <Button
               variant="outline"
               size="sm"
-              className="border-yellow-500 text-yellow-400 hover:bg-yellow-500 hover:text-black font-medium px-4 py-2 transition-all duration-300 bg-transparent"
+              className="border-primary text-primary hover:bg-primary/20 hover:text-primary hover:shadow-lg hover:shadow-primary/50 hover:border-primary/80 font-medium px-4 py-2 transition-all duration-300 bg-transparent hover:scale-105"
             >
               <User className="h-4 w-4 mr-2" />
               Đăng Nhập
@@ -81,7 +77,7 @@ export default function Header() {
           <Link href="/register">
             <Button
               size="sm"
-              className="bg-yellow-500 text-black hover:bg-yellow-400 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <UserPlus className="h-4 w-4 mr-2" />
               Đăng Ký
@@ -91,7 +87,7 @@ export default function Header() {
           <Link href="/download">
             <Button
               size="sm"
-              className="bg-yellow-500 text-black hover:bg-yellow-400 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Download className="h-4 w-4 mr-2" />
               TẢI ỨNG DỤNG NGAY

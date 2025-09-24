@@ -26,7 +26,8 @@ import {
 function HeroSection() {
   return (
     <section className="relative py-12 lg:py-16 overflow-hidden">
-      <div className="absolute inset-0 gradient-black-yellow opacity-80" />
+      <div className="absolute inset-0 gradient-black-yellow opacity-80 dark:opacity-80" />
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:opacity-0" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-ping"></div>
@@ -40,18 +41,18 @@ function HeroSection() {
         ></div>
       </div>
 
-      <div className="container relative">
+      <div className="container relative lg:ml-16">
         <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[50vh]">
-          <div className="space-y-6 animate-slide-in-left flex flex-col justify-center text-center lg:text-left lg:pl-12">
+          <div className="space-y-6 animate-slide-in-left flex flex-col justify-center text-center lg:text-left p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-primary/10 shadow-xl">
             <div className="space-y-4">
-              <h1 className="text-3xl lg:text-5xl font-bold text-balance leading-tight">
+              <h1 className="text-4xl lg:text-6xl font-black text-balance leading-tight drop-shadow-lg text-gray-900 dark:text-white">
                 Kết nối{" "}
-                <span className="text-primary bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent animate-pulse-yellow">
+                <span className="text-primary bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-pulse-yellow drop-shadow-2xl">
                   Taxi
                 </span>{" "}
                 dễ dàng hơn bao giờ hết
               </h1>
-              <p className="text-lg text-muted-foreground text-pretty max-w-md">
+              <p className="text-xl lg:text-2xl text-gray-700 dark:text-foreground text-pretty max-w-lg font-medium leading-relaxed drop-shadow-md">
                 Cổng thông tin hàng đầu cho công ty taxi, tài xế và khách hàng. Đăng ký dịch vụ, quảng cáo và tìm kiếm
                 thông tin một cách nhanh chóng.
               </p>
@@ -79,8 +80,8 @@ function HeroSection() {
             </div>
           </div>
 
-          <div className="lg:pl-8 animate-slide-in-right">
-            <Card className="p-6 bg-card/80 backdrop-blur border-primary/30 hover-lift animate-glow">
+          <div className="lg:pl-20 animate-slide-in-right">
+            <Card className="p-6 bg-card/80 backdrop-blur border-primary/30 hover-lift animate-glow bg-white/90 dark:bg-card/80">
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold text-primary">Tìm kiếm dịch vụ taxi</h3>
 
@@ -164,13 +165,13 @@ function FeaturesSection() {
   ]
 
   return (
-    <section id="features" className="py-20 bg-background/50">
+    <section id="features" className="py-20 bg-background/50 bg-gradient-to-br from-yellow-100/80 via-yellow-200/80 to-yellow-300/80 dark:bg-background/50">
       <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16 animate-fade-in-up">
           <h2 className="text-3xl lg:text-4xl font-bold text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Tại sao chọn RadioCabs.in?
           </h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
             Nền tảng toàn diện kết nối mọi thành phần trong hệ sinh thái taxi Việt Nam
           </p>
         </div>
@@ -179,7 +180,7 @@ function FeaturesSection() {
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="border-primary/20 bg-card/80 backdrop-blur hover-lift animate-fade-in-up hover-glow group"
+              className="border-primary/20 bg-white/90 dark:bg-card/80 backdrop-blur hover-lift animate-fade-in-up hover-glow group"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardHeader>
@@ -188,12 +189,12 @@ function FeaturesSection() {
                 >
                   <feature.icon className={`h-6 w-6 ${feature.color}`} />
                 </div>
-                <CardTitle className="text-xl text-foreground group-hover:text-primary transition-colors duration-300">
+                <CardTitle className="text-xl text-gray-900 dark:text-foreground group-hover:text-primary transition-colors duration-300">
                   {feature.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base leading-relaxed text-muted-foreground">
+                <CardDescription className="text-base leading-relaxed text-gray-600 dark:text-muted-foreground">
                   {feature.description}
                 </CardDescription>
               </CardContent>
@@ -255,11 +256,11 @@ function PricingSection() {
   ]
 
   return (
-    <section id="pricing" className="py-20">
+    <section id="pricing" className="py-20 bg-gradient-to-br from-yellow-100/60 via-yellow-200/60 to-yellow-300/60 dark:bg-transparent">
       <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-balance">Bảng giá linh hoạt</h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">Bảng giá linh hoạt</h2>
+          <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
             Chọn gói phù hợp với nhu cầu của bạn. Thanh toán theo tháng hoặc theo quý với mức giá ưu đãi.
           </p>
         </div>
@@ -268,7 +269,7 @@ function PricingSection() {
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative border-border/50 bg-card/50 backdrop-blur w-full max-w-sm ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
+              className={`relative border-border/50 bg-white/90 dark:bg-card/50 backdrop-blur w-full max-w-sm ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
             >
               {plan.popular && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
@@ -332,16 +333,16 @@ function PartnersSection() {
   ]
 
   return (
-    <section id="partners" className="py-20 bg-muted/30">
+    <section id="partners" className="py-20 bg-gradient-to-br from-yellow-100/70 via-yellow-200/70 to-yellow-300/70 dark:bg-muted/30">
       <div className="container max-w-7xl mx-auto px-4">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-balance">Đối tác tin cậy</h2>
-          <p className="text-xl text-muted-foreground text-pretty max-w-2xl mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">Đối tác tin cậy</h2>
+          <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
             Hơn 500+ công ty taxi và 10,000+ tài xế đã tin tưởng sử dụng RadioCabs.in
           </p>
         </div>
 
-        <Card className="p-12 bg-card/50 backdrop-blur border-border/50 max-w-full mx-auto">
+        <Card className="p-12 bg-white/90 dark:bg-card/50 backdrop-blur border-border/50 max-w-full mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 items-center justify-items-center">
             {partners.map((partner, index) => (
               <div
@@ -361,15 +362,15 @@ function PartnersSection() {
         <div className="grid md:grid-cols-3 gap-8 mt-16 max-w-4xl mx-auto">
           <div className="text-center">
             <div className="text-4xl font-bold text-primary mb-2">500+</div>
-            <div className="text-muted-foreground">Công ty taxi</div>
+            <div className="text-gray-600 dark:text-muted-foreground">Công ty taxi</div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-secondary mb-2">10,000+</div>
-            <div className="text-muted-foreground">Tài xế đăng ký</div>
+            <div className="text-gray-600 dark:text-muted-foreground">Tài xế đăng ký</div>
           </div>
           <div className="text-center">
             <div className="text-4xl font-bold text-accent mb-2">1M+</div>
-            <div className="text-muted-foreground">Lượt tìm kiếm/tháng</div>
+            <div className="text-gray-600 dark:text-muted-foreground">Lượt tìm kiếm/tháng</div>
           </div>
         </div>
       </div>
@@ -377,128 +378,10 @@ function PartnersSection() {
   )
 }
 
-function Footer() {
-  return (
-    <footer id="contact" className="bg-secondary text-secondary-foreground">
-      <div className="container max-w-7xl mx-auto px-4 py-16">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Car className="h-8 w-8 text-primary" />
-              <span className="text-xl font-bold">RadioCabs.in</span>
-            </div>
-            <p className="text-secondary-foreground/80 leading-relaxed">
-              Cổng thông tin taxi hàng đầu Việt Nam, kết nối công ty taxi, tài xế và khách hàng một cách hiệu quả nhất.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Dịch vụ</h3>
-            <ul className="space-y-2 text-secondary-foreground/80">
-              <li>
-                <Link href="/listing" className="hover:text-secondary-foreground transition-colors">
-                  Đăng ký công ty taxi
-                </Link>
-              </li>
-              <li>
-                <Link href="/drivers" className="hover:text-secondary-foreground transition-colors">
-                  Đăng ký tài xế
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="hover:text-secondary-foreground transition-colors">
-                  Tìm kiếm taxi
-                </Link>
-              </li>
-              <li>
-                <Link href="/feedback" className="hover:text-secondary-foreground transition-colors">
-                  Phản hồi dịch vụ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Hỗ trợ</h3>
-            <ul className="space-y-2 text-secondary-foreground/80">
-              <li>
-                <Link href="/services" className="hover:text-secondary-foreground transition-colors">
-                  Trung tâm trợ giúp
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="hover:text-secondary-foreground transition-colors">
-                  Điều khoản sử dụng
-                </Link>
-              </li>
-              <li>
-                <Link href="/services" className="hover:text-secondary-foreground transition-colors">
-                  Chính sách bảo mật
-                </Link>
-              </li>
-              <li>
-                <Link href="/feedback" className="hover:text-secondary-foreground transition-colors">
-                  Liên hệ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Liên hệ</h3>
-            <div className="space-y-3 text-secondary-foreground/80">
-              <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4" />
-                <span>1900 1234</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4" />
-                <span>info@radiocabs.in</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4" />
-                <span>Hà Nội, Việt Nam</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="border-t border-secondary-foreground/20 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-secondary-foreground/60 text-sm">© 2025 RadioCabs.in. Tất cả quyền được bảo lưu.</p>
-            <div className="flex gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-secondary-foreground/60 hover:text-secondary-foreground"
-              >
-                Facebook
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-secondary-foreground/60 hover:text-secondary-foreground"
-              >
-                Zalo
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-secondary-foreground/60 hover:text-secondary-foreground"
-              >
-                LinkedIn
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  )
-}
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen gradient-radial-yellow">
+    <div className="min-h-screen gradient-radial-yellow bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:gradient-radial-yellow">
       <Header />
       <main className="relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -518,7 +401,6 @@ export default function HomePage() {
         <PricingSection />
         <PartnersSection />
       </main>
-      <Footer />
     </div>
   )
 }

@@ -67,7 +67,8 @@ export default function UserDashboardLayout({
   const router = useRouter()
   
   // Mock user role - sẽ được lấy từ context/state
-  const userRole: 'company' | 'driver' = 'company'
+  // Tạm thời set thành 'driver' để test driver dashboard
+  const userRole: 'company' | 'driver' = 'driver'
   const navigation = getNavigationByRole(userRole)
 
   const handleLogout = () => {

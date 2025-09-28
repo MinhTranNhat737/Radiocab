@@ -2,390 +2,307 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { executeQuery } = require('../config/database');
-const { validateLogin, validateRegister } = require('../middleware/validation');
-const { verifyToken } = require('../middleware/auth');
+const { validateAuth } = require('../middleware/validation');
 
 const router = express.Router();
 
-// Login
-router.post('/login', validateLogin, async (req, res) => {
+// Register new user
+router.post('/register', validateAuth, async (req, res) => {
   try {
-    const { email, password } = req.body;
-    
-    // Get user from database
-    const userQuery = `
-      SELECT u.user_id, u.email, u.password_hash, u.full_name, u.phone, u.role_id, u.is_active,
-             r.role_code, r.role_name
-      FROM users u
-      INNER JOIN roles r ON r.role_id = u.role_id
-      WHERE u.email = @email
-    `;
-    
-    const userResult = await executeQuery(userQuery, { email });
-    
-    if (userResult.recordset.length === 0) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized',
-        message: 'Invalid email or password'
-      });
-    }
-    
-    const user = userResult.recordset[0];
-    
-    // Check if user is active
-    if (!user.is_active) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized',
-        message: 'Account is inactive'
-      });
-    }
-    
-    // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password_hash);
-    
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized',
-        message: 'Invalid email or password'
-      });
-    }
-    
-    // Generate JWT token
-    const token = jwt.sign(
-      { 
-        user_id: user.user_id,
-        email: user.email,
-        role_id: user.role_id,
-        role_code: user.role_code
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
-    );
-    
-    // Generate refresh token
-    const refreshToken = jwt.sign(
-      { user_id: user.user_id },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d' }
-    );
-    
-    // Store refresh token in database (optional)
-    const storeRefreshTokenQuery = `
-      INSERT INTO auth_sessions (user_id, expires_at)
-      VALUES (@user_id, DATEADD(day, 30, GETUTCDATE()))
-    `;
-    
-    await executeQuery(storeRefreshTokenQuery, { user_id: user.user_id });
-    
-    res.json({
-      success: true,
-      data: {
-        user: {
-          user_id: user.user_id,
-          email: user.email,
-          full_name: user.full_name,
-          phone: user.phone,
-          role_id: user.role_id,
-          role_code: user.role_code,
-          role_name: user.role_name
-        },
-        token,
-        refreshToken
-      },
-      message: 'Login successful'
-    });
-    
-  } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Login failed'
-    });
-  }
-});
+    const { email, password, full_name, phone, role_id = 3 } = req.body;
 
-// Register
-router.post('/register', validateRegister, async (req, res) => {
-  try {
-    const { email, password, full_name, phone, role_id } = req.body;
-    
     // Check if user already exists
-    const existingUserQuery = 'SELECT user_id FROM users WHERE email = @email';
-    const existingUser = await executeQuery(existingUserQuery, { email });
-    
-    if (existingUser.recordset.length > 0) {
-      return res.status(409).json({
+    const existingUser = await executeQuery(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({
         success: false,
-        error: 'Conflict',
-        message: 'User with this email already exists'
+        message: 'User already exists with this email'
       });
     }
-    
+
     // Hash password
-    const saltRounds = 12;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
-    
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
     // Create user
-    const createUserQuery = `
-      INSERT INTO users (email, password_hash, full_name, phone, role_id, is_active)
-      OUTPUT INSERTED.user_id
-      VALUES (@email, @password_hash, @full_name, @phone, @role_id, 1)
-    `;
-    
-    const userResult = await executeQuery(createUserQuery, {
-      email,
-      password_hash: passwordHash,
-      full_name,
-      phone,
-      role_id
-    });
-    
-    const userId = userResult.recordset[0].user_id;
-    
-    // Get user details
-    const userQuery = `
-      SELECT u.user_id, u.email, u.full_name, u.phone, u.role_id,
-             r.role_code, r.role_name
-      FROM users u
-      INNER JOIN roles r ON r.role_id = u.role_id
-      WHERE u.user_id = @user_id
-    `;
-    
-    const userDetails = await executeQuery(userQuery, { user_id: userId });
-    const user = userDetails.recordset[0];
-    
+    const result = await executeQuery(
+      `INSERT INTO users (email, password_hash, full_name, phone, role_id, created_at, updated_at)
+       VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+       RETURNING id, email, full_name, phone, role_id, created_at`,
+      [email, hashedPassword, full_name, phone, role_id]
+    );
+
+    const user = result.rows[0];
+
     // Generate JWT token
     const token = jwt.sign(
-      { 
-        user_id: user.user_id,
-        email: user.email,
-        role_id: user.role_id,
-        role_code: user.role_code
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { userId: user.id, email: user.email, roleId: user.role_id },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '24h' }
     );
-    
-    // Generate refresh token
-    const refreshToken = jwt.sign(
-      { user_id: user.user_id },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d' }
-    );
-    
+
     res.status(201).json({
       success: true,
+      message: 'User registered successfully',
       data: {
         user: {
-          user_id: user.user_id,
+          id: user.id,
           email: user.email,
           full_name: user.full_name,
           phone: user.phone,
           role_id: user.role_id,
-          role_code: user.role_code,
-          role_name: user.role_name
+          created_at: user.created_at
         },
-        token,
-        refreshToken
-      },
-      message: 'Registration successful'
+        token
+      }
     });
-    
+
   } catch (error) {
     console.error('Registration error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Registration failed'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Logout
-router.post('/logout', verifyToken, async (req, res) => {
+// Login user
+router.post('/login', validateAuth, async (req, res) => {
   try {
-    // In a real application, you might want to blacklist the token
-    // For now, we'll just return success
-    res.json({
-      success: true,
-      message: 'Logout successful'
-    });
-  } catch (error) {
-    console.error('Logout error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Logout failed'
-    });
-  }
-});
+    const { email, password } = req.body;
 
-// Refresh token
-router.post('/refresh', async (req, res) => {
-  try {
-    const { refreshToken } = req.body;
-    
-    if (!refreshToken) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized',
-        message: 'Refresh token required'
-      });
-    }
-    
-    // Verify refresh token
-    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
-    
-    // Get user details
-    const userQuery = `
-      SELECT u.user_id, u.email, u.full_name, u.phone, u.role_id, u.is_active,
-             r.role_code, r.role_name
-      FROM users u
-      INNER JOIN roles r ON r.role_id = u.role_id
-      WHERE u.user_id = @user_id AND u.is_active = 1
-    `;
-    
-    const userResult = await executeQuery(userQuery, { user_id: decoded.user_id });
-    
-    if (userResult.recordset.length === 0) {
-      return res.status(401).json({
-        success: false,
-        error: 'Unauthorized',
-        message: 'User not found or inactive'
-      });
-    }
-    
-    const user = userResult.recordset[0];
-    
-    // Generate new access token
-    const newToken = jwt.sign(
-      { 
-        user_id: user.user_id,
-        email: user.email,
-        role_id: user.role_id,
-        role_code: user.role_code
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    // Find user by email
+    const result = await executeQuery(
+      `SELECT u.*, r.role_name 
+       FROM users u 
+       JOIN roles r ON u.role_id = r.id 
+       WHERE u.email = $1`,
+      [email]
     );
-    
-    res.json({
-      success: true,
-      data: {
-        token: newToken
-      },
-      message: 'Token refreshed successfully'
-    });
-    
-  } catch (error) {
-    console.error('Token refresh error:', error);
-    res.status(401).json({
-      success: false,
-      error: 'Unauthorized',
-      message: 'Invalid refresh token'
-    });
-  }
-});
 
-// Get current user
-router.get('/me', verifyToken, async (req, res) => {
-  try {
+    if (result.rows.length === 0) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    const user = result.rows[0];
+
+    // Verify password
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    if (!isValidPassword) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid email or password'
+      });
+    }
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user.id, email: user.email, roleId: user.role_id },
+      process.env.JWT_SECRET || 'your-secret-key',
+      { expiresIn: '24h' }
+    );
+
+    // Update last login
+    await executeQuery(
+      'UPDATE users SET last_login = NOW() WHERE id = $1',
+      [user.id]
+    );
+
     res.json({
       success: true,
+      message: 'Login successful',
       data: {
-        user: req.user
+        user: {
+          id: user.id,
+          email: user.email,
+          full_name: user.full_name,
+          phone: user.phone,
+          role_id: user.role_id,
+          role_name: user.role_name,
+          last_login: user.last_login
+        },
+        token
       }
     });
+
   } catch (error) {
-    console.error('Get user error:', error);
+    console.error('Login error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get user information'
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+});
+
+// Get current user profile
+router.get('/profile', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'No token provided'
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    
+    const result = await executeQuery(
+      `SELECT u.*, r.role_name 
+       FROM users u 
+       JOIN roles r ON u.role_id = r.id 
+       WHERE u.id = $1`,
+      [decoded.userId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    const user = result.rows[0];
+    res.json({
+      success: true,
+      data: {
+        id: user.id,
+        email: user.email,
+        full_name: user.full_name,
+        phone: user.phone,
+        role_id: user.role_id,
+        role_name: user.role_name,
+        created_at: user.created_at,
+        last_login: user.last_login
+      }
+    });
+
+  } catch (error) {
+    console.error('Profile error:', error);
+    res.status(401).json({
+      success: false,
+      message: 'Invalid token'
+    });
+  }
+});
+
+// Update user profile
+router.put('/profile', async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(' ')[1];
+    
+    if (!token) {
+      return res.status(401).json({
+        success: false,
+        message: 'No token provided'
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const { full_name, phone } = req.body;
+
+    const result = await executeQuery(
+      `UPDATE users 
+       SET full_name = $1, phone = $2, updated_at = NOW()
+       WHERE id = $3
+       RETURNING id, email, full_name, phone, role_id, updated_at`,
+      [full_name, phone, decoded.userId]
+    );
+
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: result.rows[0]
+    });
+
+  } catch (error) {
+    console.error('Profile update error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Change password
-router.post('/change-password', verifyToken, async (req, res) => {
+router.put('/change-password', async (req, res) => {
   try {
-    const { currentPassword, newPassword } = req.body;
+    const token = req.headers.authorization?.split(' ')[1];
     
-    if (!currentPassword || !newPassword) {
-      return res.status(400).json({
+    if (!token) {
+      return res.status(401).json({
         success: false,
-        error: 'Bad Request',
-        message: 'Current password and new password are required'
+        message: 'No token provided'
       });
     }
-    
-    if (newPassword.length < 6) {
-      return res.status(400).json({
-        success: false,
-        error: 'Bad Request',
-        message: 'New password must be at least 6 characters long'
-      });
-    }
-    
-    // Get current user's password hash
-    const userQuery = 'SELECT password_hash FROM users WHERE user_id = @user_id';
-    const userResult = await executeQuery(userQuery, { user_id: req.user.user_id });
-    
-    if (userResult.recordset.length === 0) {
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
+    const { current_password, new_password } = req.body;
+
+    // Get current user
+    const userResult = await executeQuery(
+      'SELECT password_hash FROM users WHERE id = $1',
+      [decoded.userId]
+    );
+
+    if (userResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'User not found'
       });
     }
-    
+
     // Verify current password
-    const isCurrentPasswordValid = await bcrypt.compare(
-      currentPassword, 
-      userResult.recordset[0].password_hash
-    );
-    
-    if (!isCurrentPasswordValid) {
-      return res.status(401).json({
+    const isValidPassword = await bcrypt.compare(current_password, userResult.rows[0].password_hash);
+    if (!isValidPassword) {
+      return res.status(400).json({
         success: false,
-        error: 'Unauthorized',
         message: 'Current password is incorrect'
       });
     }
-    
+
     // Hash new password
-    const saltRounds = 12;
-    const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
-    
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(new_password, saltRounds);
+
     // Update password
-    const updatePasswordQuery = `
-      UPDATE users 
-      SET password_hash = @new_password_hash, updated_at = GETUTCDATE()
-      WHERE user_id = @user_id
-    `;
-    
-    await executeQuery(updatePasswordQuery, {
-      new_password_hash: newPasswordHash,
-      user_id: req.user.user_id
-    });
-    
+    await executeQuery(
+      'UPDATE users SET password_hash = $1, updated_at = NOW() WHERE id = $2',
+      [hashedPassword, decoded.userId]
+    );
+
     res.json({
       success: true,
       message: 'Password changed successfully'
     });
-    
+
   } catch (error) {
     console.error('Change password error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Password change failed'
+      message: 'Internal server error',
+      error: error.message
     });
   }
+});
+
+// Logout (invalidate token - in a real app, you'd maintain a blacklist)
+router.post('/logout', (req, res) => {
+  res.json({
+    success: true,
+    message: 'Logged out successfully'
+  });
 });
 
 module.exports = router;

@@ -1,350 +1,210 @@
 const express = require('express');
 const { executeQuery } = require('../config/database');
-const { validatePayment, validateId, validatePagination } = require('../middleware/validation');
-const { verifyToken } = require('../middleware/auth');
+const { validatePayment } = require('../middleware/validation');
 
 const router = express.Router();
 
 // Get all payments
-router.get('/', verifyToken, validatePagination, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      status,
-      methodId,
-      subscriptionId,
-      dateFrom,
-      dateTo
+    const { 
+      page = 1, 
+      limit = 10, 
+      company_id,
+      driver_id,
+      status_id,
+      sort_by = 'created_at',
+      sort_order = 'DESC'
     } = req.query;
-    
+
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
-    const params = { offset, limit };
-    
-    // Add status filter
-    if (status) {
-      whereClause += ' AND p.status_id = @status';
-      params.status = status;
+    let whereConditions = [];
+    let queryParams = [];
+    let paramCount = 0;
+
+    if (company_id) {
+      paramCount++;
+      whereConditions.push(`p.company_id = $${paramCount}`);
+      queryParams.push(company_id);
     }
-    
-    // Add method filter
-    if (methodId) {
-      whereClause += ' AND p.method_id = @methodId';
-      params.methodId = methodId;
+
+    if (driver_id) {
+      paramCount++;
+      whereConditions.push(`p.driver_id = $${paramCount}`);
+      queryParams.push(driver_id);
     }
-    
-    // Add subscription filter
-    if (subscriptionId) {
-      whereClause += ' AND p.subscription_id = @subscriptionId';
-      params.subscriptionId = subscriptionId;
+
+    if (status_id) {
+      paramCount++;
+      whereConditions.push(`p.status_id = $${paramCount}`);
+      queryParams.push(status_id);
     }
-    
-    // Add date filters
-    if (dateFrom) {
-      whereClause += ' AND p.created_at >= @dateFrom';
-      params.dateFrom = dateFrom;
-    }
-    
-    if (dateTo) {
-      whereClause += ' AND p.created_at <= @dateTo';
-      params.dateTo = dateTo;
-    }
-    
-    // Get payments with pagination
+
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+
+    const countQuery = `SELECT COUNT(*) as total FROM payments p ${whereClause}`;
+    const countResult = await executeQuery(countQuery, queryParams);
+    const total = parseInt(countResult.rows[0].total);
+
     const paymentsQuery = `
-      SELECT p.payment_id, p.subscription_id, p.amount, p.currency, p.method_id, p.status_id,
-             p.txn_ref, p.paid_at, p.created_at,
-             ps.name as status_name, pm.name as method_name,
-             s.start_date, s.end_date
+      SELECT 
+        p.*,
+        c.company_name,
+        d.full_name as driver_name,
+        pm.method_name,
+        ps.status_name
       FROM payments p
-      LEFT JOIN payment_statuses ps ON ps.status_id = p.status_id
-      LEFT JOIN payment_methods pm ON pm.method_id = p.method_id
-      LEFT JOIN subscriptions s ON s.subscription_id = p.subscription_id
+      LEFT JOIN companies c ON p.company_id = c.id
+      LEFT JOIN drivers d ON p.driver_id = d.id
+      LEFT JOIN payment_methods pm ON p.payment_method_id = pm.id
+      LEFT JOIN payment_statuses ps ON p.status_id = ps.id
       ${whereClause}
-      ORDER BY p.${sortBy} ${sortOrder.toUpperCase()}
-      OFFSET @offset ROWS
-      FETCH NEXT @limit ROWS ONLY
+      ORDER BY p.${sort_by} ${sort_order}
+      LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}
     `;
-    
-    const paymentsResult = await executeQuery(paymentsQuery, params);
-    
-    // Get total count
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM payments p
-      ${whereClause}
-    `;
-    
-    const countResult = await executeQuery(countQuery, params);
-    const total = countResult.recordset[0].total;
-    
+
+    queryParams.push(limit, offset);
+    const result = await executeQuery(paymentsQuery, queryParams);
+
     res.json({
       success: true,
-      data: paymentsResult.recordset,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: total,
-        totalPages: Math.ceil(total / limit)
+      data: {
+        payments: result.rows,
+        pagination: {
+          current_page: parseInt(page),
+          per_page: parseInt(limit),
+          total: total,
+          total_pages: Math.ceil(total / limit)
+        }
       }
     });
-    
+
   } catch (error) {
     console.error('Get payments error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get payments'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Get payment by ID
-router.get('/:id', verifyToken, validateId, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const paymentQuery = `
-      SELECT p.payment_id, p.subscription_id, p.amount, p.currency, p.method_id, p.status_id,
-             p.txn_ref, p.paid_at, p.created_at,
-             ps.name as status_name, pm.name as method_name,
-             s.start_date, s.end_date
+
+    const result = await executeQuery(`
+      SELECT 
+        p.*,
+        c.company_name,
+        d.full_name as driver_name,
+        pm.method_name,
+        ps.status_name
       FROM payments p
-      LEFT JOIN payment_statuses ps ON ps.status_id = p.status_id
-      LEFT JOIN payment_methods pm ON pm.method_id = p.method_id
-      LEFT JOIN subscriptions s ON s.subscription_id = p.subscription_id
-      WHERE p.payment_id = @id
-    `;
-    
-    const paymentResult = await executeQuery(paymentQuery, { id });
-    
-    if (paymentResult.recordset.length === 0) {
+      LEFT JOIN companies c ON p.company_id = c.id
+      LEFT JOIN drivers d ON p.driver_id = d.id
+      LEFT JOIN payment_methods pm ON p.payment_method_id = pm.id
+      LEFT JOIN payment_statuses ps ON p.status_id = ps.id
+      WHERE p.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Payment not found'
       });
     }
-    
+
     res.json({
       success: true,
-      data: paymentResult.recordset[0]
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Get payment error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get payment'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Create payment
-router.post('/', verifyToken, validatePayment, async (req, res) => {
+// Create new payment
+router.post('/', validatePayment, async (req, res) => {
   try {
     const {
-      subscription_id,
       amount,
-      currency,
-      method_id,
-      status_id,
-      txn_ref
+      payment_method_id,
+      subscription_id,
+      company_id,
+      driver_id,
+      description,
+      payment_date = new Date()
     } = req.body;
-    
-    const createPaymentQuery = `
-      INSERT INTO payments (subscription_id, amount, currency, method_id, status_id, txn_ref, paid_at)
-      OUTPUT INSERTED.payment_id
-      VALUES (@subscription_id, @amount, @currency, @method_id, @status_id, @txn_ref, 
-              CASE WHEN @status_id = 2 THEN GETUTCDATE() ELSE NULL END)
-    `;
-    
-    const paymentResult = await executeQuery(createPaymentQuery, {
-      subscription_id,
-      amount,
-      currency,
-      method_id,
-      status_id,
-      txn_ref
-    });
-    
-    const paymentId = paymentResult.recordset[0].payment_id;
-    
-    // Get created payment details
-    const paymentQuery = `
-      SELECT p.payment_id, p.subscription_id, p.amount, p.currency, p.method_id, p.status_id,
-             p.txn_ref, p.paid_at, p.created_at,
-             ps.name as status_name, pm.name as method_name
-      FROM payments p
-      LEFT JOIN payment_statuses ps ON ps.status_id = p.status_id
-      LEFT JOIN payment_methods pm ON pm.method_id = p.method_id
-      WHERE p.payment_id = @payment_id
-    `;
-    
-    const paymentDetails = await executeQuery(paymentQuery, { payment_id: paymentId });
-    
+
+    const result = await executeQuery(`
+      INSERT INTO payments (
+        amount, payment_method_id, subscription_id,
+        company_id, driver_id, description, payment_date,
+        status_id, created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, 1, NOW(), NOW())
+      RETURNING *
+    `, [
+      amount, payment_method_id, subscription_id,
+      company_id, driver_id, description, payment_date
+    ]);
+
     res.status(201).json({
       success: true,
-      data: paymentDetails.recordset[0],
-      message: 'Payment created successfully'
+      message: 'Payment created successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Create payment error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to create payment'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Update payment
-router.put('/:id', verifyToken, validateId, validatePayment, async (req, res) => {
+// Update payment status
+router.put('/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      subscription_id,
-      amount,
-      currency,
-      method_id,
-      status_id,
-      txn_ref
-    } = req.body;
-    
-    const updatePaymentQuery = `
-      UPDATE payments 
-      SET subscription_id = @subscription_id,
-          amount = @amount,
-          currency = @currency,
-          method_id = @method_id,
-          status_id = @status_id,
-          txn_ref = @txn_ref,
-          paid_at = CASE WHEN @status_id = 2 AND paid_at IS NULL THEN GETUTCDATE() ELSE paid_at END
-      WHERE payment_id = @id
-    `;
-    
-    await executeQuery(updatePaymentQuery, {
-      id,
-      subscription_id,
-      amount,
-      currency,
-      method_id,
-      status_id,
-      txn_ref
-    });
-    
-    // Get updated payment details
-    const paymentQuery = `
-      SELECT p.payment_id, p.subscription_id, p.amount, p.currency, p.method_id, p.status_id,
-             p.txn_ref, p.paid_at, p.created_at,
-             ps.name as status_name, pm.name as method_name
-      FROM payments p
-      LEFT JOIN payment_statuses ps ON ps.status_id = p.status_id
-      LEFT JOIN payment_methods pm ON pm.method_id = p.method_id
-      WHERE p.payment_id = @id
-    `;
-    
-    const paymentDetails = await executeQuery(paymentQuery, { id });
-    
-    res.json({
-      success: true,
-      data: paymentDetails.recordset[0],
-      message: 'Payment updated successfully'
-    });
-    
-  } catch (error) {
-    console.error('Update payment error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to update payment'
-    });
-  }
-});
+    const { status_id } = req.body;
 
-// Refund payment
-router.post('/:id/refund', verifyToken, validateId, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { amount, reason } = req.body;
-    
-    // Get current payment details
-    const paymentQuery = 'SELECT amount, status_id FROM payments WHERE payment_id = @id';
-    const paymentResult = await executeQuery(paymentQuery, { id });
-    
-    if (paymentResult.recordset.length === 0) {
+    const result = await executeQuery(`
+      UPDATE payments SET
+        status_id = $1,
+        updated_at = NOW()
+      WHERE id = $2
+      RETURNING *
+    `, [status_id, id]);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Payment not found'
       });
     }
-    
-    const currentPayment = paymentResult.recordset[0];
-    
-    if (currentPayment.status_id !== 2) {
-      return res.status(400).json({
-        success: false,
-        error: 'Bad Request',
-        message: 'Only paid payments can be refunded'
-      });
-    }
-    
-    const refundAmount = amount || currentPayment.amount;
-    
-    const refundPaymentQuery = `
-      UPDATE payments 
-      SET status_id = 4, updated_at = GETUTCDATE()
-      WHERE payment_id = @id
-    `;
-    
-    await executeQuery(refundPaymentQuery, { id });
-    
-    res.json({
-      success: true,
-      message: 'Payment refunded successfully',
-      data: {
-        refundAmount,
-        reason
-      }
-    });
-    
-  } catch (error) {
-    console.error('Refund payment error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to refund payment'
-    });
-  }
-});
 
-// Delete payment
-router.delete('/:id', verifyToken, validateId, async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const deletePaymentQuery = 'DELETE FROM payments WHERE payment_id = @id';
-    
-    await executeQuery(deletePaymentQuery, { id });
-    
     res.json({
       success: true,
-      message: 'Payment deleted successfully'
+      message: 'Payment status updated successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
-    console.error('Delete payment error:', error);
+    console.error('Update payment status error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to delete payment'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });

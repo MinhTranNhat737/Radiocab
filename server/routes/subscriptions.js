@@ -1,333 +1,222 @@
 const express = require('express');
 const { executeQuery } = require('../config/database');
-const { validateSubscription, validateId, validatePagination } = require('../middleware/validation');
-const { verifyToken, requireCompanyOwnerOrAdmin, requireDriverOwnerOrAdmin } = require('../middleware/auth');
+const { validateSubscription } = require('../middleware/validation');
 
 const router = express.Router();
 
 // Get all subscriptions
-router.get('/', verifyToken, validatePagination, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      status,
-      planId,
-      companyId,
-      driverId
+    const { 
+      page = 1, 
+      limit = 10, 
+      user_id,
+      company_id,
+      driver_id,
+      status_id,
+      sort_by = 'created_at',
+      sort_order = 'DESC'
     } = req.query;
-    
+
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
-    const params = { offset, limit };
-    
-    // Add status filter
-    if (status) {
-      whereClause += ' AND s.status_id = @status';
-      params.status = status;
+    let whereConditions = [];
+    let queryParams = [];
+    let paramCount = 0;
+
+    if (user_id) {
+      paramCount++;
+      whereConditions.push(`s.user_id = $${paramCount}`);
+      queryParams.push(user_id);
     }
-    
-    // Add plan filter
-    if (planId) {
-      whereClause += ' AND s.plan_id = @planId';
-      params.planId = planId;
+
+    if (company_id) {
+      paramCount++;
+      whereConditions.push(`cs.company_id = $${paramCount}`);
+      queryParams.push(company_id);
     }
-    
-    // Add company filter
-    if (companyId) {
-      whereClause += ' AND cs.company_id = @companyId';
-      params.companyId = companyId;
+
+    if (driver_id) {
+      paramCount++;
+      whereConditions.push(`ds.driver_id = $${paramCount}`);
+      queryParams.push(driver_id);
     }
-    
-    // Add driver filter
-    if (driverId) {
-      whereClause += ' AND ds.driver_id = @driverId';
-      params.driverId = driverId;
+
+    if (status_id) {
+      paramCount++;
+      whereConditions.push(`s.status_id = $${paramCount}`);
+      queryParams.push(status_id);
     }
-    
-    // Get subscriptions with pagination
-    const subscriptionsQuery = `
-      SELECT s.subscription_id, s.plan_id, s.status_id, s.start_date, s.end_date, s.created_at, s.updated_at,
-             p.name as plan_name, p.price, p.currency,
-             ss.name as status_name,
-             c.name as company_name, d.name as driver_name
-      FROM subscriptions s
-      LEFT JOIN plans p ON p.plan_id = s.plan_id
-      LEFT JOIN subscription_statuses ss ON ss.status_id = s.status_id
-      LEFT JOIN company_subscriptions cs ON cs.subscription_id = s.subscription_id
-      LEFT JOIN companies c ON c.company_id = cs.company_id
-      LEFT JOIN driver_subscriptions ds ON ds.subscription_id = s.subscription_id
-      LEFT JOIN drivers d ON d.driver_id = ds.driver_id
-      ${whereClause}
-      ORDER BY s.${sortBy} ${sortOrder.toUpperCase()}
-      OFFSET @offset ROWS
-      FETCH NEXT @limit ROWS ONLY
-    `;
-    
-    const subscriptionsResult = await executeQuery(subscriptionsQuery, params);
-    
-    // Get total count
+
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+
     const countQuery = `
-      SELECT COUNT(*) as total
+      SELECT COUNT(*) as total 
       FROM subscriptions s
-      LEFT JOIN company_subscriptions cs ON cs.subscription_id = s.subscription_id
-      LEFT JOIN driver_subscriptions ds ON ds.subscription_id = s.subscription_id
+      LEFT JOIN company_subscriptions cs ON s.id = cs.subscription_id
+      LEFT JOIN driver_subscriptions ds ON s.id = ds.subscription_id
       ${whereClause}
     `;
-    
-    const countResult = await executeQuery(countQuery, params);
-    const total = countResult.recordset[0].total;
-    
+    const countResult = await executeQuery(countQuery, queryParams);
+    const total = parseInt(countResult.rows[0].total);
+
+    const subscriptionsQuery = `
+      SELECT 
+        s.*,
+        p.plan_name,
+        p.price,
+        ss.status_name,
+        u.full_name as user_name,
+        c.company_name,
+        d.full_name as driver_name
+      FROM subscriptions s
+      LEFT JOIN plans p ON s.plan_id = p.id
+      LEFT JOIN subscription_statuses ss ON s.status_id = ss.id
+      LEFT JOIN users u ON s.user_id = u.id
+      LEFT JOIN company_subscriptions cs ON s.id = cs.subscription_id
+      LEFT JOIN companies c ON cs.company_id = c.id
+      LEFT JOIN driver_subscriptions ds ON s.id = ds.subscription_id
+      LEFT JOIN drivers d ON ds.driver_id = d.id
+      ${whereClause}
+      ORDER BY s.${sort_by} ${sort_order}
+      LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}
+    `;
+
+    queryParams.push(limit, offset);
+    const result = await executeQuery(subscriptionsQuery, queryParams);
+
     res.json({
       success: true,
-      data: subscriptionsResult.recordset,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: total,
-        totalPages: Math.ceil(total / limit)
+      data: {
+        subscriptions: result.rows,
+        pagination: {
+          current_page: parseInt(page),
+          per_page: parseInt(limit),
+          total: total,
+          total_pages: Math.ceil(total / limit)
+        }
       }
     });
-    
+
   } catch (error) {
     console.error('Get subscriptions error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get subscriptions'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Get subscription by ID
-router.get('/:id', verifyToken, validateId, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const subscriptionQuery = `
-      SELECT s.subscription_id, s.plan_id, s.status_id, s.start_date, s.end_date, s.created_at, s.updated_at,
-             p.name as plan_name, p.price, p.currency,
-             ss.name as status_name,
-             c.name as company_name, d.name as driver_name
+
+    const result = await executeQuery(`
+      SELECT 
+        s.*,
+        p.plan_name,
+        p.price,
+        ss.status_name,
+        u.full_name as user_name
       FROM subscriptions s
-      LEFT JOIN plans p ON p.plan_id = s.plan_id
-      LEFT JOIN subscription_statuses ss ON ss.status_id = s.status_id
-      LEFT JOIN company_subscriptions cs ON cs.subscription_id = s.subscription_id
-      LEFT JOIN companies c ON c.company_id = cs.company_id
-      LEFT JOIN driver_subscriptions ds ON ds.subscription_id = s.subscription_id
-      LEFT JOIN drivers d ON d.driver_id = ds.driver_id
-      WHERE s.subscription_id = @id
-    `;
-    
-    const subscriptionResult = await executeQuery(subscriptionQuery, { id });
-    
-    if (subscriptionResult.recordset.length === 0) {
+      LEFT JOIN plans p ON s.plan_id = p.id
+      LEFT JOIN subscription_statuses ss ON s.status_id = ss.id
+      LEFT JOIN users u ON s.user_id = u.id
+      WHERE s.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Subscription not found'
       });
     }
-    
+
     res.json({
       success: true,
-      data: subscriptionResult.recordset[0]
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Get subscription error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get subscription'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Create subscription
-router.post('/', verifyToken, validateSubscription, async (req, res) => {
+// Create new subscription
+router.post('/', validateSubscription, async (req, res) => {
   try {
     const {
+      user_id,
       plan_id,
-      status_id,
       start_date,
       end_date,
-      company_id,
-      driver_id
+      status_id = 1,
+      billing_cycle_id = 1
     } = req.body;
-    
-    // Create subscription
-    const createSubscriptionQuery = `
-      INSERT INTO subscriptions (plan_id, status_id, start_date, end_date)
-      OUTPUT INSERTED.subscription_id
-      VALUES (@plan_id, @status_id, @start_date, @end_date)
-    `;
-    
-    const subscriptionResult = await executeQuery(createSubscriptionQuery, {
-      plan_id,
-      status_id,
-      start_date,
-      end_date
-    });
-    
-    const subscriptionId = subscriptionResult.recordset[0].subscription_id;
-    
-    // Link to company or driver
-    if (company_id) {
-      const linkCompanyQuery = `
-        INSERT INTO company_subscriptions (subscription_id, company_id)
-        VALUES (@subscription_id, @company_id)
-      `;
-      await executeQuery(linkCompanyQuery, { subscription_id: subscriptionId, company_id });
-    }
-    
-    if (driver_id) {
-      const linkDriverQuery = `
-        INSERT INTO driver_subscriptions (subscription_id, driver_id)
-        VALUES (@subscription_id, @driver_id)
-      `;
-      await executeQuery(linkDriverQuery, { subscription_id: subscriptionId, driver_id });
-    }
-    
-    // Get created subscription details
-    const subscriptionQuery = `
-      SELECT s.subscription_id, s.plan_id, s.status_id, s.start_date, s.end_date, s.created_at, s.updated_at,
-             p.name as plan_name, p.price, p.currency,
-             ss.name as status_name
-      FROM subscriptions s
-      LEFT JOIN plans p ON p.plan_id = s.plan_id
-      LEFT JOIN subscription_statuses ss ON ss.status_id = s.status_id
-      WHERE s.subscription_id = @subscription_id
-    `;
-    
-    const subscriptionDetails = await executeQuery(subscriptionQuery, { subscription_id: subscriptionId });
-    
+
+    const result = await executeQuery(`
+      INSERT INTO subscriptions (
+        user_id, plan_id, start_date, end_date,
+        status_id, billing_cycle_id, created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+      RETURNING *
+    `, [user_id, plan_id, start_date, end_date, status_id, billing_cycle_id]);
+
     res.status(201).json({
       success: true,
-      data: subscriptionDetails.recordset[0],
-      message: 'Subscription created successfully'
+      message: 'Subscription created successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Create subscription error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to create subscription'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Update subscription
-router.put('/:id', verifyToken, validateId, validateSubscription, async (req, res) => {
+// Update subscription status
+router.put('/:id/status', async (req, res) => {
   try {
     const { id } = req.params;
-    const {
-      plan_id,
-      status_id,
-      start_date,
-      end_date
-    } = req.body;
-    
-    const updateSubscriptionQuery = `
-      UPDATE subscriptions 
-      SET plan_id = @plan_id,
-          status_id = @status_id,
-          start_date = @start_date,
-          end_date = @end_date,
-          updated_at = GETUTCDATE()
-      WHERE subscription_id = @id
-    `;
-    
-    await executeQuery(updateSubscriptionQuery, {
-      id,
-      plan_id,
-      status_id,
-      start_date,
-      end_date
-    });
-    
-    // Get updated subscription details
-    const subscriptionQuery = `
-      SELECT s.subscription_id, s.plan_id, s.status_id, s.start_date, s.end_date, s.created_at, s.updated_at,
-             p.name as plan_name, p.price, p.currency,
-             ss.name as status_name
-      FROM subscriptions s
-      LEFT JOIN plans p ON p.plan_id = s.plan_id
-      LEFT JOIN subscription_statuses ss ON ss.status_id = s.status_id
-      WHERE s.subscription_id = @id
-    `;
-    
-    const subscriptionDetails = await executeQuery(subscriptionQuery, { id });
-    
-    res.json({
-      success: true,
-      data: subscriptionDetails.recordset[0],
-      message: 'Subscription updated successfully'
-    });
-    
-  } catch (error) {
-    console.error('Update subscription error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to update subscription'
-    });
-  }
-});
+    const { status_id } = req.body;
 
-// Cancel subscription
-router.post('/:id/cancel', verifyToken, validateId, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { reason } = req.body;
-    
-    const cancelSubscriptionQuery = `
-      UPDATE subscriptions 
-      SET status_id = 4, updated_at = GETUTCDATE()
-      WHERE subscription_id = @id
-    `;
-    
-    await executeQuery(cancelSubscriptionQuery, { id });
-    
-    res.json({
-      success: true,
-      message: 'Subscription cancelled successfully'
-    });
-    
-  } catch (error) {
-    console.error('Cancel subscription error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to cancel subscription'
-    });
-  }
-});
+    const result = await executeQuery(`
+      UPDATE subscriptions SET
+        status_id = $1,
+        updated_at = NOW()
+      WHERE id = $2
+      RETURNING *
+    `, [status_id, id]);
 
-// Delete subscription
-router.delete('/:id', verifyToken, validateId, async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const deleteSubscriptionQuery = 'DELETE FROM subscriptions WHERE subscription_id = @id';
-    
-    await executeQuery(deleteSubscriptionQuery, { id });
-    
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Subscription not found'
+      });
+    }
+
     res.json({
       success: true,
-      message: 'Subscription deleted successfully'
+      message: 'Subscription status updated successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
-    console.error('Delete subscription error:', error);
+    console.error('Update subscription status error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to delete subscription'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });

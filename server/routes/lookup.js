@@ -1,161 +1,114 @@
 const express = require('express');
 const { executeQuery } = require('../config/database');
-const { verifyToken } = require('../middleware/auth');
 
 const router = express.Router();
 
 // Get all lookup data
-router.get('/', verifyToken, async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    // Get cities
-    const citiesQuery = `
-      SELECT ci.city_id, ci.name, ci.state_id, s.name as state_name, s.country_id, co.name as country_name
-      FROM cities ci
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      ORDER BY co.name, s.name, ci.name
-    `;
-    
-    const citiesResult = await executeQuery(citiesQuery);
-    
-    // Get states
-    const statesQuery = `
-      SELECT s.state_id, s.name, s.country_id, co.name as country_name
-      FROM states s
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      ORDER BY co.name, s.name
-    `;
-    
-    const statesResult = await executeQuery(statesQuery);
-    
-    // Get countries
-    const countriesQuery = 'SELECT country_id, name, iso_code FROM countries ORDER BY name';
-    const countriesResult = await executeQuery(countriesQuery);
-    
-    // Get membership types
-    const membershipTypesQuery = 'SELECT membership_type_id, code, name FROM membership_types ORDER BY name';
-    const membershipTypesResult = await executeQuery(membershipTypesQuery);
-    
-    // Get subscription statuses
-    const subscriptionStatusesQuery = 'SELECT status_id, code, name FROM subscription_statuses ORDER BY name';
-    const subscriptionStatusesResult = await executeQuery(subscriptionStatusesQuery);
-    
-    // Get payment statuses
-    const paymentStatusesQuery = 'SELECT status_id, code, name FROM payment_statuses ORDER BY name';
-    const paymentStatusesResult = await executeQuery(paymentStatusesQuery);
-    
-    // Get payment methods
-    const paymentMethodsQuery = 'SELECT method_id, code, name FROM payment_methods ORDER BY name';
-    const paymentMethodsResult = await executeQuery(paymentMethodsQuery);
-    
-    // Get ad statuses
-    const adStatusesQuery = 'SELECT status_id, code, name FROM ad_statuses ORDER BY name';
-    const adStatusesResult = await executeQuery(adStatusesQuery);
-    
-    // Get plans
-    const plansQuery = `
-      SELECT p.plan_id, p.name, p.price, p.currency, p.billing_cycle_id,
-             bc.name as billing_cycle_name, it.name as item_type_name
-      FROM plans p
-      LEFT JOIN billing_cycles bc ON bc.billing_cycle_id = p.billing_cycle_id
-      LEFT JOIN item_types it ON it.item_type_id = p.item_type_id
-      WHERE p.is_active = 1
-      ORDER BY it.name, bc.name, p.name
-    `;
-    
-    const plansResult = await executeQuery(plansQuery);
-    
-    // Get billing cycles
-    const billingCyclesQuery = 'SELECT billing_cycle_id, code, name, months FROM billing_cycles ORDER BY months, name';
-    const billingCyclesResult = await executeQuery(billingCyclesQuery);
-    
-    // Get roles
-    const rolesQuery = 'SELECT role_id, role_code, role_name FROM roles ORDER BY role_name';
-    const rolesResult = await executeQuery(rolesQuery);
-    
+    const [
+      countries,
+      states,
+      cities,
+      roles,
+      plans,
+      paymentMethods,
+      paymentStatuses,
+      subscriptionStatuses,
+      adStatuses,
+      membershipTypes,
+      itemTypes,
+      feedbackTypes,
+      billingCycles
+    ] = await Promise.all([
+      executeQuery('SELECT * FROM countries ORDER BY name'),
+      executeQuery('SELECT * FROM states ORDER BY name'),
+      executeQuery('SELECT * FROM cities ORDER BY name'),
+      executeQuery('SELECT * FROM roles ORDER BY role_name'),
+      executeQuery('SELECT * FROM plans ORDER BY name'),
+      executeQuery('SELECT * FROM payment_methods ORDER BY name'),
+      executeQuery('SELECT * FROM payment_statuses ORDER BY name'),
+      executeQuery('SELECT * FROM subscription_statuses ORDER BY name'),
+      executeQuery('SELECT * FROM ad_statuses ORDER BY name'),
+      executeQuery('SELECT * FROM membership_types ORDER BY name'),
+      executeQuery('SELECT * FROM item_types ORDER BY name'),
+      executeQuery('SELECT * FROM feedback_types ORDER BY name'),
+      executeQuery('SELECT * FROM billing_cycles ORDER BY name')
+    ]);
+
     res.json({
       success: true,
       data: {
-        cities: citiesResult.recordset,
-        states: statesResult.recordset,
-        countries: countriesResult.recordset,
-        membershipTypes: membershipTypesResult.recordset,
-        subscriptionStatuses: subscriptionStatusesResult.recordset,
-        paymentStatuses: paymentStatusesResult.recordset,
-        paymentMethods: paymentMethodsResult.recordset,
-        adStatuses: adStatusesResult.recordset,
-        plans: plansResult.recordset,
-        billingCycles: billingCyclesResult.recordset,
-        roles: rolesResult.recordset
+        countries: countries.rows,
+        states: states.rows,
+        cities: cities.rows,
+        roles: roles.rows,
+        plans: plans.rows,
+        payment_methods: paymentMethods.rows,
+        payment_statuses: paymentStatuses.rows,
+        subscription_statuses: subscriptionStatuses.rows,
+        ad_statuses: adStatuses.rows,
+        membership_types: membershipTypes.rows,
+        item_types: itemTypes.rows,
+        feedback_types: feedbackTypes.rows,
+        billing_cycles: billingCycles.rows
       }
     });
-    
+
   } catch (error) {
     console.error('Get lookup data error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get lookup data'
-    });
-  }
-});
-
-// Get cities by state
-router.get('/cities/:stateId', verifyToken, async (req, res) => {
-  try {
-    const { stateId } = req.params;
-    
-    const citiesQuery = `
-      SELECT ci.city_id, ci.name, ci.state_id, s.name as state_name
-      FROM cities ci
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      WHERE ci.state_id = @stateId
-      ORDER BY ci.name
-    `;
-    
-    const citiesResult = await executeQuery(citiesQuery, { stateId });
-    
-    res.json({
-      success: true,
-      data: citiesResult.recordset
-    });
-    
-  } catch (error) {
-    console.error('Get cities error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get cities'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Get states by country
-router.get('/states/:countryId', verifyToken, async (req, res) => {
+router.get('/states/:country_id', async (req, res) => {
   try {
-    const { countryId } = req.params;
-    
-    const statesQuery = `
-      SELECT s.state_id, s.name, s.country_id, co.name as country_name
-      FROM states s
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      WHERE s.country_id = @countryId
-      ORDER BY s.name
-    `;
-    
-    const statesResult = await executeQuery(statesQuery, { countryId });
-    
+    const { country_id } = req.params;
+    const result = await executeQuery(
+      'SELECT * FROM states WHERE country_id = $1 ORDER BY state_name',
+      [country_id]
+    );
+
     res.json({
       success: true,
-      data: statesResult.recordset
+      data: result.rows
     });
-    
+
   } catch (error) {
     console.error('Get states error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get states'
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+});
+
+// Get cities by state
+router.get('/cities/:state_id', async (req, res) => {
+  try {
+    const { state_id } = req.params;
+    const result = await executeQuery(
+      'SELECT * FROM cities WHERE state_id = $1 ORDER BY city_name',
+      [state_id]
+    );
+
+    res.json({
+      success: true,
+      data: result.rows
+    });
+
+  } catch (error) {
+    console.error('Get cities error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });

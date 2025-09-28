@@ -6,6 +6,9 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import Header from "@/components/Header"
+import AdSidebar from "@/components/AdSidebar"
+import { SidebarProvider, useSidebar } from "@/components/SidebarManager"
+import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext"
 import {
   Car,
   Search,
@@ -19,15 +22,104 @@ import {
   Shield,
   Clock,
   Check,
-  Mail,
-  Phone,
 } from "lucide-react"
 
-function HeroSection() {
+function AdvertisementBanner() {
+  const { t } = useLanguage()
+  
   return (
-    <section className="relative py-12 lg:py-16 overflow-hidden">
-      <div className="absolute inset-0 gradient-black-yellow opacity-80 dark:opacity-80" />
-      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:opacity-0" />
+    <section className="relative py-12 bg-gradient-to-r from-primary via-accent to-primary overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-10">
+        <div className="absolute top-0 left-0 w-full h-full" style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+        }}></div>
+      </div>
+      
+      {/* Shimmer Effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer"></div>
+      
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="text-center md:text-left space-y-6">
+              <div className="flex items-center justify-center md:justify-start space-x-4">
+                <div className="icon-container w-24 h-24 bg-white/20 backdrop-blur rounded-full flex items-center justify-center animate-pulse">
+                  <Car className="h-12 w-12 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold text-white">{t.adTitle}</h3>
+                  <div className="rating-stars flex items-center space-x-1 text-yellow-300">
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <Star className="h-5 w-5 fill-current" />
+                    <span className="text-lg font-semibold ml-2 text-white">{t.adRating}</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-xl text-white/90 leading-relaxed">
+                {t.adDescription}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Button className="bg-white text-primary hover:bg-white/90 px-10 py-4 text-xl font-bold transition-all duration-300 hover:scale-105 shadow-lg">
+                  {t.bookNow}
+                </Button>
+                <Button variant="outline" className="border-white text-white hover:bg-white/10 px-10 py-4 text-xl font-bold transition-all duration-300 hover:scale-105">
+                  {t.learnMore}
+                </Button>
+              </div>
+            </div>
+            <div className="hidden md:block">
+              <div className="relative">
+                <div className="w-full h-64 bg-white/10 backdrop-blur rounded-3xl flex items-center justify-center border border-white/20">
+                  <div className="text-center space-y-4">
+                    <Car className="h-20 w-20 text-white mx-auto animate-bounce" />
+                    <p className="text-white text-2xl font-bold">Premium Service</p>
+                    <div className="flex items-center justify-center space-x-2">
+                      <Star className="h-6 w-6 text-yellow-300 fill-current" />
+                      <Star className="h-6 w-6 text-yellow-300 fill-current" />
+                      <Star className="h-6 w-6 text-yellow-300 fill-current" />
+                      <Star className="h-6 w-6 text-yellow-300 fill-current" />
+                      <Star className="h-6 w-6 text-yellow-300 fill-current" />
+                    </div>
+                  </div>
+                </div>
+                <div className="absolute -top-4 -right-4 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+                  <Star className="h-6 w-6 text-white fill-current" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HeroSection() {
+  const { t } = useLanguage()
+  
+  return (
+    <section className="homepage relative py-8 sm:py-12 lg:py-16 overflow-hidden page-enter">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
+        style={{
+          backgroundImage: "url('/taxi.png')",
+          backgroundSize: "150% auto",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Overlay gradients - darker background for better text visibility */}
+      <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
+
+      {/* Left to right gradient to ensure taxi front is visible on the right */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-primary rounded-full animate-ping"></div>
@@ -41,20 +133,15 @@ function HeroSection() {
         ></div>
       </div>
 
-      <div className="container relative lg:ml-16">
-        <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[50vh]">
-          <div className="space-y-6 animate-slide-in-left flex flex-col justify-center text-center lg:text-left p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-primary/10 shadow-xl">
-            <div className="space-y-4">
-              <h1 className="text-4xl lg:text-6xl font-black text-balance leading-tight drop-shadow-lg text-gray-900 dark:text-white">
-                Kết nối{" "}
-                <span className="text-primary bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-pulse-yellow drop-shadow-2xl">
-                  Taxi
-                </span>{" "}
-                dễ dàng hơn bao giờ hết
+      <div className="container relative lg:ml-16 px-4 sm:px-6">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 items-center min-h-[40vh] sm:min-h-[50vh]">
+          <div className="hero-section space-y-4 sm:space-y-6 animate-slide-in-left flex flex-col justify-center text-center lg:text-left p-4 sm:p-6 rounded-2xl bg-background/50 backdrop-blur-sm border border-primary/10 shadow-xl">
+            <div className="space-y-3 sm:space-y-4">
+              <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black text-balance leading-tight drop-shadow-lg text-black dark:text-white homepage-text">
+                {t.heroTitle}
               </h1>
-              <p className="text-xl lg:text-2xl text-gray-700 dark:text-foreground text-pretty max-w-lg font-medium leading-relaxed drop-shadow-md">
-                Cổng thông tin hàng đầu cho công ty taxi, tài xế và khách hàng. Đăng ký dịch vụ, quảng cáo và tìm kiếm
-                thông tin một cách nhanh chóng.
+              <p className="text-lg sm:text-xl lg:text-2xl text-gray-700 dark:text-foreground text-pretty max-w-lg font-medium leading-relaxed drop-shadow-md homepage-text">
+                {t.heroSubtitle}
               </p>
             </div>
 
@@ -62,19 +149,19 @@ function HeroSection() {
               <Link href="/listing">
                 <Button
                   size="default"
-                  className="bg-primary text-primary-foreground hover:bg-primary/90 animate-glow hover-lift w-full sm:w-auto"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 animate-glow hover-lift w-full sm:w-auto transition-all duration-300"
                 >
                   <Zap className="h-4 w-4 mr-2" />
-                  Đăng Ký Công Ty Taxi
+                  {t.registerCompany}
                 </Button>
               </Link>
               <Link href="/drivers">
                 <Button
                   size="default"
                   variant="outline"
-                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground hover-glow bg-transparent w-full sm:w-auto"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground hover-glow bg-transparent w-full sm:w-auto transition-all duration-300"
                 >
-                  Đăng Ký Tài Xế
+                  {t.registerDriver}
                 </Button>
               </Link>
             </div>
@@ -83,22 +170,22 @@ function HeroSection() {
           <div className="lg:pl-20 animate-slide-in-right">
             <Card className="p-6 bg-card/80 backdrop-blur border-primary/30 hover-lift animate-glow bg-white/90 dark:bg-card/80">
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-primary">Tìm kiếm dịch vụ taxi</h3>
+                <h3 className="text-lg font-semibold text-primary">{t.searchPlaceholder}</h3>
 
                 <div className="space-y-3">
                   <div className="relative animate-fade-in-up">
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-primary" />
-                    <Input placeholder="Điểm đón" className="pl-10 border-primary/30 focus:border-primary hover-glow" />
+                    <Input placeholder={t.pickupPoint} className="pl-10 border-primary/30 focus:border-primary hover-glow" />
                   </div>
 
                   <div className="relative animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
                     <MapPin className="absolute left-3 top-3 h-4 w-4 text-primary" />
-                    <Input placeholder="Điểm đến" className="pl-10 border-primary/30 focus:border-primary hover-glow" />
+                    <Input placeholder={t.destination} className="pl-10 border-primary/30 focus:border-primary hover-glow" />
                   </div>
 
                   <div className="relative animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
                     <Calendar className="absolute left-3 top-3 h-4 w-4 text-primary" />
-                    <Input type="datetime-local" className="pl-10 border-primary/30 focus:border-primary hover-glow" />
+                    <Input type="datetime-local" placeholder={t.pickupTime} className="pl-10 border-primary/30 focus:border-primary hover-glow" />
                   </div>
                 </div>
 
@@ -107,7 +194,7 @@ function HeroSection() {
                   style={{ animationDelay: "0.3s" }}
                 >
                   <Search className="h-4 w-4 mr-2" />
-                  Tìm Kiếm Taxi
+                  {t.searchButton}
                 </Button>
               </div>
             </Card>
@@ -119,68 +206,89 @@ function HeroSection() {
 }
 
 function FeaturesSection() {
+  const { t } = useLanguage()
+  
   const features = [
     {
       icon: Building2,
-      title: "Đăng ký công ty taxi",
-      description: "Dễ dàng đăng ký và quảng cáo dịch vụ taxi của bạn trên nền tảng",
+      title: t.feature1Title,
+      description: t.feature1Desc,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
       icon: Users,
-      title: "Kết nối tài xế",
-      description: "Tài xế có thể đăng ký và kết nối với các công ty taxi phù hợp",
+      title: t.feature2Title,
+      description: t.feature2Desc,
       color: "text-accent",
       bgColor: "bg-accent/10",
     },
     {
       icon: MessageSquare,
-      title: "Phản hồi khách hàng",
-      description: "Khách hàng có thể gửi phản hồi và đánh giá dịch vụ một cách dễ dàng",
+      title: t.feature3Title,
+      description: t.feature3Desc,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
       icon: Star,
-      title: "Đánh giá chất lượng",
-      description: "Hệ thống đánh giá minh bạch giúp nâng cao chất lượng dịch vụ",
+      title: t.feature4Title,
+      description: t.feature4Desc,
       color: "text-accent",
       bgColor: "bg-accent/10",
     },
     {
       icon: Shield,
-      title: "An toàn bảo mật",
-      description: "Thông tin được bảo mật tuyệt đối với công nghệ mã hóa tiên tiến",
+      title: t.feature1Title,
+      description: t.feature1Desc,
       color: "text-primary",
       bgColor: "bg-primary/10",
     },
     {
       icon: Clock,
-      title: "Hỗ trợ 24/7",
-      description: "Đội ngũ hỗ trợ khách hàng hoạt động 24/7 để giải đáp mọi thắc mắc",
+      title: t.feature4Title,
+      description: t.feature4Desc,
       color: "text-accent",
       bgColor: "bg-accent/10",
     },
   ]
 
   return (
-    <section id="features" className="py-20 bg-background/50 bg-gradient-to-br from-yellow-100/80 via-yellow-200/80 to-yellow-300/80 dark:bg-background/50">
-      <div className="container max-w-7xl mx-auto px-4">
-        <div className="text-center space-y-4 mb-16 animate-fade-in-up">
-          <h2 className="text-3xl lg:text-4xl font-bold text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Tại sao chọn RadioCabs.in?
+    <section
+      id="features"
+      className="relative py-12 sm:py-16 lg:py-20 bg-background/50 bg-gradient-to-br from-yellow-100/80 via-yellow-200/80 to-yellow-300/80 dark:bg-background/50 overflow-hidden slide-in-left"
+    >
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
+        style={{
+          backgroundImage: "url('/taxibg2.jpg')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "10% center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Overlay gradients - darker background for better text visibility */}
+      <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
+
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 relative">
+        <div className="text-center space-y-3 sm:space-y-4 mb-12 sm:mb-16 animate-fade-in-up">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {t.featuresTitle}
           </h2>
-          <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
-            Nền tảng toàn diện kết nối mọi thành phần trong hệ sinh thái taxi Việt Nam
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
+            {t.featuresSubtitle}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 justify-items-center">
           {features.map((feature, index) => (
             <Card
               key={index}
-              className="border-primary/20 bg-white/90 dark:bg-card/80 backdrop-blur hover-lift animate-fade-in-up hover-glow group"
+              className="border-primary/20 bg-white/90 dark:bg-card/80 backdrop-blur hover-lift animate-fade-in-up hover-glow group card-transition"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <CardHeader>
@@ -207,61 +315,84 @@ function FeaturesSection() {
 }
 
 function PricingSection() {
+  const { t } = useLanguage()
+  
   const plans = [
     {
       name: "Free",
       price: "0",
-      period: "Miễn phí",
-      description: "Dành cho cá nhân tài xế mới bắt đầu",
-      features: ["Đăng ký thông tin cơ bản", "Tìm kiếm công ty taxi", "Gửi phản hồi cơ bản", "Hỗ trợ email"],
-      buttonText: "Bắt đầu miễn phí",
+      period: "Free",
+      description: "For new individual drivers",
+      features: ["Basic information registration", "Taxi company search", "Basic feedback", "Email support"],
+      buttonText: t.getStarted,
       popular: false,
     },
     {
       name: "Basic",
       price: "299,000",
-      period: "VNĐ/tháng",
+      period: "VND/month",
       quarterlyPrice: "799,000",
-      quarterlyPeriod: "VNĐ/quý",
-      description: "Dành cho công ty taxi nhỏ và tài xế chuyên nghiệp",
+      quarterlyPeriod: "VND/quarter",
+      description: "For small taxi companies and professional drivers",
       features: [
-        "Tất cả tính năng Free",
-        "Quảng cáo dịch vụ cơ bản",
-        "Thống kê cơ bản",
-        "Hỗ trợ điện thoại",
-        "Tối đa 10 xe đăng ký",
+        "All Free features",
+        "Basic service advertising",
+        "Basic statistics",
+        "Phone support",
+        "Up to 10 vehicles",
       ],
-      buttonText: "Chọn gói Basic",
+      buttonText: "Choose Basic Plan",
       popular: false,
     },
     {
       name: "Premium",
       price: "699,000",
-      period: "VNĐ/tháng",
+      period: "VND/month",
       quarterlyPrice: "1,899,000",
-      quarterlyPeriod: "VNĐ/quý",
-      description: "Dành cho công ty taxi lớn và đối tác chiến lược",
+      quarterlyPeriod: "VND/quarter",
+      description: "For large taxi companies and strategic partners",
       features: [
-        "Tất cả tính năng Basic",
-        "Quảng cáo ưu tiên",
-        "Thống kê chi tiết",
-        "Hỗ trợ 24/7",
-        "Không giới hạn số xe",
-        "API tích hợp",
-        "Báo cáo tùy chỉnh",
+        "All Basic features",
+        "Priority advertising",
+        "Detailed statistics",
+        "24/7 support",
+        "Unlimited vehicles",
+        "API integration",
+        "Custom reports",
       ],
-      buttonText: "Chọn gói Premium",
+      buttonText: "Choose Premium Plan",
       popular: true,
     },
   ]
 
   return (
-    <section id="pricing" className="py-20 bg-gradient-to-br from-yellow-100/60 via-yellow-200/60 to-yellow-300/60 dark:bg-transparent">
-      <div className="container max-w-7xl mx-auto px-4">
+    <section
+      id="pricing"
+      className="relative py-20 bg-gradient-to-br from-yellow-100/60 via-yellow-200/60 to-yellow-300/60 dark:bg-transparent overflow-hidden slide-in-right"
+    >
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
+        style={{
+          backgroundImage: "url('/taxi3.jpg')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "10% center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Overlay gradients - darker background for better text visibility */}
+      <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
+
+      <div className="container max-w-7xl mx-auto px-4 relative">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">Bảng giá linh hoạt</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">
+            {t.pricingTitle}
+          </h2>
           <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
-            Chọn gói phù hợp với nhu cầu của bạn. Thanh toán theo tháng hoặc theo quý với mức giá ưu đãi.
+            {t.pricingSubtitle}
           </p>
         </div>
 
@@ -269,7 +400,7 @@ function PricingSection() {
           {plans.map((plan, index) => (
             <Card
               key={index}
-              className={`relative border-border/50 bg-white/90 dark:bg-card/50 backdrop-blur w-full max-w-sm ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
+              className={`relative border-border/50 bg-white/90 dark:bg-card/50 backdrop-blur w-full max-w-sm card-transition ${plan.popular ? "border-primary shadow-lg scale-105" : ""}`}
             >
               {plan.popular && (
                 <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
@@ -321,6 +452,8 @@ function PricingSection() {
 }
 
 function PartnersSection() {
+  const { t } = useLanguage()
+  
   const partners = [
     { name: "Vinasun", logo: "/vinasun-taxi-logo.jpg" },
     { name: "Mai Linh", logo: "/mai-linh-taxi-logo.jpg" },
@@ -333,12 +466,31 @@ function PartnersSection() {
   ]
 
   return (
-    <section id="partners" className="py-20 bg-gradient-to-br from-yellow-100/70 via-yellow-200/70 to-yellow-300/70 dark:bg-muted/30">
-      <div className="container max-w-7xl mx-auto px-4">
+    <section
+      id="partners"
+      className="relative py-20 bg-gradient-to-br from-yellow-100/70 via-yellow-200/70 to-yellow-300/70 dark:bg-muted/30 overflow-hidden fade-in-scale"
+    >
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
+        style={{
+          backgroundImage: "url('/taxi4.jpg')",
+          backgroundSize: "100% auto",
+          backgroundPosition: "10% center",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+
+      {/* Overlay gradients - darker background for better text visibility */}
+      <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
+      <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
+      <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
+
+      <div className="container max-w-7xl mx-auto px-4 relative">
         <div className="text-center space-y-4 mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">Đối tác tin cậy</h2>
+          <h2 className="text-3xl lg:text-4xl font-bold text-balance text-gray-900 dark:text-white">{t.partnersTitle}</h2>
           <p className="text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
-            Hơn 500+ công ty taxi và 10,000+ tài xế đã tin tưởng sử dụng RadioCabs.in
+            {t.partnersSubtitle}
           </p>
         </div>
 
@@ -378,12 +530,88 @@ function PartnersSection() {
   )
 }
 
+function TaxiVideoSection() {
+  const { t } = useLanguage()
+  
+  return (
+    <section className="relative py-16 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/10 dark:bg-background/50 overflow-hidden fade-in-scale">
+      <div className="container max-w-6xl mx-auto px-4 relative">
+        <div className="text-center space-y-4 sm:space-y-6 mb-8 sm:mb-12 animate-fade-in-up">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-balance bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            {t.videoTitle}
+          </h2>
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-muted-foreground text-pretty max-w-2xl mx-auto">
+            {t.videoSubtitle}
+          </p>
+        </div>
 
-export default function HomePage() {
+        {/* Video container that extends beyond section boundaries */}
+        <div className="relative -mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-24">
+          <div className="relative">
+            <video 
+              className="w-full h-[50vh] sm:h-[60vh] md:h-[70vh] lg:h-[80vh] object-cover" 
+              autoPlay 
+              loop 
+              muted 
+              playsInline
+            >
+              <source src="/taxivideo.mp4" type="video/mp4" />
+              Trình duyệt của bạn không hỗ trợ video.
+            </video>
+
+            {/* Video overlay with play indicator */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+
+            {/* Floating badge */}
+            <div className="absolute top-4 right-4">
+              <Badge className="bg-primary/90 text-primary-foreground backdrop-blur">
+                <Car className="h-3 w-3 mr-1" />
+                Dịch vụ chuyên nghiệp
+              </Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Call to action buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in-up">
+          <Link href="/listing">
+            <Button
+              size="lg"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 animate-glow hover-lift"
+            >
+              <Building2 className="h-5 w-5 mr-2" />
+              Đăng ký công ty taxi
+            </Button>
+          </Link>
+          <Link href="/drivers">
+            <Button
+              size="lg"
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-primary-foreground hover-glow bg-transparent"
+            >
+              <Users className="h-5 w-5 mr-2" />
+              Trở thành tài xế
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function HomePageContent() {
+  const { leftCollapsed, rightCollapsed } = useSidebar()
+  const bothCollapsed = leftCollapsed && rightCollapsed
+  
   return (
     <div className="min-h-screen gradient-radial-yellow bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:gradient-radial-yellow">
       <Header />
-      <main className="relative overflow-hidden">
+      
+      {/* Ad Sidebars */}
+      <AdSidebar position="left" />
+      <AdSidebar position="right" />
+      
+      <main className={`relative overflow-hidden ${bothCollapsed ? 'sidebars-collapsed' : ''}`} id="main-content">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full animate-float"></div>
           <div
@@ -396,11 +624,23 @@ export default function HomePage() {
           ></div>
         </div>
 
+        <AdvertisementBanner />
         <HeroSection />
         <FeaturesSection />
+        <TaxiVideoSection />
         <PricingSection />
         <PartnersSection />
       </main>
     </div>
+  )
+}
+
+export default function HomePage() {
+  return (
+    <LanguageProvider>
+      <SidebarProvider>
+        <HomePageContent />
+      </SidebarProvider>
+    </LanguageProvider>
   )
 }

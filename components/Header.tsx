@@ -5,19 +5,23 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu, Download, User, UserPlus } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
+import LanguageToggle from "@/components/LanguageToggle"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function Header() {
+  const { t } = useLanguage()
+  
   return (
     <header className="sticky top-0 z-50 w-full bg-background shadow-lg border-b border-primary/20">
       <div className="w-full flex items-center h-24 px-4 md:px-8">
         <div className="flex items-center flex-shrink-0">
-          <Link href="/" className="flex items-center gap-2 p-3 rounded-xl bg-gradient-to-r from-black/30 via-primary/20 to-black/30 backdrop-blur-sm border-2 border-black/60 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 ring-2 ring-white/50">
+          <Link href="/" className="flex items-center">
             <Image
               src="logo2.png"
               alt="RadioCabs Logo"
               width={200}
               height={75}
-              className="h-32 w-auto drop-shadow-lg dark:drop-shadow-none"
+              className="h-32 w-auto"
             />
           </Link>
         </div>
@@ -27,37 +31,37 @@ export default function Header() {
             href="/"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Trang Chủ
+            {t.home}
           </Link>
           <Link
             href="/listing"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Công Ty Taxi
+            {t.taxiCompanies}
           </Link>
           <Link
             href="/drivers"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Tài Xế
+            {t.drivers}
           </Link>
           <Link
             href="/advertise"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Quảng Cáo
+            {t.advertise}
           </Link>
           <Link
             href="/services"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Dịch Vụ
+            {t.services}
           </Link>
           <Link
             href="/feedback"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >
-            Góp Ý
+            {t.feedback}
           </Link>
         </nav>
 
@@ -70,7 +74,7 @@ export default function Header() {
               className="border-primary text-primary hover:bg-primary/20 hover:text-primary hover:shadow-lg hover:shadow-primary/50 hover:border-primary/80 font-medium px-4 py-2 transition-all duration-300 bg-transparent hover:scale-105"
             >
               <User className="h-4 w-4 mr-2" />
-              Đăng Nhập
+              {t.login}
             </Button>
           </Link>
 
@@ -80,7 +84,7 @@ export default function Header() {
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <UserPlus className="h-4 w-4 mr-2" />
-              Đăng Ký
+              {t.register}
             </Button>
           </Link>
 
@@ -90,15 +94,11 @@ export default function Header() {
               className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <Download className="h-4 w-4 mr-2" />
-              TẢI ỨNG DỤNG NGAY
+              {t.downloadApp}
             </Button>
           </Link>
 
-          <div className="hidden md:flex items-center gap-2 text-yellow-400 text-sm font-medium">
-            <button className="hover:text-yellow-300 transition-colors">VN</button>
-            <span className="text-yellow-400/50">|</span>
-            <button className="hover:text-yellow-300 transition-colors">EN</button>
-          </div>
+          <LanguageToggle />
 
           <Button variant="ghost" size="sm" className="md:hidden text-yellow-400 hover:bg-yellow-400/10">
             <Menu className="h-4 w-4" />

@@ -1,12 +1,32 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
+import { Inter, Roboto, Open_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import Footer from "@/components/Footer"
+import SmoothTransition from "@/components/SmoothTransition"
 import "./globals.css"
+
+// Font configurations
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const roboto = Roboto({
+  subsets: ["latin", "latin-ext"],
+  weight: ["300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
+  display: "swap",
+})
+
+const openSans = Open_Sans({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-open-sans",
+  display: "swap",
+})
 
 export const metadata: Metadata = {
   title: "RadioCabs.in - Cổng Thông Tin Taxi Hàng Đầu Việt Nam",
@@ -22,14 +42,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" suppressHydrationWarning>
-      <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className={`font-sans ${inter.variable} ${roboto.variable} ${openSans.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
-          <Suspense fallback={null}>{children}</Suspense>
+          <SmoothTransition>
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center">
+                <div className="loading-spinner w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full"></div>
+              </div>
+            }>
+              {children}
+            </Suspense>
+          </SmoothTransition>
           <Footer />
           <Analytics />
         </ThemeProvider>

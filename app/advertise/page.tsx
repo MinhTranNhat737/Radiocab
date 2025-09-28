@@ -60,24 +60,24 @@ export default function AdvertisePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400 page-enter">
       <Header />
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden">
+      <section className="hero-section py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fade-in-scale">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-yellow-300 to-yellow-500 bg-clip-text text-transparent animate-pulse">
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 text-black dark:bg-gradient-to-r dark:from-yellow-400 dark:via-yellow-300 dark:to-yellow-500 dark:bg-clip-text dark:text-transparent animate-pulse">
             Quảng cáo Dịch vụ Taxi
           </h1>
-          <p className="text-xl text-gray-600 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-700 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8), -2px -2px 4px rgba(0,0,0,0.8), 2px -2px 4px rgba(0,0,0,0.8), -2px 2px 4px rgba(0,0,0,0.8)' }}>
             Đăng ký quảng cáo dịch vụ taxi của bạn để tiếp cận nhiều khách hàng hơn trên RadioCabs.in
           </p>
         </div>
       </section>
 
       {/* Main Content */}
-      <section className="py-16">
+      <section className="py-16 slide-in-left">
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10 max-w-4xl mx-auto">
             <CardHeader className="text-center">

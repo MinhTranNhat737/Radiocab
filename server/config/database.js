@@ -1,24 +1,16 @@
-const sql = require('mssql');
+const { Pool } = require('pg');
 
 // Database configuration
 const dbConfig = {
-  server: process.env.DB_SERVER || 'localhost',
-  database: process.env.DB_NAME || 'Radiocabs',
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT) || 1433,
-  options: {
-    encrypt: process.env.DB_ENCRYPT === 'true',
-    trustServerCertificate: process.env.DB_TRUST_SERVER_CERTIFICATE === 'true',
-    enableArithAbort: true,
-    requestTimeout: 30000,
-    connectionTimeout: 30000,
-    pool: {
-      max: 10,
-      min: 0,
-      idleTimeoutMillis: 30000
-    }
-  }
+  host: process.env.DB_HOST || 'localhost',
+  database: process.env.DB_NAME || 'radiocabs',
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || '18112003',
+  port: parseInt(process.env.DB_PORT) || 4000,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 30000,
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
 };
 
 // Connection pool
@@ -28,7 +20,7 @@ let pool = null;
 const initializeDatabase = async () => {
   try {
     if (!pool) {
-      pool = await sql.connect(dbConfig);
+      pool = new Pool(dbConfig);
       console.log('✅ Database connected successfully');
     }
     return pool;
@@ -52,17 +44,10 @@ const getConnection = async () => {
 };
 
 // Execute query
-const executeQuery = async (query, params = {}) => {
+const executeQuery = async (query, params = []) => {
   try {
     const pool = await getConnection();
-    const request = pool.request();
-    
-    // Add parameters to request
-    Object.entries(params).forEach(([key, value]) => {
-      request.input(key, value);
-    });
-    
-    const result = await request.query(query);
+    const result = await pool.query(query, params);
     return result;
   } catch (error) {
     console.error('❌ Query execution failed:', error);
@@ -70,18 +55,11 @@ const executeQuery = async (query, params = {}) => {
   }
 };
 
-// Execute stored procedure
-const executeProcedure = async (procedureName, params = {}) => {
+// Execute stored procedure (PostgreSQL function)
+const executeProcedure = async (procedureName, params = []) => {
   try {
     const pool = await getConnection();
-    const request = pool.request();
-    
-    // Add parameters to request
-    Object.entries(params).forEach(([key, value]) => {
-      request.input(key, value);
-    });
-    
-    const result = await request.execute(procedureName);
+    const result = await pool.query(`SELECT * FROM ${procedureName}(${params.map((_, i) => `$${i + 1}`).join(', ')})`, params);
     return result;
   } catch (error) {
     console.error('❌ Stored procedure execution failed:', error);
@@ -93,7 +71,7 @@ const executeProcedure = async (procedureName, params = {}) => {
 const closeConnection = async () => {
   try {
     if (pool) {
-      await pool.close();
+      await pool.end();
       pool = null;
       console.log('✅ Database connection closed');
     }
@@ -122,5 +100,5 @@ module.exports = {
   executeQuery,
   executeProcedure,
   closeConnection,
-  sql
+  Pool
 };

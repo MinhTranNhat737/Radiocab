@@ -140,8 +140,8 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-8 page-enter">
+      <div className="fade-in-scale">
         <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
         <p className="text-muted-foreground mt-2">
           Tổng quan hệ thống và quản lý
@@ -149,7 +149,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Tổng công ty</CardTitle>
@@ -208,7 +208,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* System Health & Pending Approvals */}
-      <div className="grid gap-6 md:grid-cols-2">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -279,7 +279,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Recent Activity */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
         {/* Recent Companies */}
         <Card>
           <CardHeader>
@@ -376,7 +376,7 @@ export default function AdminDashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 md:grid-cols-4">
             <Link href="/admin/dashboard/companies">
               <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
                 <Building2 className="h-6 w-6" />

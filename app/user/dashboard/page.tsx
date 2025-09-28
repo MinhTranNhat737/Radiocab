@@ -155,8 +155,8 @@ export default function UserDashboardPage() {
   const recentActivity = currentData.recentActivity
 
   return (
-    <div className="space-y-8">
-      <div>
+    <div className="space-y-8 page-enter">
+      <div className="fade-in-scale">
         <h1 className="text-3xl font-bold text-foreground">
           {userRole === 'company' ? 'Company' : 'Driver'} Dashboard
         </h1>
@@ -193,7 +193,7 @@ export default function UserDashboardPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="font-medium">Email:</span>
@@ -238,7 +238,7 @@ export default function UserDashboardPage() {
       </Card>
 
       {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Lượt xem hồ sơ</CardTitle>
@@ -371,7 +371,7 @@ export default function UserDashboardPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             <Link href={`/user/dashboard/${userRole}/profile`}>
               <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
                 {userRole === 'company' ? (

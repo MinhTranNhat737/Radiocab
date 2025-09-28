@@ -1,451 +1,313 @@
 const express = require('express');
 const { executeQuery } = require('../config/database');
-const { validateCompany, validateId, validatePagination } = require('../middleware/validation');
-const { verifyToken, requireCompanyOwnerOrAdmin, requireOwnership } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Get all companies
-router.get('/', verifyToken, validatePagination, async (req, res) => {
+// Get all companies with pagination and filters
+router.get('/', async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      search = '',
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      status,
-      membershipType,
-      cityId
+    const { 
+      page = 1, 
+      limit = 10, 
+      search = '', 
+      city_id,
+      sort_by = 'created_at',
+      sort_order = 'DESC'
     } = req.query;
-    
+
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
-    const params = { offset, limit };
-    
-    // Add search filter
+    let whereConditions = [];
+    let queryParams = [];
+    let paramCount = 0;
+
+    // Build WHERE clause
     if (search) {
-      whereClause += ' AND (c.name LIKE @search OR c.contact_person LIKE @search OR c.email LIKE @search)';
-      params.search = `%${search}%`;
+      paramCount++;
+      whereConditions.push(`(c.name ILIKE $${paramCount} OR c.email ILIKE $${paramCount})`);
+      queryParams.push(`%${search}%`);
     }
-    
-    // Add status filter
-    if (status) {
-      whereClause += ' AND c.status = @status';
-      params.status = status;
+
+    if (city_id) {
+      paramCount++;
+      whereConditions.push(`c.city_id = $${paramCount}`);
+      queryParams.push(city_id);
     }
-    
-    // Add membership type filter
-    if (membershipType) {
-      whereClause += ' AND c.membership_type_id = @membershipType';
-      params.membershipType = membershipType;
-    }
-    
-    // Add city filter
-    if (cityId) {
-      whereClause += ' AND c.city_id = @cityId';
-      params.cityId = cityId;
-    }
-    
-    // Get companies with pagination
-    const companiesQuery = `
-      SELECT c.company_id, c.company_code, c.name, c.contact_person, c.designation,
-             c.address_line, c.city_id, c.mobile, c.telephone, c.fax_number, c.email,
-             c.membership_type_id, c.owner_user_id, c.status, c.created_at, c.updated_at,
-             ci.name as city_name, s.name as state_name, co.name as country_name,
-             mt.name as membership_type_name, u.full_name as owner_name
-      FROM companies c
-      LEFT JOIN cities ci ON ci.city_id = c.city_id
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      LEFT JOIN membership_types mt ON mt.membership_type_id = c.membership_type_id
-      LEFT JOIN users u ON u.user_id = c.owner_user_id
-      ${whereClause}
-      ORDER BY c.${sortBy} ${sortOrder.toUpperCase()}
-      OFFSET @offset ROWS
-      FETCH NEXT @limit ROWS ONLY
-    `;
-    
-    const companiesResult = await executeQuery(companiesQuery, params);
-    
+
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+
     // Get total count
     const countQuery = `
       SELECT COUNT(*) as total
       FROM companies c
       ${whereClause}
     `;
-    
-    const countResult = await executeQuery(countQuery, params);
-    const total = countResult.recordset[0].total;
-    
+    const countResult = await executeQuery(countQuery, queryParams);
+    const total = parseInt(countResult.rows[0].total);
+
+    // Get companies with details
+    const companiesQuery = `
+      SELECT 
+        c.*,
+        ci.name as city_name,
+        s.name as state_name,
+        co.name as country_name
+      FROM companies c
+      LEFT JOIN cities ci ON c.city_id = ci.id
+      LEFT JOIN states s ON ci.state_id = s.id
+      LEFT JOIN countries co ON s.country_id = co.id
+      ${whereClause}
+      ORDER BY c.${sort_by} ${sort_order}
+      LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}
+    `;
+
+    queryParams.push(limit, offset);
+    const result = await executeQuery(companiesQuery, queryParams);
+
     res.json({
       success: true,
-      data: companiesResult.recordset,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: total,
-        totalPages: Math.ceil(total / limit)
+      data: {
+        companies: result.rows,
+        pagination: {
+          current_page: parseInt(page),
+          per_page: parseInt(limit),
+          total: total,
+          total_pages: Math.ceil(total / limit)
+        }
       }
     });
-    
+
   } catch (error) {
     console.error('Get companies error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get companies'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Get company by ID
-router.get('/:id', verifyToken, validateId, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const companyQuery = `
-      SELECT c.company_id, c.company_code, c.name, c.contact_person, c.designation,
-             c.address_line, c.city_id, c.mobile, c.telephone, c.fax_number, c.email,
-             c.membership_type_id, c.owner_user_id, c.status, c.created_at, c.updated_at,
-             ci.name as city_name, s.name as state_name, co.name as country_name,
-             mt.name as membership_type_name, u.full_name as owner_name
+
+    const result = await executeQuery(`
+      SELECT 
+        c.*,
+        ci.name as city_name,
+        s.name as state_name,
+        co.name as country_name
       FROM companies c
-      LEFT JOIN cities ci ON ci.city_id = c.city_id
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      LEFT JOIN membership_types mt ON mt.membership_type_id = c.membership_type_id
-      LEFT JOIN users u ON u.user_id = c.owner_user_id
-      WHERE c.company_id = @id
-    `;
-    
-    const companyResult = await executeQuery(companyQuery, { id });
-    
-    if (companyResult.recordset.length === 0) {
+      LEFT JOIN cities ci ON c.city_id = ci.id
+      LEFT JOIN states s ON ci.state_id = s.id
+      LEFT JOIN countries co ON s.country_id = co.id
+      WHERE c.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Company not found'
       });
     }
-    
+
+    // Get company drivers
+    const driversResult = await executeQuery(`
+      SELECT 
+        d.id, d.license_number, d.license_expiry, d.is_active,
+        u.username, u.email, u.first_name, u.last_name, u.phone
+      FROM drivers d
+      JOIN users u ON d.user_id = u.id
+      WHERE d.company_id = $1
+      ORDER BY d.created_at DESC
+    `, [id]);
+
+    // Get company subscriptions
+    const subscriptionsResult = await executeQuery(`
+      SELECT 
+        s.*, p.plan_name, p.price, ss.name as status_name
+      FROM subscriptions s
+      JOIN plans p ON s.plan_id = p.id
+      JOIN subscription_statuses ss ON s.status_id = ss.id
+      WHERE s.company_id = $1
+      ORDER BY s.created_at DESC
+    `, [id]);
+
     res.json({
       success: true,
-      data: companyResult.recordset[0]
+      data: {
+        company: result.rows[0],
+        drivers: driversResult.rows,
+        subscriptions: subscriptionsResult.rows
+      }
     });
-    
+
   } catch (error) {
     console.error('Get company error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get company'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Create company
-router.post('/', verifyToken, validateCompany, async (req, res) => {
+// Create new company
+router.post('/', async (req, res) => {
   try {
     const {
       name,
-      contact_person,
-      designation,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      fax_number,
       email,
-      membership_type_id,
-      status = 'draft'
+      phone,
+      address,
+      city_id,
+      website,
+      description
     } = req.body;
-    
-    // Generate company code
-    const companyCode = `CAB${Date.now().toString().slice(-6)}`;
-    
-    const createCompanyQuery = `
+
+    // Check if company with same email exists
+    const existingCompany = await executeQuery(
+      'SELECT id FROM companies WHERE email = $1',
+      [email]
+    );
+
+    if (existingCompany.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Company with this email already exists'
+      });
+    }
+
+    const result = await executeQuery(`
       INSERT INTO companies (
-        company_code, name, contact_person, designation, address_line, city_id,
-        mobile, telephone, fax_number, email, membership_type_id, owner_user_id, status
-      )
-      OUTPUT INSERTED.company_id
-      VALUES (
-        @company_code, @name, @contact_person, @designation, @address_line, @city_id,
-        @mobile, @telephone, @fax_number, @email, @membership_type_id, @owner_user_id, @status
-      )
-    `;
-    
-    const companyResult = await executeQuery(createCompanyQuery, {
-      company_code: companyCode,
-      name,
-      contact_person,
-      designation,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      fax_number,
-      email,
-      membership_type_id,
-      owner_user_id: req.user.user_id,
-      status
-    });
-    
-    const companyId = companyResult.recordset[0].company_id;
-    
-    // Get created company details
-    const companyQuery = `
-      SELECT c.company_id, c.company_code, c.name, c.contact_person, c.designation,
-             c.address_line, c.city_id, c.mobile, c.telephone, c.fax_number, c.email,
-             c.membership_type_id, c.owner_user_id, c.status, c.created_at, c.updated_at,
-             ci.name as city_name, mt.name as membership_type_name
-      FROM companies c
-      LEFT JOIN cities ci ON ci.city_id = c.city_id
-      LEFT JOIN membership_types mt ON mt.membership_type_id = c.membership_type_id
-      WHERE c.company_id = @company_id
-    `;
-    
-    const companyDetails = await executeQuery(companyQuery, { company_id: companyId });
-    
+        name, email, phone, address, city_id, website, description,
+        created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+      RETURNING *
+    `, [
+      name, email, phone, address, city_id, website, description
+    ]);
+
     res.status(201).json({
       success: true,
-      data: companyDetails.recordset[0],
-      message: 'Company created successfully'
+      message: 'Company created successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Create company error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to create company'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Update company
-router.put('/:id', verifyToken, validateId, validateCompany, requireOwnership('company'), async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const {
       name,
-      contact_person,
-      designation,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      fax_number,
       email,
-      membership_type_id,
-      status
+      phone,
+      address,
+      city_id,
+      website,
+      description
     } = req.body;
-    
-    const updateCompanyQuery = `
-      UPDATE companies 
-      SET name = @name,
-          contact_person = @contact_person,
-          designation = @designation,
-          address_line = @address_line,
-          city_id = @city_id,
-          mobile = @mobile,
-          telephone = @telephone,
-          fax_number = @fax_number,
-          email = @email,
-          membership_type_id = @membership_type_id,
-          status = @status,
-          updated_at = GETUTCDATE()
-      WHERE company_id = @id
-    `;
-    
-    await executeQuery(updateCompanyQuery, {
-      id,
-      name,
-      contact_person,
-      designation,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      fax_number,
-      email,
-      membership_type_id,
-      status
-    });
-    
-    // Get updated company details
-    const companyQuery = `
-      SELECT c.company_id, c.company_code, c.name, c.contact_person, c.designation,
-             c.address_line, c.city_id, c.mobile, c.telephone, c.fax_number, c.email,
-             c.membership_type_id, c.owner_user_id, c.status, c.created_at, c.updated_at,
-             ci.name as city_name, mt.name as membership_type_name
-      FROM companies c
-      LEFT JOIN cities ci ON ci.city_id = c.city_id
-      LEFT JOIN membership_types mt ON mt.membership_type_id = c.membership_type_id
-      WHERE c.company_id = @id
-    `;
-    
-    const companyDetails = await executeQuery(companyQuery, { id });
-    
+
+    // Check if company exists
+    const existingCompany = await executeQuery(
+      'SELECT id FROM companies WHERE id = $1',
+      [id]
+    );
+
+    if (existingCompany.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+
+    // Check if email is already used by another company
+    const emailCheck = await executeQuery(
+      'SELECT id FROM companies WHERE email = $1 AND id != $2',
+      [email, id]
+    );
+
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already used by another company'
+      });
+    }
+
+    const result = await executeQuery(`
+      UPDATE companies SET
+        name = $1,
+        email = $2,
+        phone = $3,
+        address = $4,
+        city_id = $5,
+        website = $6,
+        description = $7,
+        updated_at = NOW()
+      WHERE id = $8
+      RETURNING *
+    `, [
+      name, email, phone, address, city_id, website, description, id
+    ]);
+
     res.json({
       success: true,
-      data: companyDetails.recordset[0],
-      message: 'Company updated successfully'
+      message: 'Company updated successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Update company error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to update company'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Delete company
-router.delete('/:id', verifyToken, validateId, requireOwnership('company'), async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    // Soft delete by setting status to 'deleted'
-    const deleteCompanyQuery = `
-      UPDATE companies 
-      SET status = 'deleted', updated_at = GETUTCDATE()
-      WHERE company_id = @id
-    `;
-    
-    await executeQuery(deleteCompanyQuery, { id });
-    
+
+    // Check if company exists
+    const existingCompany = await executeQuery(
+      'SELECT id FROM companies WHERE id = $1',
+      [id]
+    );
+
+    if (existingCompany.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+
+    // Delete company (cascade will handle related records)
+    await executeQuery('DELETE FROM companies WHERE id = $1', [id]);
+
     res.json({
       success: true,
       message: 'Company deleted successfully'
     });
-    
+
   } catch (error) {
     console.error('Delete company error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to delete company'
-    });
-  }
-});
-
-// Get company dashboard
-router.get('/:id/dashboard', verifyToken, requireOwnership('company'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    // Get company basic info
-    const companyQuery = `
-      SELECT c.company_id, c.company_code, c.name, c.status, c.created_at
-      FROM companies c
-      WHERE c.company_id = @id
-    `;
-    
-    const companyResult = await executeQuery(companyQuery, { id });
-    
-    if (companyResult.recordset.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: 'Not Found',
-        message: 'Company not found'
-      });
-    }
-    
-    const company = companyResult.recordset[0];
-    
-    // Get dashboard stats
-    const statsQuery = `
-      SELECT 
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id) as total_ads,
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id AND status_id = 2) as active_ads,
-        (SELECT COUNT(*) FROM company_subscriptions cs 
-         JOIN subscriptions s ON s.subscription_id = cs.subscription_id 
-         WHERE cs.company_id = @id AND s.status_id = 2) as active_subscriptions,
-        (SELECT COUNT(*) FROM payments p
-         JOIN company_subscriptions cs ON cs.subscription_id = p.subscription_id
-         WHERE cs.company_id = @id AND p.status_id = 2) as total_payments
-    `;
-    
-    const statsResult = await executeQuery(statsQuery, { id });
-    const stats = statsResult.recordset[0];
-    
-    // Get recent activity (simplified)
-    const activityQuery = `
-      SELECT TOP 5
-        'advertisement' as type,
-        a.title as title,
-        a.created_at as created_at,
-        ast.name as status
-      FROM advertisements a
-      LEFT JOIN ad_statuses ast ON ast.status_id = a.status_id
-      WHERE a.company_id = @id
-      ORDER BY a.created_at DESC
-    `;
-    
-    const activityResult = await executeQuery(activityQuery, { id });
-    
-    res.json({
-      success: true,
-      data: {
-        company,
-        stats,
-        recentActivity: activityResult.recordset
-      }
-    });
-    
-  } catch (error) {
-    console.error('Get company dashboard error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get company dashboard'
-    });
-  }
-});
-
-// Get company stats
-router.get('/:id/stats', verifyToken, requireOwnership('company'), async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const statsQuery = `
-      SELECT 
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id) as total_ads,
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id AND status_id = 2) as active_ads,
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id AND status_id = 1) as draft_ads,
-        (SELECT COUNT(*) FROM advertisements WHERE company_id = @id AND status_id = 4) as expired_ads,
-        (SELECT COUNT(*) FROM company_subscriptions cs 
-         JOIN subscriptions s ON s.subscription_id = cs.subscription_id 
-         WHERE cs.company_id = @id AND s.status_id = 2) as active_subscriptions,
-        (SELECT COUNT(*) FROM company_subscriptions cs 
-         JOIN subscriptions s ON s.subscription_id = cs.subscription_id 
-         WHERE cs.company_id = @id AND s.status_id = 1) as pending_subscriptions,
-        (SELECT COUNT(*) FROM payments p
-         JOIN company_subscriptions cs ON cs.subscription_id = p.subscription_id
-         WHERE cs.company_id = @id AND p.status_id = 2) as successful_payments,
-        (SELECT COUNT(*) FROM payments p
-         JOIN company_subscriptions cs ON cs.subscription_id = p.subscription_id
-         WHERE cs.company_id = @id AND p.status_id = 4) as refunded_payments
-    `;
-    
-    const statsResult = await executeQuery(statsQuery, { id });
-    
-    res.json({
-      success: true,
-      data: statsResult.recordset[0]
-    });
-    
-  } catch (error) {
-    console.error('Get company stats error:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get company stats'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });

@@ -1,445 +1,521 @@
 const express = require('express');
 const { executeQuery } = require('../config/database');
-const { validateDriver, validateId, validatePagination } = require('../middleware/validation');
-const { verifyToken, requireDriverOwnerOrAdmin, requireOwnership } = require('../middleware/auth');
+const { validateDriver } = require('../middleware/validation');
 
 const router = express.Router();
 
-// Get all drivers
-router.get('/', verifyToken, validatePagination, async (req, res) => {
+// Get all drivers with pagination and filters
+router.get('/', async (req, res) => {
   try {
-    const {
-      page = 1,
-      limit = 10,
-      search = '',
-      sortBy = 'created_at',
-      sortOrder = 'desc',
-      status,
-      cityId,
-      experienceYears
+    const { 
+      page = 1, 
+      limit = 10, 
+      search = '', 
+      city_id, 
+      state_id, 
+      country_id,
+      company_id,
+      sort_by = 'created_at',
+      sort_order = 'DESC'
     } = req.query;
-    
+
     const offset = (page - 1) * limit;
-    
-    let whereClause = 'WHERE 1=1';
-    const params = { offset, limit };
-    
-    // Add search filter
+    let whereConditions = [];
+    let queryParams = [];
+    let paramCount = 0;
+
+    // Build WHERE clause
     if (search) {
-      whereClause += ' AND (d.name LIKE @search OR d.contact_person LIKE @search OR d.email LIKE @search)';
-      params.search = `%${search}%`;
+      paramCount++;
+      whereConditions.push(`(d.full_name ILIKE $${paramCount} OR d.email ILIKE $${paramCount} OR d.phone ILIKE $${paramCount})`);
+      queryParams.push(`%${search}%`);
     }
-    
-    // Add status filter
-    if (status) {
-      whereClause += ' AND d.status = @status';
-      params.status = status;
+
+    if (city_id) {
+      paramCount++;
+      whereConditions.push(`d.city_id = $${paramCount}`);
+      queryParams.push(city_id);
     }
-    
-    // Add city filter
-    if (cityId) {
-      whereClause += ' AND d.city_id = @cityId';
-      params.cityId = cityId;
+
+    if (state_id) {
+      paramCount++;
+      whereConditions.push(`d.state_id = $${paramCount}`);
+      queryParams.push(state_id);
     }
-    
-    // Add experience filter
-    if (experienceYears) {
-      whereClause += ' AND d.experience_years >= @experienceYears';
-      params.experienceYears = experienceYears;
+
+    if (country_id) {
+      paramCount++;
+      whereConditions.push(`d.country_id = $${paramCount}`);
+      queryParams.push(country_id);
     }
-    
-    // Get drivers with pagination
-    const driversQuery = `
-      SELECT d.driver_id, d.driver_code, d.name, d.contact_person, d.address_line, d.city_id,
-             d.mobile, d.telephone, d.email, d.experience_years, d.description,
-             d.owner_user_id, d.status, d.created_at, d.updated_at,
-             ci.name as city_name, s.name as state_name, co.name as country_name,
-             u.full_name as owner_name
-      FROM drivers d
-      LEFT JOIN cities ci ON ci.city_id = d.city_id
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      LEFT JOIN users u ON u.user_id = d.owner_user_id
-      ${whereClause}
-      ORDER BY d.${sortBy} ${sortOrder.toUpperCase()}
-      OFFSET @offset ROWS
-      FETCH NEXT @limit ROWS ONLY
-    `;
-    
-    const driversResult = await executeQuery(driversQuery, params);
-    
+
+    if (company_id) {
+      paramCount++;
+      whereConditions.push(`cdl.company_id = $${paramCount}`);
+      queryParams.push(company_id);
+    }
+
+    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+
     // Get total count
     const countQuery = `
-      SELECT COUNT(*) as total
+      SELECT COUNT(DISTINCT d.id) as total
       FROM drivers d
+      LEFT JOIN company_driver_links cdl ON d.id = cdl.driver_id
       ${whereClause}
     `;
-    
-    const countResult = await executeQuery(countQuery, params);
-    const total = countResult.recordset[0].total;
-    
+    const countResult = await executeQuery(countQuery, queryParams);
+    const total = parseInt(countResult.rows[0].total);
+
+    // Get drivers with details
+    const driversQuery = `
+      SELECT DISTINCT
+        d.*,
+        ci.city_name,
+        s.state_name,
+        co.country_name,
+        c.company_name,
+        cdl.joined_at,
+        cdl.status as company_status
+      FROM drivers d
+      LEFT JOIN cities ci ON d.city_id = ci.id
+      LEFT JOIN states s ON d.state_id = s.id
+      LEFT JOIN countries co ON d.country_id = co.id
+      LEFT JOIN company_driver_links cdl ON d.id = cdl.driver_id
+      LEFT JOIN companies c ON cdl.company_id = c.id
+      ${whereClause}
+      ORDER BY d.${sort_by} ${sort_order}
+      LIMIT $${paramCount + 1} OFFSET $${paramCount + 2}
+    `;
+
+    queryParams.push(limit, offset);
+    const result = await executeQuery(driversQuery, queryParams);
+
     res.json({
       success: true,
-      data: driversResult.recordset,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
-        total: total,
-        totalPages: Math.ceil(total / limit)
+      data: {
+        drivers: result.rows,
+        pagination: {
+          current_page: parseInt(page),
+          per_page: parseInt(limit),
+          total: total,
+          total_pages: Math.ceil(total / limit)
+        }
       }
     });
-    
+
   } catch (error) {
     console.error('Get drivers error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get drivers'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Get driver by ID
-router.get('/:id', verifyToken, validateId, async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const driverQuery = `
-      SELECT d.driver_id, d.driver_code, d.name, d.contact_person, d.address_line, d.city_id,
-             d.mobile, d.telephone, d.email, d.experience_years, d.description,
-             d.owner_user_id, d.status, d.created_at, d.updated_at,
-             ci.name as city_name, s.name as state_name, co.name as country_name,
-             u.full_name as owner_name
+
+    const result = await executeQuery(`
+      SELECT 
+        d.*,
+        ci.city_name,
+        s.state_name,
+        co.country_name
       FROM drivers d
-      LEFT JOIN cities ci ON ci.city_id = d.city_id
-      LEFT JOIN states s ON s.state_id = ci.state_id
-      LEFT JOIN countries co ON co.country_id = s.country_id
-      LEFT JOIN users u ON u.user_id = d.owner_user_id
-      WHERE d.driver_id = @id
-    `;
-    
-    const driverResult = await executeQuery(driverQuery, { id });
-    
-    if (driverResult.recordset.length === 0) {
+      LEFT JOIN cities ci ON d.city_id = ci.id
+      LEFT JOIN states s ON d.state_id = s.id
+      LEFT JOIN countries co ON d.country_id = co.id
+      WHERE d.id = $1
+    `, [id]);
+
+    if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Driver not found'
       });
     }
-    
+
+    // Get driver companies
+    const companiesResult = await executeQuery(`
+      SELECT 
+        c.id, c.company_name, c.email, c.phone,
+        cdl.joined_at, cdl.status
+      FROM companies c
+      JOIN company_driver_links cdl ON c.id = cdl.company_id
+      WHERE cdl.driver_id = $1
+      ORDER BY cdl.joined_at DESC
+    `, [id]);
+
+    // Get driver subscriptions
+    const subscriptionsResult = await executeQuery(`
+      SELECT 
+        ds.*, p.plan_name, p.price, ss.status_name
+      FROM driver_subscriptions ds
+      JOIN plans p ON ds.plan_id = p.id
+      JOIN subscription_statuses ss ON ds.status_id = ss.id
+      WHERE ds.driver_id = $1
+      ORDER BY ds.created_at DESC
+    `, [id]);
+
     res.json({
       success: true,
-      data: driverResult.recordset[0]
+      data: {
+        driver: result.rows[0],
+        companies: companiesResult.rows,
+        subscriptions: subscriptionsResult.rows
+      }
     });
-    
+
   } catch (error) {
     console.error('Get driver error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get driver'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Create driver
-router.post('/', verifyToken, validateDriver, async (req, res) => {
+// Create new driver
+router.post('/', validateDriver, async (req, res) => {
   try {
     const {
-      name,
-      contact_person,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
+      full_name,
       email,
+      phone,
+      license_number,
+      license_expiry,
+      address,
+      city_id,
+      state_id,
+      country_id,
       experience_years,
-      description,
-      status = 'draft'
+      vehicle_type
     } = req.body;
-    
-    // Generate driver code
-    const driverCode = `DRV${Date.now().toString().slice(-6)}`;
-    
-    const createDriverQuery = `
+
+    // Check if driver with same email exists
+    const existingDriver = await executeQuery(
+      'SELECT id FROM drivers WHERE email = $1',
+      [email]
+    );
+
+    if (existingDriver.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Driver with this email already exists'
+      });
+    }
+
+    // Check if license number already exists
+    const existingLicense = await executeQuery(
+      'SELECT id FROM drivers WHERE license_number = $1',
+      [license_number]
+    );
+
+    if (existingLicense.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Driver with this license number already exists'
+      });
+    }
+
+    const result = await executeQuery(`
       INSERT INTO drivers (
-        driver_code, name, contact_person, address_line, city_id,
-        mobile, telephone, email, experience_years, description, owner_user_id, status
-      )
-      OUTPUT INSERTED.driver_id
-      VALUES (
-        @driver_code, @name, @contact_person, @address_line, @city_id,
-        @mobile, @telephone, @email, @experience_years, @description, @owner_user_id, @status
-      )
-    `;
-    
-    const driverResult = await executeQuery(createDriverQuery, {
-      driver_code: driverCode,
-      name,
-      contact_person,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      email,
-      experience_years,
-      description,
-      owner_user_id: req.user.user_id,
-      status
-    });
-    
-    const driverId = driverResult.recordset[0].driver_id;
-    
-    // Get created driver details
-    const driverQuery = `
-      SELECT d.driver_id, d.driver_code, d.name, d.contact_person, d.address_line, d.city_id,
-             d.mobile, d.telephone, d.email, d.experience_years, d.description,
-             d.owner_user_id, d.status, d.created_at, d.updated_at,
-             ci.name as city_name
-      FROM drivers d
-      LEFT JOIN cities ci ON ci.city_id = d.city_id
-      WHERE d.driver_id = @driver_id
-    `;
-    
-    const driverDetails = await executeQuery(driverQuery, { driver_id: driverId });
-    
+        full_name, email, phone, license_number, license_expiry,
+        address, city_id, state_id, country_id, experience_years,
+        vehicle_type, created_at, updated_at
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, NOW(), NOW())
+      RETURNING *
+    `, [
+      full_name, email, phone, license_number, license_expiry,
+      address, city_id, state_id, country_id, experience_years, vehicle_type
+    ]);
+
     res.status(201).json({
       success: true,
-      data: driverDetails.recordset[0],
-      message: 'Driver created successfully'
+      message: 'Driver created successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Create driver error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to create driver'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Update driver
-router.put('/:id', verifyToken, validateId, validateDriver, requireOwnership('driver'), async (req, res) => {
+router.put('/:id', validateDriver, async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      name,
-      contact_person,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
+      full_name,
       email,
+      phone,
+      license_number,
+      license_expiry,
+      address,
+      city_id,
+      state_id,
+      country_id,
       experience_years,
-      description,
-      status
+      vehicle_type
     } = req.body;
-    
-    const updateDriverQuery = `
-      UPDATE drivers 
-      SET name = @name,
-          contact_person = @contact_person,
-          address_line = @address_line,
-          city_id = @city_id,
-          mobile = @mobile,
-          telephone = @telephone,
-          email = @email,
-          experience_years = @experience_years,
-          description = @description,
-          status = @status,
-          updated_at = GETUTCDATE()
-      WHERE driver_id = @id
-    `;
-    
-    await executeQuery(updateDriverQuery, {
-      id,
-      name,
-      contact_person,
-      address_line,
-      city_id,
-      mobile,
-      telephone,
-      email,
-      experience_years,
-      description,
-      status
-    });
-    
-    // Get updated driver details
-    const driverQuery = `
-      SELECT d.driver_id, d.driver_code, d.name, d.contact_person, d.address_line, d.city_id,
-             d.mobile, d.telephone, d.email, d.experience_years, d.description,
-             d.owner_user_id, d.status, d.created_at, d.updated_at,
-             ci.name as city_name
-      FROM drivers d
-      LEFT JOIN cities ci ON ci.city_id = d.city_id
-      WHERE d.driver_id = @id
-    `;
-    
-    const driverDetails = await executeQuery(driverQuery, { id });
-    
+
+    // Check if driver exists
+    const existingDriver = await executeQuery(
+      'SELECT id FROM drivers WHERE id = $1',
+      [id]
+    );
+
+    if (existingDriver.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Driver not found'
+      });
+    }
+
+    // Check if email is already used by another driver
+    const emailCheck = await executeQuery(
+      'SELECT id FROM drivers WHERE email = $1 AND id != $2',
+      [email, id]
+    );
+
+    if (emailCheck.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email already used by another driver'
+      });
+    }
+
+    // Check if license number is already used by another driver
+    const licenseCheck = await executeQuery(
+      'SELECT id FROM drivers WHERE license_number = $1 AND id != $2',
+      [license_number, id]
+    );
+
+    if (licenseCheck.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'License number already used by another driver'
+      });
+    }
+
+    const result = await executeQuery(`
+      UPDATE drivers SET
+        full_name = $1,
+        email = $2,
+        phone = $3,
+        license_number = $4,
+        license_expiry = $5,
+        address = $6,
+        city_id = $7,
+        state_id = $8,
+        country_id = $9,
+        experience_years = $10,
+        vehicle_type = $11,
+        updated_at = NOW()
+      WHERE id = $12
+      RETURNING *
+    `, [
+      full_name, email, phone, license_number, license_expiry,
+      address, city_id, state_id, country_id, experience_years, vehicle_type, id
+    ]);
+
     res.json({
       success: true,
-      data: driverDetails.recordset[0],
-      message: 'Driver updated successfully'
+      message: 'Driver updated successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
     console.error('Update driver error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to update driver'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
 // Delete driver
-router.delete('/:id', verifyToken, validateId, requireOwnership('driver'), async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    
-    // Soft delete by setting status to 'deleted'
-    const deleteDriverQuery = `
-      UPDATE drivers 
-      SET status = 'deleted', updated_at = GETUTCDATE()
-      WHERE driver_id = @id
-    `;
-    
-    await executeQuery(deleteDriverQuery, { id });
-    
+
+    // Check if driver exists
+    const existingDriver = await executeQuery(
+      'SELECT id FROM drivers WHERE id = $1',
+      [id]
+    );
+
+    if (existingDriver.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Driver not found'
+      });
+    }
+
+    // Check if driver has active subscriptions
+    const activeSubscriptions = await executeQuery(`
+      SELECT COUNT(*) as count FROM driver_subscriptions 
+      WHERE driver_id = $1 AND status_id IN (1, 2)
+    `, [id]);
+
+    if (parseInt(activeSubscriptions.rows[0].count) > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot delete driver with active subscriptions'
+      });
+    }
+
+    // Delete driver (cascade will handle related records)
+    await executeQuery('DELETE FROM drivers WHERE id = $1', [id]);
+
     res.json({
       success: true,
       message: 'Driver deleted successfully'
     });
-    
+
   } catch (error) {
     console.error('Delete driver error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to delete driver'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Get driver dashboard
-router.get('/:id/dashboard', verifyToken, requireOwnership('driver'), async (req, res) => {
+// Link driver to company
+router.post('/:id/companies/:company_id', async (req, res) => {
   try {
-    const { id } = req.params;
-    
-    // Get driver basic info
-    const driverQuery = `
-      SELECT d.driver_id, d.driver_code, d.name, d.status, d.created_at
-      FROM drivers d
-      WHERE d.driver_id = @id
-    `;
-    
-    const driverResult = await executeQuery(driverQuery, { id });
-    
-    if (driverResult.recordset.length === 0) {
+    const { id, company_id } = req.params;
+    const { status = 'active' } = req.body;
+
+    // Check if driver exists
+    const driverCheck = await executeQuery(
+      'SELECT id FROM drivers WHERE id = $1',
+      [id]
+    );
+
+    if (driverCheck.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Not Found',
         message: 'Driver not found'
       });
     }
-    
-    const driver = driverResult.recordset[0];
-    
-    // Get dashboard stats
-    const statsQuery = `
-      SELECT 
-        (SELECT COUNT(*) FROM driver_subscriptions ds 
-         JOIN subscriptions s ON s.subscription_id = ds.subscription_id 
-         WHERE ds.driver_id = @id AND s.status_id = 2) as active_subscriptions,
-        (SELECT COUNT(*) FROM driver_subscriptions ds 
-         JOIN subscriptions s ON s.subscription_id = ds.subscription_id 
-         WHERE ds.driver_id = @id AND s.status_id = 1) as pending_subscriptions,
-        (SELECT COUNT(*) FROM payments p
-         JOIN driver_subscriptions ds ON ds.subscription_id = p.subscription_id
-         WHERE ds.driver_id = @id AND p.status_id = 2) as successful_payments,
-        (SELECT COUNT(*) FROM company_driver_links WHERE driver_id = @id) as company_links
-    `;
-    
-    const statsResult = await executeQuery(statsQuery, { id });
-    const stats = statsResult.recordset[0];
-    
-    // Get recent activity (simplified)
-    const activityQuery = `
-      SELECT TOP 5
-        'subscription' as type,
-        'Driver Subscription' as title,
-        s.created_at as created_at,
-        ss.name as status
-      FROM driver_subscriptions ds
-      JOIN subscriptions s ON s.subscription_id = ds.subscription_id
-      LEFT JOIN subscription_statuses ss ON ss.status_id = s.status_id
-      WHERE ds.driver_id = @id
-      ORDER BY s.created_at DESC
-    `;
-    
-    const activityResult = await executeQuery(activityQuery, { id });
-    
-    res.json({
+
+    // Check if company exists
+    const companyCheck = await executeQuery(
+      'SELECT id FROM companies WHERE id = $1',
+      [company_id]
+    );
+
+    if (companyCheck.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Company not found'
+      });
+    }
+
+    // Check if link already exists
+    const existingLink = await executeQuery(
+      'SELECT id FROM company_driver_links WHERE driver_id = $1 AND company_id = $2',
+      [id, company_id]
+    );
+
+    if (existingLink.rows.length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: 'Driver is already linked to this company'
+      });
+    }
+
+    const result = await executeQuery(`
+      INSERT INTO company_driver_links (driver_id, company_id, status, joined_at)
+      VALUES ($1, $2, $3, NOW())
+      RETURNING *
+    `, [id, company_id, status]);
+
+    res.status(201).json({
       success: true,
-      data: {
-        driver,
-        stats,
-        recentActivity: activityResult.recordset
-      }
+      message: 'Driver linked to company successfully',
+      data: result.rows[0]
     });
-    
+
   } catch (error) {
-    console.error('Get driver dashboard error:', error);
+    console.error('Link driver to company error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get driver dashboard'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });
 
-// Get driver stats
-router.get('/:id/stats', verifyToken, requireOwnership('driver'), async (req, res) => {
+// Unlink driver from company
+router.delete('/:id/companies/:company_id', async (req, res) => {
   try {
-    const { id } = req.params;
-    
-    const statsQuery = `
-      SELECT 
-        (SELECT COUNT(*) FROM driver_subscriptions ds 
-         JOIN subscriptions s ON s.subscription_id = ds.subscription_id 
-         WHERE ds.driver_id = @id AND s.status_id = 2) as active_subscriptions,
-        (SELECT COUNT(*) FROM driver_subscriptions ds 
-         JOIN subscriptions s ON s.subscription_id = ds.subscription_id 
-         WHERE ds.driver_id = @id AND s.status_id = 1) as pending_subscriptions,
-        (SELECT COUNT(*) FROM driver_subscriptions ds 
-         JOIN subscriptions s ON s.subscription_id = ds.subscription_id 
-         WHERE ds.driver_id = @id AND s.status_id = 4) as cancelled_subscriptions,
-        (SELECT COUNT(*) FROM payments p
-         JOIN driver_subscriptions ds ON ds.subscription_id = p.subscription_id
-         WHERE ds.driver_id = @id AND p.status_id = 2) as successful_payments,
-        (SELECT COUNT(*) FROM payments p
-         JOIN driver_subscriptions ds ON ds.subscription_id = p.subscription_id
-         WHERE ds.driver_id = @id AND p.status_id = 4) as refunded_payments,
-        (SELECT COUNT(*) FROM company_driver_links WHERE driver_id = @id) as company_links
-    `;
-    
-    const statsResult = await executeQuery(statsQuery, { id });
-    
+    const { id, company_id } = req.params;
+
+    const result = await executeQuery(
+      'DELETE FROM company_driver_links WHERE driver_id = $1 AND company_id = $2 RETURNING *',
+      [id, company_id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Driver-company link not found'
+      });
+    }
+
     res.json({
       success: true,
-      data: statsResult.recordset[0]
+      message: 'Driver unlinked from company successfully'
     });
-    
+
+  } catch (error) {
+    console.error('Unlink driver from company error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Internal server error',
+      error: error.message
+    });
+  }
+});
+
+// Get driver statistics
+router.get('/:id/stats', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const stats = await executeQuery(`
+      SELECT 
+        (SELECT COUNT(*) FROM company_driver_links WHERE driver_id = $1) as total_companies,
+        (SELECT COUNT(*) FROM driver_subscriptions WHERE driver_id = $1) as total_subscriptions,
+        (SELECT COALESCE(SUM(amount), 0) FROM payments WHERE driver_id = $1) as total_payments
+    `, [id]);
+
+    res.json({
+      success: true,
+      data: stats.rows[0]
+    });
+
   } catch (error) {
     console.error('Get driver stats error:', error);
     res.status(500).json({
       success: false,
-      error: 'Internal Server Error',
-      message: 'Failed to get driver stats'
+      message: 'Internal server error',
+      error: error.message
     });
   }
 });

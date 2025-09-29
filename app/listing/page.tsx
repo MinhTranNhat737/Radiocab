@@ -12,8 +12,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Building2, Phone, Mail, MapPin, CreditCard, Users } from "lucide-react"
 import Link from "next/link"
 import Header from "@/components/Header"
+import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function ListingPage() {
+  const { t } = useLanguage()
+  
   const [formData, setFormData] = useState({
     companyName: "",
     companyId: "",
@@ -79,10 +82,10 @@ export default function ListingPage() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 text-black dark:bg-gradient-to-r dark:from-yellow-400 dark:via-yellow-300 dark:to-yellow-500 dark:bg-clip-text dark:text-transparent animate-pulse">
-            Đăng ký & Tìm kiếm Công ty Taxi
+            {t.listingTitle}
           </h1>
           <p className="text-lg sm:text-xl text-gray-700 dark:text-yellow-200 mb-6 sm:mb-8 max-w-3xl mx-auto leading-relaxed">
-            Đăng ký công ty taxi của bạn hoặc tìm kiếm các công ty taxi đã đăng ký trên hệ thống RadioCabs.in
+            {t.listingSubtitle}
           </p>
         </div>
       </section>
@@ -96,10 +99,10 @@ export default function ListingPage() {
                 value="register"
                 className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
-                Đăng ký công ty
+                {t.registerCompanyTab}
               </TabsTrigger>
               <TabsTrigger value="search" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                Tìm kiếm công ty
+                {t.searchCompanyTab}
               </TabsTrigger>
             </TabsList>
 

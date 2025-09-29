@@ -4,6 +4,7 @@ import { Inter, Roboto, Open_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
+import { LanguageProvider } from "@/contexts/LanguageContext"
 import Footer from "@/components/Footer"
 import SmoothTransition from "@/components/SmoothTransition"
 import "./globals.css"
@@ -49,16 +50,18 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SmoothTransition>
-            <Suspense fallback={
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="loading-spinner w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full"></div>
-              </div>
-            }>
-              {children}
-            </Suspense>
-          </SmoothTransition>
-          <Footer />
+          <LanguageProvider>
+            <SmoothTransition>
+              <Suspense fallback={
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="loading-spinner w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full"></div>
+                </div>
+              }>
+                {children}
+              </Suspense>
+            </SmoothTransition>
+            <Footer />
+          </LanguageProvider>
           <Analytics />
         </ThemeProvider>
       </body>

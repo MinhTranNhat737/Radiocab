@@ -8,7 +8,7 @@ import Link from "next/link"
 import Header from "@/components/Header"
 import AdSidebar from "@/components/AdSidebar"
 import { SidebarProvider, useSidebar } from "@/components/SidebarManager"
-import { LanguageProvider, useLanguage } from "@/contexts/LanguageContext"
+import { useLanguage } from "@/contexts/LanguageContext"
 import {
   Car,
   Search,
@@ -637,10 +637,8 @@ function HomePageContent() {
 
 export default function HomePage() {
   return (
-    <LanguageProvider>
-      <SidebarProvider>
-        <HomePageContent />
-      </SidebarProvider>
-    </LanguageProvider>
+    <SidebarProvider>
+      <HomePageContent />
+    </SidebarProvider>
   )
 }

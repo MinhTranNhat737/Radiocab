@@ -8,9 +8,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { LogIn, Shield, User, Eye, EyeOff, Building2 } from "lucide-react"
+import { LogIn, Shield, User, Eye, EyeOff, Building2, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import Header from "@/components/Header"
+import { login } from "@/lib/auth"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function LoginPage() {
   const [adminData, setAdminData] = useState({
@@ -25,27 +27,59 @@ export default function LoginPage() {
 
   const [showAdminPassword, setShowAdminPassword] = useState(false)
   const [showUserPassword, setShowUserPassword] = useState(false)
+  const [adminError, setAdminError] = useState("")
+  const [userError, setUserError] = useState("")
 
   const handleAdminInputChange = (field: string, value: string) => {
     setAdminData((prev) => ({ ...prev, [field]: value }))
+    setAdminError("")
   }
 
   const handleUserInputChange = (field: string, value: string) => {
     setUserData((prev) => ({ ...prev, [field]: value }))
+    setUserError("")
   }
 
   const handleAdminSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Admin login:", adminData)
+    const user = login(adminData.username, adminData.password)
+    
+    if (!user) {
+      setAdminError("Tên đăng nhập hoặc mật khẩu không đúng!")
+      return
+    }
+    
+    if (user.role !== 'admin') {
+      setAdminError("Tài khoản này không có quyền quản trị!")
+      return
+    }
+    
     // Redirect to admin dashboard
     window.location.href = "/admin/dashboard"
   }
 
   const handleUserSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("User login:", userData)
-    // Redirect to user dashboard
-    window.location.href = "/user/dashboard"
+    const user = login(userData.userId, userData.password)
+    
+    if (!user) {
+      setUserError("Mã người dùng hoặc mật khẩu không đúng!")
+      return
+    }
+    
+    if (user.role === 'admin') {
+      setUserError("Vui lòng sử dụng tab Quản trị viên để đăng nhập!")
+      return
+    }
+    
+    // Redirect based on user role
+    if (user.role === 'company') {
+      window.location.href = "/user/dashboard/company/profile"
+    } else if (user.role === 'driver') {
+      window.location.href = "/user/dashboard/driver/profile"
+    } else {
+      window.location.href = "/user/dashboard"
+    }
   }
 
   return (
@@ -95,6 +129,13 @@ export default function LoginPage() {
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleUserSubmit} className="space-y-6">
+                      {userError && (
+                        <Alert variant="destructive" className="bg-red-900/20 border-red-500/50">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>{userError}</AlertDescription>
+                        </Alert>
+                      )}
+                      
                       <div className="space-y-2">
                         <Label htmlFor="userId" className="text-gray-700 dark:text-yellow-300">
                           Mã người dùng *
@@ -104,7 +145,7 @@ export default function LoginPage() {
                           value={userData.userId}
                           onChange={(e) => handleUserInputChange("userId", e.target.value)}
                           className="bg-white/80 dark:bg-black/50 border-yellow-500/50 text-gray-900 dark:text-yellow-100 focus:border-yellow-400"
-                          placeholder="Nhập mã công ty, mã tài xế hoặc mã quảng cáo"
+                          placeholder="Nhập username, email hoặc mã người dùng"
                           required
                         />
                       </div>
@@ -173,6 +214,13 @@ export default function LoginPage() {
                   </CardHeader>
                   <CardContent>
                     <form onSubmit={handleAdminSubmit} className="space-y-6">
+                      {adminError && (
+                        <Alert variant="destructive" className="bg-red-900/20 border-red-500/50">
+                          <AlertCircle className="h-4 w-4" />
+                          <AlertDescription>{adminError}</AlertDescription>
+                        </Alert>
+                      )}
+                      
                       <div className="space-y-2">
                         <Label htmlFor="adminUsername" className="text-gray-700 dark:text-yellow-300">
                           Tên đăng nhập *

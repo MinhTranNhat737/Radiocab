@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Radiocabs-BE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3471410369ee58b1a64a790c7dd959a376323761")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fead3d08cbf09a9dd9bfd88d783170d2e84f4f2a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Radiocabs-BE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Radiocabs-BE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

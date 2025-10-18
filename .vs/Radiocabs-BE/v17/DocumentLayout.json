@@ -1,0 +1,139 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\services\\aaaa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\services\\aaaa.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\repositories\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\repositories\\class.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\data\\dtbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\data\\dtbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\dtos\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\dtos\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\helpers\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\middlewares\\drivermiddlewares.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\middlewares\\drivermiddlewares.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs-be\\radiocabs-be\\models\\driversmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D78FE677-1DC4-4521-8E27-4E0F73595961}|Radiocabs-BE\\Radiocabs-BE.csproj|solutionrelative:radiocabs-be\\models\\driversmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "aaaa.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Services\\aaaa.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Services\\aaaa.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Services\\aaaa.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Services\\aaaa.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:20:18.479Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Class.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Repositories\\Class.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Repositories\\Class.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Repositories\\Class.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Repositories\\Class.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:20:10.774Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DTBcontext.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Data\\DTBcontext.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Data\\DTBcontext.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Data\\DTBcontext.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Data\\DTBcontext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:20:02.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Databasecontext.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\DTOs\\Databasecontext.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\DTOs\\Databasecontext.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\DTOs\\Databasecontext.cs",
+              "RelativeToolTip": "Radiocabs-BE\\DTOs\\Databasecontext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:19:49.783Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "helpers.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Helpers\\helpers.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Helpers\\helpers.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Helpers\\helpers.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Helpers\\helpers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:19:36.448Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "DriverMiddlewares.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Middlewares\\DriverMiddlewares.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Middlewares\\DriverMiddlewares.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Middlewares\\DriverMiddlewares.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Middlewares\\DriverMiddlewares.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:19:19.849Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "DriversModel.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Models\\DriversModel.cs",
+              "RelativeDocumentMoniker": "Radiocabs-BE\\Models\\DriversModel.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Models\\DriversModel.cs",
+              "RelativeToolTip": "Radiocabs-BE\\Models\\DriversModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-18T06:19:05.446Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

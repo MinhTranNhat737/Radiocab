@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "WX0yP52GKOk=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\AD\\source\\repos\\Radiocabs-BE\\Radiocabs-BE\\Radiocabs-BE.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\AD\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.6\\microsoft.aspnetcore.openapi.9.0.6.nupkg.sha512",
+    "C:\\Users\\AD\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

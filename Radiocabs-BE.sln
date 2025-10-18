@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Radiocabs-BE", "Radiocabs-BE\Radiocabs-BE.csproj", "{D78FE677-1DC4-4521-8E27-4E0F73595961}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D78FE677-1DC4-4521-8E27-4E0F73595961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D78FE677-1DC4-4521-8E27-4E0F73595961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D78FE677-1DC4-4521-8E27-4E0F73595961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D78FE677-1DC4-4521-8E27-4E0F73595961}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E2BC999-F946-47C5-9A25-96AF2504FD7A}
+	EndGlobalSection
+EndGlobal

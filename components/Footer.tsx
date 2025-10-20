@@ -76,11 +76,6 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/advertise" className="hover:text-yellow-400 transition-colors">
-                  Quảng cáo dịch vụ
-                </Link>
-              </li>
-              <li>
                 <Link href="/services" className="hover:text-yellow-400 transition-colors">
                   Tìm kiếm taxi
                 </Link>

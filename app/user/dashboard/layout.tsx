@@ -42,7 +42,6 @@ const getNavigationByRole = (role: 'company' | 'driver') => {
   if (role === 'company') {
     baseNav.push(
       { name: "Leads", href: "/user/dashboard/company/leads", icon: Users },
-      { name: "Advertisements", href: "/user/dashboard/company/ads", icon: Megaphone },
       { name: "Reviews", href: "/user/dashboard/company/reviews", icon: FileText }
     )
   } else {

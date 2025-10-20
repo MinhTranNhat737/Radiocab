@@ -25,7 +25,6 @@ const adminNavigation = [
   { name: "Dashboard", href: "/admin/dashboard", icon: BarChart3 },
   { name: "Companies", href: "/admin/dashboard/companies", icon: Building2 },
   { name: "Drivers", href: "/admin/dashboard/drivers", icon: Users },
-  { name: "Advertisements", href: "/admin/dashboard/ads", icon: Megaphone },
   { name: "Subscriptions", href: "/admin/dashboard/subscriptions", icon: CreditCard },
   { name: "Payments", href: "/admin/dashboard/payments", icon: CreditCard },
   { name: "Leads", href: "/admin/dashboard/leads", icon: Users },

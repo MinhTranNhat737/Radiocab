@@ -46,12 +46,6 @@ export default function Header() {
             {t.drivers}
           </Link>
           <Link
-            href="/advertise"
-            className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
-          >
-            {t.advertise}
-          </Link>
-          <Link
             href="/services"
             className="text-xs md:text-sm font-medium text-primary hover:text-primary/80 transition-all duration-300 hover:scale-105 whitespace-nowrap"
           >

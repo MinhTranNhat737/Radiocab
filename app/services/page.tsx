@@ -42,14 +42,6 @@ export default function ServicesPage() {
       link: "/drivers",
     },
     {
-      icon: Megaphone,
-      title: "Dịch vụ Quảng cáo",
-      description: "Quảng bá thương hiệu và dịch vụ taxi của bạn đến hàng triệu người dùng",
-      features: ["Banner quảng cáo", "Vị trí ưu tiên", "Thống kê chi tiết", "Tư vấn marketing"],
-      pricing: "Từ 300,000 VNĐ/tháng",
-      link: "/advertise",
-    },
-    {
       icon: MessageSquare,
       title: "Hỗ trợ Khách hàng",
       description: "Hệ thống hỗ trợ và góp ý toàn diện cho mọi người dùng",
@@ -351,15 +343,6 @@ export default function ServicesPage() {
                   <Link href="/drivers">
                     <Car className="w-4 h-4 mr-2" />
                     Đăng ký Tài xế
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-semibold py-3"
-                >
-                  <Link href="/advertise">
-                    <Megaphone className="w-4 h-4 mr-2" />
-                    Đăng ký Quảng cáo
                   </Link>
                 </Button>
                 <Button

@@ -5,7 +5,6 @@ export interface Translations {
   home: string
   taxiCompanies: string
   drivers: string
-  advertise: string
   services: string
   feedback: string
   login: string
@@ -64,11 +63,6 @@ export interface Translations {
   learnMore: string
   contactUs: string
   
-  // Advertisement
-  adTitle: string
-  adDescription: string
-  adRating: string
-  bookNow: string
 
   // Listing Page
   listingTitle: string
@@ -131,23 +125,6 @@ export interface Translations {
   searchDriverPlaceholder: string
   enterDriverKeyword: string
 
-  // Advertise Page
-  advertiseTitle: string
-  advertiseSubtitle: string
-  advertiseRegistrationTitle: string
-  advertiseRegistrationDesc: string
-  serviceDescription: string
-  serviceDescriptionLabel: string
-  serviceDescriptionPlaceholder: string
-  advertisePayment: string
-  advertiseCost: string
-  advertiseBenefits: string
-  advertiseBenefitsTitle: string
-  benefit1: string
-  benefit2: string
-  benefit3: string
-  benefit4: string
-  registerAdvertise: string
 
   // Services Page
   servicesTitle: string
@@ -161,7 +138,6 @@ export interface Translations {
   chooseService: string
   registerCompany: string
   registerDriver: string
-  registerAdvertise: string
   sendFeedback: string
   step1: string
   step2: string
@@ -215,7 +191,6 @@ export const translations: Record<Language, Translations> = {
     home: 'Trang Chủ',
     taxiCompanies: 'Công Ty Taxi',
     drivers: 'Tài Xế',
-    advertise: 'Quảng Cáo',
     services: 'Dịch Vụ',
     feedback: 'Góp Ý',
     login: 'Đăng Nhập',
@@ -274,11 +249,6 @@ export const translations: Record<Language, Translations> = {
     learnMore: 'Tìm Hiểu Thêm',
     contactUs: 'Liên Hệ',
     
-    // Advertisement
-    adTitle: 'Dịch Vụ Taxi Cao Cấp',
-    adDescription: 'Trải nghiệm sang trọng với các đối tác taxi cao cấp của chúng tôi',
-    adRating: '4.9/5',
-    bookNow: 'Đặt Ngay',
 
     // Listing Page
     listingTitle: 'Đăng ký & Tìm kiếm Công ty Taxi',
@@ -341,23 +311,6 @@ export const translations: Record<Language, Translations> = {
     searchDriverPlaceholder: 'Nhập tên tài xế, mã tài xế, thành phố hoặc kinh nghiệm...',
     enterDriverKeyword: 'Nhập từ khóa để tìm kiếm tài xế',
 
-    // Advertise Page
-    advertiseTitle: 'Quảng cáo Dịch vụ Taxi',
-    advertiseSubtitle: 'Đăng ký quảng cáo dịch vụ taxi của bạn để tiếp cận nhiều khách hàng hơn trên RadioCabs.in',
-    advertiseRegistrationTitle: 'Đăng ký quảng cáo',
-    advertiseRegistrationDesc: 'Điền thông tin để đăng ký quảng cáo dịch vụ taxi của bạn',
-    serviceDescription: 'Mô tả dịch vụ',
-    serviceDescriptionLabel: 'Mô tả chi tiết về dịch vụ',
-    serviceDescriptionPlaceholder: 'Mô tả về dịch vụ taxi, khu vực hoạt động, ưu điểm của công ty...',
-    advertisePayment: 'Hình thức thanh toán',
-    advertiseCost: 'Chi phí quảng cáo',
-    advertiseBenefits: 'Lợi ích khi quảng cáo với RadioCabs.in',
-    advertiseBenefitsTitle: 'Lợi ích khi quảng cáo với RadioCabs.in',
-    benefit1: 'Hiển thị thông tin công ty nổi bật',
-    benefit2: 'Tiếp cận khách hàng tiềm năng',
-    benefit3: 'Tăng độ nhận biết thương hiệu',
-    benefit4: 'Báo cáo thống kê chi tiết',
-    registerAdvertise: 'Đăng ký quảng cáo',
 
     // Services Page
     servicesTitle: 'Dịch vụ & Thông tin',
@@ -371,7 +324,6 @@ export const translations: Record<Language, Translations> = {
     chooseService: 'Chọn dịch vụ phù hợp với nhu cầu của bạn',
     registerCompany: 'Đăng ký Công ty',
     registerDriver: 'Đăng ký Tài xế',
-    registerAdvertise: 'Đăng ký Quảng cáo',
     sendFeedback: 'Gửi Góp ý',
     step1: 'Đăng ký',
     step2: 'Xác thực',
@@ -393,14 +345,10 @@ export const translations: Record<Language, Translations> = {
     service2Desc: 'Tham gia mạng lưới tài xế chuyên nghiệp và tìm kiếm cơ hội việc làm',
     service2Features: 'Hồ sơ tài xế chuyên nghiệp, Kết nối với công ty, Đánh giá từ khách hàng, Hỗ trợ 24/7',
     service2Pricing: '150,000 VNĐ/tháng',
-    service3Title: 'Dịch vụ Quảng cáo',
-    service3Desc: 'Quảng bá thương hiệu và dịch vụ taxi của bạn đến hàng triệu người dùng',
-    service3Features: 'Banner quảng cáo, Vị trí ưu tiên, Thống kê chi tiết, Tư vấn marketing',
-    service3Pricing: 'Từ 300,000 VNĐ/tháng',
-    service4Title: 'Hỗ trợ Khách hàng',
-    service4Desc: 'Hệ thống hỗ trợ và góp ý toàn diện cho mọi người dùng',
-    service4Features: 'Hỗ trợ 24/7, Xử lý khiếu nại, Tư vấn dịch vụ, Phản hồi nhanh chóng',
-    service4Pricing: 'Miễn phí',
+    service3Title: 'Hỗ trợ Khách hàng',
+    service3Desc: 'Hệ thống hỗ trợ và góp ý toàn diện cho mọi người dùng',
+    service3Features: 'Hỗ trợ 24/7, Xử lý khiếu nại, Tư vấn dịch vụ, Phản hồi nhanh chóng',
+    service3Pricing: 'Miễn phí',
     benefit1Title: 'Mạng lưới rộng khắp',
     benefit1Desc: 'Kết nối toàn quốc với hàng nghìn công ty taxi và tài xế',
     benefit2Title: 'Bảo mật tuyệt đối',
@@ -424,7 +372,6 @@ export const translations: Record<Language, Translations> = {
     home: 'Home',
     taxiCompanies: 'Taxi Companies',
     drivers: 'Drivers',
-    advertise: 'Advertise',
     services: 'Services',
     feedback: 'Feedback',
     login: 'Login',
@@ -483,11 +430,6 @@ export const translations: Record<Language, Translations> = {
     learnMore: 'Learn More',
     contactUs: 'Contact Us',
     
-    // Advertisement
-    adTitle: 'Premium Taxi Service',
-    adDescription: 'Experience luxury with our premium taxi partners',
-    adRating: '4.9/5',
-    bookNow: 'Book Now',
 
     // Listing Page
     listingTitle: 'Register & Search Taxi Companies',
@@ -550,23 +492,6 @@ export const translations: Record<Language, Translations> = {
     searchDriverPlaceholder: 'Enter driver name, driver ID, city or experience...',
     enterDriverKeyword: 'Enter keywords to search for drivers',
 
-    // Advertise Page
-    advertiseTitle: 'Taxi Service Advertising',
-    advertiseSubtitle: 'Register to advertise your taxi service to reach more customers on RadioCabs.in',
-    advertiseRegistrationTitle: 'Register Advertisement',
-    advertiseRegistrationDesc: 'Fill in the information to register your taxi service advertisement',
-    serviceDescription: 'Service Description',
-    serviceDescriptionLabel: 'Detailed service description',
-    serviceDescriptionPlaceholder: 'Describe your taxi service, operating area, company advantages...',
-    advertisePayment: 'Payment Method',
-    advertiseCost: 'Advertising Cost',
-    advertiseBenefits: 'Benefits of advertising with RadioCabs.in',
-    advertiseBenefitsTitle: 'Benefits of advertising with RadioCabs.in',
-    benefit1: 'Highlight company information',
-    benefit2: 'Reach potential customers',
-    benefit3: 'Increase brand awareness',
-    benefit4: 'Detailed statistics reports',
-    registerAdvertise: 'Register Advertisement',
 
     // Services Page
     servicesTitle: 'Services & Information',
@@ -580,7 +505,6 @@ export const translations: Record<Language, Translations> = {
     chooseService: 'Choose the service that suits your needs',
     registerCompany: 'Register Company',
     registerDriver: 'Register Driver',
-    registerAdvertise: 'Register Advertisement',
     sendFeedback: 'Send Feedback',
     step1: 'Register',
     step2: 'Verify',
@@ -602,14 +526,10 @@ export const translations: Record<Language, Translations> = {
     service2Desc: 'Join professional driver network and find job opportunities',
     service2Features: 'Professional driver profile, Connect with companies, Customer reviews, 24/7 support',
     service2Pricing: '150,000 VND/month',
-    service3Title: 'Advertising Service',
-    service3Desc: 'Promote your taxi brand and service to millions of users',
-    service3Features: 'Banner advertising, Priority placement, Detailed statistics, Marketing consultation',
-    service3Pricing: 'From 300,000 VND/month',
-    service4Title: 'Customer Support',
-    service4Desc: 'Comprehensive support and feedback system for all users',
-    service4Features: '24/7 support, Complaint handling, Service consultation, Quick response',
-    service4Pricing: 'Free',
+    service3Title: 'Customer Support',
+    service3Desc: 'Comprehensive support and feedback system for all users',
+    service3Features: '24/7 support, Complaint handling, Service consultation, Quick response',
+    service3Pricing: 'Free',
     benefit1Title: 'Wide Network',
     benefit1Desc: 'Nationwide connection with thousands of taxi companies and drivers',
     benefit2Title: 'Absolute Security',

@@ -190,9 +190,6 @@ export default function LoginPage() {
                           <Link href="/drivers" className="text-gray-700 dark:text-yellow-400 hover:text-gray-900 dark:hover:text-yellow-300 transition-colors">
                             Đăng ký tài xế
                           </Link>
-                          <Link href="/advertise" className="text-gray-700 dark:text-yellow-400 hover:text-gray-900 dark:hover:text-yellow-300 transition-colors">
-                            Đăng ký quảng cáo
-                          </Link>
                         </div>
                       </div>
                     </form>

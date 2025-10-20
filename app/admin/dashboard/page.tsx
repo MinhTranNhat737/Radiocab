@@ -93,17 +93,6 @@ export default function AdminDashboardPage() {
       startDate: "01/12/2024",
       endDate: "31/12/2024"
     },
-    {
-      id: 2,
-      title: "Quảng cáo sidebar",
-      company: "XYZ Transport",
-      type: "Sidebar",
-      status: "pending",
-      budget: 3000000,
-      spent: 0,
-      startDate: "01/01/2025",
-      endDate: "31/01/2025"
-    }
   ]
 
   const systemHealth = {
@@ -260,12 +249,6 @@ export default function AdminDashboardPage() {
               <span className="text-sm font-medium">Drivers</span>
               <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
                 8
-              </Badge>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm font-medium">Advertisements</span>
-              <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                3
               </Badge>
             </div>
             <div className="flex items-center justify-between">

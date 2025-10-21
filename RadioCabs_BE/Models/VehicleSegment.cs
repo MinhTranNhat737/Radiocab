@@ -8,6 +8,11 @@
         public string Name { get; set; } = null!;
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
-    }
 
+        // Nav
+        public Company Company { get; set; } = null!;
+
+        // (tuỳ chọn)
+        public ICollection<VehicleModel>? VehicleModels { get; set; }
+    }
 }

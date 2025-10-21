@@ -12,5 +12,14 @@
         public string? ImageUrl { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
+
+        // Navs (khớp DbContext)
+        public Company Company { get; set; } = null!;
+        public VehicleSegment? Segment { get; set; }
+
+        // (tuỳ chọn) quan hệ ngược
+        public ICollection<Vehicle>? Vehicles { get; set; }
+        public ICollection<ModelPriceProvince>? ModelPrices { get; set; }
+        public ICollection<DrivingOrder>? DrivingOrders { get; set; }
     }
 }

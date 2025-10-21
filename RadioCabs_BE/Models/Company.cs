@@ -9,9 +9,15 @@
         public string Address { get; set; } = null!;
         public string TaxCode { get; set; } = null!;
         public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
-        public long ContactAccountId { get; set; }
+
+        // CHỈNH: nullable để khớp OnDelete(SetNull)
+        public long? ContactAccountId { get; set; }
+
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public string Fax { get; set; } = string.Empty;
+
+        // Navigation
+        public Account? ContactAccount { get; set; }
     }
 }

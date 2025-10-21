@@ -12,5 +12,17 @@
         public DateOnly InServiceFrom { get; set; }
         public int OdometerKm { get; set; } = 0;
         public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
+
+        // Navs
+        public Company Company { get; set; } = null!;
+        public VehicleModel Model { get; set; } = null!;
+
+        // (tuỳ chọn) quan hệ ngược
+        public ICollection<DriverVehicleAssignment>? DriverAssignments { get; set; }
+        public ICollection<DriverSchedule>? DriverSchedules { get; set; }
+        public ICollection<DriverScheduleTemplate>? DriverScheduleTemplates { get; set; }
+        public ICollection<VehicleInProvince>? VehicleInProvinces { get; set; }
+        public ICollection<VehicleZonePreference>? ZonePreferences { get; set; }
+        public ICollection<DrivingOrder>? DrivingOrders { get; set; }
     }
 }

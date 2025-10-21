@@ -14,5 +14,8 @@
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public DateTimeOffset? EmailVerifiedAt { get; set; }
+
+        // (tuỳ chọn) điều hướng ngược về Company nếu bạn muốn:
+        // public Company? Company { get; set; }
     }
 }

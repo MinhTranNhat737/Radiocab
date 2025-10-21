@@ -1,6 +1,11 @@
-﻿namespace RadioCabs_BE.Models
+﻿using NpgsqlTypes;
+namespace RadioCabs_BE.Models
 {
-    public enum ActiveFlag { ACTIVE, INACTIVE }
+    public enum ActiveFlag
+    {
+        [PgName("ACTIVE")] ACTIVE,
+        [PgName("INACTIVE")] INACTIVE
+    }
     public enum RoleType { ADMIN, MANAGER, ACCOUNTANT, DISPATCHER, DRIVER, CUSTOMER }
     public enum OrderStatus { NEW, ASSIGNED, ONGOING, DONE, CANCELLED, FAILED }
     public enum PaymentMethod { CASH, CARD, WALLET, BANK }

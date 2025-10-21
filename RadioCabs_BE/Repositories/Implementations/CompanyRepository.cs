@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RadioCabs_BE.Models;
 using RadioCabs_BE.Repositories.Interfaces;
-using Radiocabs_BE.Data;
+using RadioCabs_BE.Data;
 
 namespace RadioCabs_BE.Repositories.Implementations
 {

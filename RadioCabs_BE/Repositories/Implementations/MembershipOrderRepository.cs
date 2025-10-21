@@ -9,7 +9,14 @@ namespace RadioCabs_BE.Repositories.Implementations
     {
         public MembershipOrderRepository(RadiocabsDbContext db) : base(db) { }
 
-        public Task<IReadOnlyList<MembershipOrder>> ListByCompanyAsync(long companyId, CancellationToken ct = default)
-            => _set.AsNoTracking().Where(x => x.CompanyId == companyId).ToListAsync(ct);
+        public async Task<IReadOnlyList<MembershipOrder>> ListByCompanyAsync(
+            long companyId, CancellationToken ct = default)
+        {
+            var rows = await _set.AsNoTracking()
+                                 .Where(x => x.CompanyId == companyId)
+                                 .OrderByDescending(x => x.StartDate)
+                                 .ToListAsync(ct);
+            return rows;
+        }
     }
 }

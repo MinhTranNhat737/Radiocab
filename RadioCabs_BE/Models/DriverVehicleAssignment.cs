@@ -7,5 +7,9 @@
         public long VehicleId { get; set; }
         public DateTimeOffset StartAt { get; set; }
         public DateTimeOffset? EndAt { get; set; }
+
+        // Navigation
+        public Account Driver { get; set; } = null!;
+        public Vehicle Vehicle { get; set; } = null!;
     }
 }

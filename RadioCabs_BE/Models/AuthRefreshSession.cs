@@ -1,4 +1,6 @@
-﻿namespace RadioCabs_BE.Models
+﻿using System.Net;
+
+namespace RadioCabs_BE.Models
 {
     public class AuthRefreshSession
     {
@@ -10,8 +12,9 @@
         public DateTimeOffset ExpiresAt { get; set; }
         public DateTimeOffset? RevokedAt { get; set; }
         public Guid? ReplacedBy { get; set; }
-        public string? Ip { get; set; }          // inet -> string
+        public IPAddress? Ip { get; set; }          // inet → IPAddress (khuyến nghị)
         public string? UserAgent { get; set; }
-    }
 
+        public Account Account { get; set; } = null!;
+    }
 }

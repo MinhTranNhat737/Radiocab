@@ -12,6 +12,9 @@
         public string? Note { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
-    }
 
+        // Navigation (khớp DbContext đang dùng)
+        public Account Driver { get; set; } = null!;
+        public Vehicle? Vehicle { get; set; }
+    }
 }

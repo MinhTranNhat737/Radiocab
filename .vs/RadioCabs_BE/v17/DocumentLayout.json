@@ -3,27 +3,107 @@
   "WorkspaceRootPath": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\data\\radiocabsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\data\\radiocabsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\driverscheduletemplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\driverscheduletemplate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\radiocabs_be.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\radiocabs_be.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\data\\radiocabsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\data\\radiocabsdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\dtos\\createcompanydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\dtos\\createcompanydto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\driverschedule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\driverschedule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\dtos\\pagerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\dtos\\pagerequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\enums.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\authrefreshsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\authrefreshsession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\authemailcode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\authemailcode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\drivervehicleassignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\drivervehicleassignment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\radiocabs_be.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\radiocabs_be.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\radiocabs_be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\radiocabs_be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\vehiclezonepreference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\vehiclezonepreference.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\vehicleinprovince.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\vehicleinprovince.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\zoneward.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\zoneward.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\zone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\zone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\ward.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\ward.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\province.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\province.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\vehiclemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\vehiclemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\vehiclesegment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\vehiclesegment.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\company.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\obj\\release\\net9.0\\.netcoreapp,version=v9.0.assemblyattributes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -32,14 +112,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\obj\\debug\\net9.0\\radiocabs_be.assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\obj\\debug\\net9.0\\radiocabs_be.assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\models\\models\\enum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\models\\models\\enum.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\radiocabs_be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
-      "RelativeMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|solutionrelative:radiocabs_be\\radiocabs_be.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F6552629-824C-4EB6-BFEC-FCC543D37FDA}|RadioCabs_BE\\RadioCabs_BE.csproj|c:\\users\\ad\\source\\repos\\radiocabs_be\\radiocabs_be\\radiocabs_be.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
@@ -53,8 +125,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 3,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "RadiocabsDbcontext.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T01:12:10.435Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "AuthRefreshSession.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\AuthRefreshSession.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\AuthRefreshSession.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\AuthRefreshSession.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\AuthRefreshSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:18:16.751Z"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 3,
@@ -63,14 +159,50 @@
               "RelativeDocumentMoniker": "RadioCabs_BE\\Program.cs",
               "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Program.cs",
               "RelativeToolTip": "RadioCabs_BE\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAACIAAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T00:50:44.616Z",
+              "WhenOpened": "2025-10-21T00:50:44.616Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DriverScheduleTemplate.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverScheduleTemplate.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\DriverScheduleTemplate.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverScheduleTemplate.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\DriverScheduleTemplate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:16:24.722Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
+              "Title": "DriverSchedule.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverSchedule.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\DriverSchedule.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverSchedule.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\DriverSchedule.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:17:02.33Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Account.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Account.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Account.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Account.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Account.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:01:59.088Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\appsettings.json",
               "RelativeDocumentMoniker": "RadioCabs_BE\\appsettings.json",
@@ -78,103 +210,71 @@
               "RelativeToolTip": "RadioCabs_BE\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-10-21T00:50:45.072Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Microsoft.NET.Sdk.DefaultItems.Shared.targets",
-              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
-              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
-              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
-              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
-              "ViewState": "AgIAAOQAAAAAAAAAAAAIwL0AAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
-              "WhenOpened": "2025-10-21T01:09:42.034Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "RadioCabs_BE.csproj",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\RadioCabs_BE.csproj",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
-              "RelativeToolTip": "RadioCabs_BE\\RadioCabs_BE.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-10-21T00:49:42.88Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Enum.cs",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Models\\Enum.cs",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Models\\Enum.cs",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Models\\Enum.cs",
-              "RelativeToolTip": "RadioCabs_BE\\Models\\Models\\Enum.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T01:17:43.29Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "WeatherForecast.cs",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\WeatherForecast.cs",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\WeatherForecast.cs",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\WeatherForecast.cs",
-              "RelativeToolTip": "RadioCabs_BE\\WeatherForecast.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T01:17:24.438Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "RadiocabsDbcontext.cs",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
-              "RelativeToolTip": "RadioCabs_BE\\Data\\RadiocabsDbcontext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T01:12:10.435Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-21T00:50:45.072Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "RadioCabs_BE.AssemblyInfo.cs",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
-              "RelativeToolTip": "RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAALAAAAAAAAAA==",
+              "Title": "PageRequest.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\DTOs\\PageRequest.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\DTOs\\PageRequest.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\DTOs\\PageRequest.cs",
+              "RelativeToolTip": "RadioCabs_BE\\DTOs\\PageRequest.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T01:18:03.075Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-21T02:24:07.236Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": ".NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
-              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
-              "RelativeDocumentMoniker": "RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
-              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
-              "RelativeToolTip": "RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAALAAAAAAAAAA==",
+              "DocumentIndex": 5,
+              "Title": "CreateCompanyDto.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\DTOs\\CreateCompanyDto.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\DTOs\\CreateCompanyDto.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\DTOs\\CreateCompanyDto.cs",
+              "RelativeToolTip": "RadioCabs_BE\\DTOs\\CreateCompanyDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA/AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-21T01:18:08.491Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-21T02:25:15.214Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
+              "Title": "AuthEmailCode.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\AuthEmailCode.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\AuthEmailCode.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\AuthEmailCode.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\AuthEmailCode.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:17:50.319Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DriverVehicleAssignment.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverVehicleAssignment.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\DriverVehicleAssignment.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\DriverVehicleAssignment.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\DriverVehicleAssignment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:17:20.81Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Enums.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Enums.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Enums.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Enums.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Enums.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T01:17:43.29Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
               "Title": "RadioCabs_BE.http",
               "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.http",
               "RelativeDocumentMoniker": "RadioCabs_BE\\RadioCabs_BE.http",
@@ -182,20 +282,198 @@
               "RelativeToolTip": "RadioCabs_BE\\RadioCabs_BE.http",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
-              "WhenOpened": "2025-10-21T01:11:33.874Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-21T01:11:33.874Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 14,
+              "Title": "Vehicle.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Vehicle.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Vehicle.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Vehicle.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Vehicle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:03:41.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "RadioCabs_BE.csproj",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\RadioCabs_BE.csproj",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
+              "RelativeToolTip": "RadioCabs_BE\\RadioCabs_BE.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-10-21T00:49:42.88Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "VehicleZonePreference.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleZonePreference.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\VehicleZonePreference.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleZonePreference.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\VehicleZonePreference.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:06:19.48Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "VehicleInProvince.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleInProvince.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\VehicleInProvince.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleInProvince.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\VehicleInProvince.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:06:00.527Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ZoneWard.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\ZoneWard.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\ZoneWard.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\ZoneWard.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\ZoneWard.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:05:04.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "Zone.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Zone.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Zone.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Zone.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Zone.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:04:42.174Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Ward.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Ward.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Ward.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Ward.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Ward.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:04:21.999Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "Province.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Province.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Province.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Province.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Province.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:04:04.67Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "VehicleModel.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleModel.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\VehicleModel.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleModel.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\VehicleModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:03:22.103Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "VehicleSegment.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleSegment.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\VehicleSegment.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\VehicleSegment.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\VehicleSegment.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:02:46.062Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Company.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Company.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\Models\\Company.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\Models\\Company.cs",
+              "RelativeToolTip": "RadioCabs_BE\\Models\\Company.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T02:02:27.944Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Microsoft.NET.Sdk.DefaultItems.Shared.targets",
+              "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
+              "ToolTip": "C:\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.301\\Sdks\\Microsoft.NET.Sdk\\targets\\Microsoft.NET.Sdk.DefaultItems.Shared.targets",
+              "ViewState": "AgIAAOQAAAAAAAAAAAAIwL0AAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003801|",
+              "WhenOpened": "2025-10-21T01:09:42.034Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\WeatherForecast.cs",
+              "RelativeToolTip": "RadioCabs_BE\\WeatherForecast.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T01:17:24.438Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "RadioCabs_BE.AssemblyInfo.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
+              "RelativeToolTip": "RadioCabs_BE\\obj\\Debug\\net9.0\\RadioCabs_BE.AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T01:18:03.075Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": ".NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
+              "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
+              "RelativeDocumentMoniker": "RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
+              "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
+              "RelativeToolTip": "RadioCabs_BE\\obj\\Release\\net9.0\\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-21T01:18:08.491Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
               "Title": "RadioCabs_BE",
               "DocumentMoniker": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
               "RelativeDocumentMoniker": "RadioCabs_BE\\RadioCabs_BE.csproj",
               "ToolTip": "C:\\Users\\AD\\source\\repos\\RadioCabs_BE\\RadioCabs_BE\\RadioCabs_BE.csproj",
               "RelativeToolTip": "RadioCabs_BE\\RadioCabs_BE.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-10-21T01:16:47.505Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-21T01:16:47.505Z"
             }
           ]
         }

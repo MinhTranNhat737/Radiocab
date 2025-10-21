@@ -1,77 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="obj\Debug\net9.0\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs" />
-    <Compile Include="obj\Debug\net9.0\Radiocabs-BE.AssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net9.0\Radiocabs-BE.GlobalUsings.g.cs" />
-    <Compile Include="obj\Debug\net9.0\Radiocabs-BE.MvcApplicationPartsAssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net9.0\RadioCabs_BE.AssemblyInfo.cs" />
-    <Compile Include="obj\Debug\net9.0\RadioCabs_BE.GlobalUsings.g.cs" />
-    <Compile Include="obj\Release\net9.0\.NETCoreApp,Version=v9.0.AssemblyAttributes.cs" />
-    <Compile Include="obj\Release\net9.0\Radiocabs-BE.AssemblyInfo.cs" />
-    <Compile Include="obj\Release\net9.0\Radiocabs-BE.GlobalUsings.g.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="obj\Debug\net9.0\Radiocabs-BE.csproj.FileListAbsolute.txt" />
-    <Content Include="obj\Debug\net9.0\Radiocabs-BE.sourcelink.json" />
-    <Content Include="obj\Debug\net9.0\rjsmcshtml.dswa.cache.json" />
-    <Content Include="obj\Debug\net9.0\rjsmrazor.dswa.cache.json" />
-    <Content Include="obj\Debug\net9.0\rpswa.dswa.cache.json" />
-    <Content Include="obj\Debug\net9.0\staticwebassets.build.endpoints.json" />
-    <Content Include="obj\Debug\net9.0\staticwebassets.build.json" />
-    <Content Include="obj\Debug\net9.0\staticwebassets.references.upToDateCheck.txt" />
-    <Content Include="obj\Debug\net9.0\staticwebassets.removed.txt" />
-    <Content Include="obj\project.assets.json" />
-    <Content Include="obj\Radiocabs-BE.csproj.nuget.dgspec.json" />
-    <Content Include="obj\RadioCabs_BE.csproj.nuget.dgspec.json" />
-    <Content Include="Properties\launchSettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="obj\Debug\net9.0\apphost.exe" />
-    <None Include="obj\Debug\net9.0\Radiocab.9DDECC49.Up2Date" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.assets.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.csproj.AssemblyReference.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.csproj.CoreCompileInputs.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.dll" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.GeneratedMSBuildEditorConfig.editorconfig" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.genruntimeconfig.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.MvcApplicationPartsAssemblyInfo.cache" />
-    <None Include="obj\Debug\net9.0\Radiocabs-BE.pdb" />
-    <None Include="obj\Debug\net9.0\RadioCabs_BE.AssemblyInfoInputs.cache" />
-    <None Include="obj\Debug\net9.0\RadioCabs_BE.assets.cache" />
-    <None Include="obj\Debug\net9.0\RadioCabs_BE.csproj.AssemblyReference.cache" />
-    <None Include="obj\Debug\net9.0\RadioCabs_BE.GeneratedMSBuildEditorConfig.editorconfig" />
-    <None Include="obj\Debug\net9.0\refint\Radiocabs-BE.dll" />
-    <None Include="obj\Debug\net9.0\ref\Radiocabs-BE.dll" />
-    <None Include="obj\Debug\net9.0\staticwebassets.build.json.cache" />
-    <None Include="obj\project.nuget.cache" />
-    <None Include="obj\Radiocabs-BE.csproj.nuget.g.props" />
-    <None Include="obj\Radiocabs-BE.csproj.nuget.g.targets" />
-    <None Include="obj\RadioCabs_BE.csproj.nuget.g.props" />
-    <None Include="obj\RadioCabs_BE.csproj.nuget.g.targets" />
-    <None Include="obj\Release\net9.0\Radiocabs-BE.AssemblyInfoInputs.cache" />
-    <None Include="obj\Release\net9.0\Radiocabs-BE.assets.cache" />
-    <None Include="obj\Release\net9.0\Radiocabs-BE.csproj.AssemblyReference.cache" />
-    <None Include="obj\Release\net9.0\Radiocabs-BE.GeneratedMSBuildEditorConfig.editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="obj\Debug\net9.0\staticwebassets\" />
-    <Folder Include="obj\Release\net9.0\refint\" />
-    <Folder Include="obj\Release\net9.0\ref\" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.6" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+	</ItemGroup>
 
 </Project>

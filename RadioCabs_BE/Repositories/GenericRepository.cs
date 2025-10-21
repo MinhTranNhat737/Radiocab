@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RadioCabs_BE.Repositories;
-using Radiocabs_BE.Data;
+using RadioCabs_BE.Data;
 using System.Linq.Expressions;
 
 namespace RadioCabs_BE.Repositories

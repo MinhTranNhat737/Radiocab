@@ -1,29 +1,46 @@
+using Microsoft.EntityFrameworkCore;
+using RadioCabs_BE.Data;
 using RadioCabs_BE.Models;
-using RadioCabs_BE.Repositories.Interfaces;
 using RadioCabs_BE.Services.Interfaces;
-using RadioCabs_BE.Repositories;
+
 namespace RadioCabs_BE.Services
 {
     public class MembershipService : IMembershipService
     {
-        private readonly IMembershipOrderRepository _repo;
-        private readonly IUnitOfWork _uow;
+        private readonly RadiocabsDbContext _db;
+        public MembershipService(RadiocabsDbContext db) => _db = db;
 
-        public MembershipService(IMembershipOrderRepository repo, IUnitOfWork uow)
+        public Task<MembershipOrder?> GetAsync(long id, CancellationToken ct = default)
+            => _db.MembershipOrders.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.MembershipOrderId == id, ct);
+
+        public async Task<IReadOnlyList<MembershipOrder>> ListByCompanyAsync(long companyId, CancellationToken ct = default)
+            => await _db.MembershipOrders.AsNoTracking()
+                   .Where(x => x.CompanyId == companyId)
+                   .OrderByDescending(x => x.StartDate)
+                   .ToListAsync(ct);
+
+        public async Task<long> CreateAsync(MembershipOrder order, CancellationToken ct = default)
         {
-            _repo = repo; _uow = uow;
+            _db.MembershipOrders.Add(order);
+            await _db.SaveChangesAsync(ct);
+            return order.MembershipOrderId;
         }
 
-        public Task<IReadOnlyList<MembershipOrder>> ListByCompanyAsync(long companyId, CancellationToken ct = default)
-            => _repo.ListByCompanyAsync(companyId, ct);
+        // === Bổ sung để khớp controller ===
+        public Task<MembershipOrder?> GetOrderAsync(long id, CancellationToken ct = default)
+            => GetAsync(id, ct);
 
-        public async Task<MembershipOrder> CreateOrderAsync(MembershipOrder order, CancellationToken ct = default)
+        // Giả định "Deactivate" = kết thúc gói ngay hôm nay
+        public async Task<bool> DeactivateAsync(long id, CancellationToken ct = default)
         {
-            // tính amount nếu client chưa gửi đúng
-            if (order.Amount <= 0) order.Amount = order.UnitMonths * order.UnitPrice;
-            await _repo.AddAsync(order, ct);
-            await _uow.SaveChangesAsync(ct);
-            return order;
+            var mo = await _db.MembershipOrders.FirstOrDefaultAsync(x => x.MembershipOrderId == id, ct);
+            if (mo == null) return false;
+
+            // kết thúc ngay hôm nay (UTC). Đổi sang Local nếu bạn muốn.
+            mo.EndDate = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+            await _db.SaveChangesAsync(ct);
+            return true;
         }
     }
 }

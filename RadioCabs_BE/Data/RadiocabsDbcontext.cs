@@ -2,7 +2,7 @@
 using RadioCabs_BE.Models;       // namespace models của bạn
 using System;
 
-namespace Radiocabs_BE.Data
+namespace RadioCabs_BE.Data
 {
     public class RadiocabsDbContext : DbContext
     {

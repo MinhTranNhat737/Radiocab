@@ -23,7 +23,7 @@ namespace RadioCabs_BE.DTOs
         public short? YearManufactured { get; set; }
         public DateOnly? InServiceFrom { get; set; }
         public int? OdometerKm { get; set; }
-        public string? Status { get; set; }
+        public ActiveFlag? Status { get; set; }
     }
 
     public class VehicleDto
@@ -37,7 +37,7 @@ namespace RadioCabs_BE.DTOs
         public short? YearManufactured { get; set; }
         public DateOnly InServiceFrom { get; set; }
         public int OdometerKm { get; set; }
-        public string Status { get; set; } = null!;
+        public ActiveFlag Status { get; set; }
         public VehicleModelDto? Model { get; set; }
     }
 
@@ -47,8 +47,8 @@ namespace RadioCabs_BE.DTOs
         public long? SegmentId { get; set; }
         public string Brand { get; set; } = null!;
         public string ModelName { get; set; } = null!;
-        public string FuelType { get; set; } = "GASOLINE";
-        public string SeatCategory { get; set; } = "SEDAN_5";
+        public FuelType FuelType { get; set; } = FuelType.GASOLINE;
+        public VehicleCategory SeatCategory { get; set; } = VehicleCategory.SEDAN_5;
         public string? ImageUrl { get; set; }
         public string? Description { get; set; }
     }
@@ -58,8 +58,8 @@ namespace RadioCabs_BE.DTOs
         public long? SegmentId { get; set; }
         public string? Brand { get; set; }
         public string? ModelName { get; set; }
-        public string? FuelType { get; set; }
-        public string? SeatCategory { get; set; }
+        public FuelType? FuelType { get; set; }
+        public VehicleCategory? SeatCategory { get; set; }
         public string? ImageUrl { get; set; }
         public string? Description { get; set; }
         public bool? IsActive { get; set; }
@@ -72,8 +72,8 @@ namespace RadioCabs_BE.DTOs
         public long? SegmentId { get; set; }
         public string Brand { get; set; } = null!;
         public string ModelName { get; set; } = null!;
-        public string FuelType { get; set; } = null!;
-        public string SeatCategory { get; set; } = null!;
+        public FuelType FuelType { get; set; }
+        public VehicleCategory SeatCategory { get; set; }
         public string? ImageUrl { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; }

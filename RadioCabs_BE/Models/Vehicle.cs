@@ -1,3 +1,5 @@
+using RadioCabs_BE.Models;
+
 namespace RadioCabs_BE.Models
 {
     public class Vehicle
@@ -11,7 +13,7 @@ namespace RadioCabs_BE.Models
         public short? YearManufactured { get; set; }
         public DateOnly InServiceFrom { get; set; }
         public int OdometerKm { get; set; } = 0;
-        public string Status { get; set; } = "ACTIVE";
+        public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
 
         // Navigation properties
         public Company Company { get; set; } = null!;

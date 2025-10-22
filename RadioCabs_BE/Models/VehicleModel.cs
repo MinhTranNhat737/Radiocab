@@ -1,3 +1,5 @@
+using RadioCabs_BE.Models;
+
 namespace RadioCabs_BE.Models
 {
     public class VehicleModel
@@ -7,8 +9,8 @@ namespace RadioCabs_BE.Models
         public long? SegmentId { get; set; }
         public string Brand { get; set; } = null!;
         public string ModelName { get; set; } = null!;
-        public string FuelType { get; set; } = "GASOLINE";
-        public string SeatCategory { get; set; } = "SEDAN_5";
+        public FuelType FuelType { get; set; } = FuelType.GASOLINE;
+        public VehicleCategory SeatCategory { get; set; } = VehicleCategory.SEDAN_5;
         public string? ImageUrl { get; set; }
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;

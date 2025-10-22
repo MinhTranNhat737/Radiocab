@@ -10,7 +10,7 @@ namespace RadioCabs_BE.DTOs
         public string FullName { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public string Role { get; set; } = "CUSTOMER";
+        public RoleType Role { get; set; } = RoleType.CUSTOMER;
     }
 
     public class UpdateAccountDto
@@ -18,8 +18,8 @@ namespace RadioCabs_BE.DTOs
         public string? FullName { get; set; }
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public string? Role { get; set; }
-        public string? Status { get; set; }
+        public RoleType? Role { get; set; }
+        public ActiveFlag? Status { get; set; }
     }
 
     public class LoginDto
@@ -44,8 +44,8 @@ namespace RadioCabs_BE.DTOs
         public string FullName { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public string Role { get; set; } = null!;
-        public string Status { get; set; } = null!;
+        public RoleType Role { get; set; }
+        public ActiveFlag Status { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public DateTimeOffset? EmailVerifiedAt { get; set; }

@@ -60,7 +60,7 @@ namespace RadioCabs_BE.Services
                 YearManufactured = dto.YearManufactured,
                 InServiceFrom = dto.InServiceFrom,
                 OdometerKm = dto.OdometerKm,
-                Status = "ACTIVE"
+                Status = ActiveFlag.ACTIVE
             };
 
             await _unitOfWork.Repository<Vehicle>().AddAsync(vehicle);
@@ -81,7 +81,7 @@ namespace RadioCabs_BE.Services
             if (dto.YearManufactured.HasValue) vehicle.YearManufactured = dto.YearManufactured.Value;
             if (dto.InServiceFrom.HasValue) vehicle.InServiceFrom = dto.InServiceFrom.Value;
             if (dto.OdometerKm.HasValue) vehicle.OdometerKm = dto.OdometerKm.Value;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) vehicle.Status = dto.Status;
+            if (dto.Status.HasValue) vehicle.Status = dto.Status.Value;
 
             _unitOfWork.Repository<Vehicle>().Update(vehicle);
             await _unitOfWork.SaveChangesAsync();
@@ -162,8 +162,8 @@ namespace RadioCabs_BE.Services
             if (dto.SegmentId.HasValue) model.SegmentId = dto.SegmentId.Value;
             if (dto.Brand != null) model.Brand = dto.Brand;
             if (dto.ModelName != null) model.ModelName = dto.ModelName;
-            if (!string.IsNullOrWhiteSpace(dto.FuelType)) model.FuelType = dto.FuelType;
-            if (!string.IsNullOrWhiteSpace(dto.SeatCategory)) model.SeatCategory = dto.SeatCategory;
+            if (dto.FuelType.HasValue) model.FuelType = dto.FuelType.Value;
+            if (dto.SeatCategory.HasValue) model.SeatCategory = dto.SeatCategory.Value;
             if (dto.ImageUrl != null) model.ImageUrl = dto.ImageUrl;
             if (dto.Description != null) model.Description = dto.Description;
             if (dto.IsActive.HasValue) model.IsActive = dto.IsActive.Value;

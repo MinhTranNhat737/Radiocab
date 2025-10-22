@@ -58,7 +58,7 @@ namespace RadioCabs_BE.Services
                 TaxCode = dto.TaxCode,
                 Fax = dto.Fax,
                 ContactAccountId = dto.ContactAccountId,
-                Status = "ACTIVE",
+                Status = ActiveFlag.ACTIVE,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
@@ -80,7 +80,7 @@ namespace RadioCabs_BE.Services
             if (dto.TaxCode != null) company.TaxCode = dto.TaxCode;
             if (dto.Fax != null) company.Fax = dto.Fax;
             if (dto.ContactAccountId.HasValue) company.ContactAccountId = dto.ContactAccountId.Value;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) company.Status = dto.Status;
+            if (dto.Status.HasValue) company.Status = dto.Status.Value;
             company.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<Company>().Update(company);

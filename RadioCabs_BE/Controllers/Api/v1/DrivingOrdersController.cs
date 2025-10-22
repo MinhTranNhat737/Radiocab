@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RadioCabs_BE.DTOs;
 using RadioCabs_BE.Services.Interfaces;
+using RadioCabs_BE.Models;
 
 namespace RadioCabs_BE.Controllers.Api.v1
 {
@@ -164,7 +165,7 @@ namespace RadioCabs_BE.Controllers.Api.v1
 
     public class UpdateStatusDto
     {
-        public string Status { get; set; } = null!;
+        public OrderStatus Status { get; set; }
     }
 
     public class CompleteOrderDto

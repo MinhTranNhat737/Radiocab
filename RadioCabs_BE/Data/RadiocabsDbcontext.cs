@@ -52,8 +52,8 @@ namespace RadioCabs_BE.Data
             modelBuilder.HasPostgresEnum<FuelType>("public", "fuel_type_enum");
             modelBuilder.HasPostgresEnum<VehicleCategory>("public", "vehicle_category_enum");
             modelBuilder.HasPostgresEnum<ShiftStatus>("public", "shift_status");
-            // modelBuilder.HasPostgresEnum<RevocationReason>("public", "revocation_reason");
-            // modelBuilder.HasPostgresEnum<VerificationPurpose>("public", "verification_purpose");
+            modelBuilder.HasPostgresEnum<RevocationReason>("public", "revocation_reason");
+            modelBuilder.HasPostgresEnum<VerificationPurpose>("public", "verification_purpose");
 
             // ====== Account ======
             modelBuilder.Entity<Account>(e =>

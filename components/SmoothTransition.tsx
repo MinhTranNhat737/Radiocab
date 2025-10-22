@@ -13,11 +13,11 @@ export default function SmoothTransition({ children }: SmoothTransitionProps) {
   const pathname = usePathname()
 
   useEffect(() => {
-    // Trigger transition when pathname changes
+    
     setIsVisible(false)
     
     const timer = setTimeout(() => {
-      setKey(prev => prev + 1) // Force re-render
+      setKey(prev => prev + 1) 
       setIsVisible(true)
     }, 150)
 
@@ -37,3 +37,4 @@ export default function SmoothTransition({ children }: SmoothTransitionProps) {
     </div>
   )
 }
+

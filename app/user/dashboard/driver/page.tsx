@@ -21,7 +21,7 @@ export default function DriverDashboard() {
 
   return (
     <div className="space-y-8 p-6">
-      {/* Welcome Section */}
+      {}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-yellow-400 mb-2">
           Chào mừng, {user?.fullName || 'Tài xế'}!
@@ -31,7 +31,7 @@ export default function DriverDashboard() {
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/10 border-blue-200 dark:border-blue-800">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -86,7 +86,7 @@ export default function DriverDashboard() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-4">
           Truy cập nhanh
@@ -124,7 +124,7 @@ export default function DriverDashboard() {
         </div>
       </div>
 
-      {/* Driver Stats */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
           <CardHeader>
@@ -196,5 +196,6 @@ export default function DriverDashboard() {
     </div>
   )
 }
+
 
 

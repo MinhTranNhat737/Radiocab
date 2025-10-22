@@ -1,27 +1,24 @@
-// Authentication system with mock data
-
 export interface User {
   id: string
   username: string
   email: string
   fullName: string
-  role: 'admin' | 'company' | 'driver'
-  password: string // In production, this should never be stored in frontend
+  role: 'ADMIN' | 'MANAGER' | 'ACCOUNTANT' | 'DISPATCHER' | 'DRIVER' | 'CUSTOMER'
+  password: string
   phone?: string
+  companyId?: number
   companyName?: string
   driverLicense?: string
   createdAt: string
 }
 
-// Demo accounts
 export const DEMO_ACCOUNTS: User[] = [
-  // Admin accounts
   {
     id: 'admin-001',
     username: 'admin',
     email: 'admin@radiocabs.in',
     fullName: 'Quản Trị Viên',
-    role: 'admin',
+    role: 'ADMIN',
     password: 'Admin@123',
     phone: '0901234567',
     createdAt: '2024-01-01T00:00:00Z'
@@ -31,21 +28,20 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'superadmin',
     email: 'superadmin@radiocabs.in',
     fullName: 'Super Admin',
-    role: 'admin',
+    role: 'ADMIN',
     password: 'SuperAdmin@2024',
     phone: '0901234568',
     createdAt: '2024-01-01T00:00:00Z'
   },
-  
-  // Company accounts
   {
     id: 'company-001',
     username: 'vinasun',
     email: 'info@vinasun.vn',
     fullName: 'Nguyễn Văn A',
-    role: 'company',
+    role: 'MANAGER',
     password: 'Vinasun@123',
     phone: '0902345678',
+    companyId: 1,
     companyName: 'Vinasun Taxi',
     createdAt: '2024-01-15T00:00:00Z'
   },
@@ -54,9 +50,10 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'mailinh',
     email: 'contact@mailinh.vn',
     fullName: 'Trần Thị B',
-    role: 'company',
+    role: 'MANAGER',
     password: 'MaiLinh@123',
     phone: '0903456789',
+    companyId: 2,
     companyName: 'Mai Linh Taxi',
     createdAt: '2024-01-20T00:00:00Z'
   },
@@ -65,9 +62,10 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'saigontaxi',
     email: 'info@saigontaxi.vn',
     fullName: 'Lê Văn C',
-    role: 'company',
+    role: 'MANAGER',
     password: 'SaigonTaxi@123',
     phone: '0904567890',
+    companyId: 3,
     companyName: 'Saigon Taxi',
     createdAt: '2024-02-01T00:00:00Z'
   },
@@ -76,9 +74,10 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'vinataxigroup',
     email: 'contact@vinataxigroup.vn',
     fullName: 'Phạm Thị D',
-    role: 'company',
+    role: 'MANAGER',
     password: 'VinaTaxi@123',
     phone: '0905678901',
+    companyId: 4,
     companyName: 'Vina Taxi Group',
     createdAt: '2024-02-10T00:00:00Z'
   },
@@ -87,22 +86,23 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'greentaxi',
     email: 'hello@greentaxi.vn',
     fullName: 'Hoàng Văn E',
-    role: 'company',
+    role: 'MANAGER',
     password: 'GreenTaxi@123',
     phone: '0906789012',
+    companyId: 5,
     companyName: 'Green Taxi',
     createdAt: '2024-02-15T00:00:00Z'
   },
-  
-  // Driver accounts
   {
     id: 'driver-001',
     username: 'driver001',
     email: 'driver001@radiocabs.in',
     fullName: 'Nguyễn Minh F',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver001@123',
     phone: '0907890123',
+    companyId: 1,
+    companyName: 'Vinasun Taxi',
     driverLicense: 'B2-123456789',
     createdAt: '2024-01-25T00:00:00Z'
   },
@@ -111,9 +111,11 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver002',
     email: 'driver002@radiocabs.in',
     fullName: 'Trần Văn G',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver002@123',
     phone: '0908901234',
+    companyId: 2,
+    companyName: 'Mai Linh Taxi',
     driverLicense: 'B2-987654321',
     createdAt: '2024-02-01T00:00:00Z'
   },
@@ -122,9 +124,11 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver003',
     email: 'driver003@radiocabs.in',
     fullName: 'Lê Thị H',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver003@123',
     phone: '0909012345',
+    companyId: 3,
+    companyName: 'Saigon Taxi',
     driverLicense: 'B2-555666777',
     createdAt: '2024-02-05T00:00:00Z'
   },
@@ -133,9 +137,11 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver004',
     email: 'driver004@radiocabs.in',
     fullName: 'Phạm Văn I',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver004@123',
     phone: '0910123456',
+    companyId: 4,
+    companyName: 'Vina Taxi Group',
     driverLicense: 'B2-111222333',
     createdAt: '2024-02-10T00:00:00Z'
   },
@@ -144,9 +150,11 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver005',
     email: 'driver005@radiocabs.in',
     fullName: 'Võ Thị K',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver005@123',
     phone: '0911234567',
+    companyId: 5,
+    companyName: 'Green Taxi',
     driverLicense: 'B2-444555666',
     createdAt: '2024-02-15T00:00:00Z'
   },
@@ -155,9 +163,11 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver006',
     email: 'driver006@radiocabs.in',
     fullName: 'Đặng Văn L',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver006@123',
     phone: '0912345678',
+    companyId: 1,
+    companyName: 'Vinasun Taxi',
     driverLicense: 'B2-777888999',
     createdAt: '2024-02-20T00:00:00Z'
   },
@@ -166,25 +176,96 @@ export const DEMO_ACCOUNTS: User[] = [
     username: 'driver007',
     email: 'driver007@radiocabs.in',
     fullName: 'Bùi Thị M',
-    role: 'driver',
+    role: 'DRIVER',
     password: 'Driver007@123',
     phone: '0913456789',
+    companyId: 2,
+    companyName: 'Mai Linh Taxi',
     driverLicense: 'B2-123789456',
     createdAt: '2024-02-25T00:00:00Z'
   },
+  // Accountant accounts
+  {
+    id: 'accountant-001',
+    username: 'accountant001',
+    email: 'accountant001@radiocabs.in',
+    fullName: 'Nguyễn Thị N',
+    role: 'ACCOUNTANT',
+    password: 'Accountant001@123',
+    phone: '0914567890',
+    companyId: 1,
+    companyName: 'Vinasun Taxi',
+    createdAt: '2024-03-01T00:00:00Z'
+  },
+  {
+    id: 'accountant-002',
+    username: 'accountant002',
+    email: 'accountant002@radiocabs.in',
+    fullName: 'Trần Văn O',
+    role: 'ACCOUNTANT',
+    password: 'Accountant002@123',
+    phone: '0915678901',
+    companyId: 2,
+    companyName: 'Mai Linh Taxi',
+    createdAt: '2024-03-05T00:00:00Z'
+  },
+  // Dispatcher accounts (thay coordinator)
+  {
+    id: 'dispatcher-001',
+    username: 'dispatcher001',
+    email: 'dispatcher001@radiocabs.in',
+    fullName: 'Lê Thị P',
+    role: 'DISPATCHER',
+    password: 'Dispatcher001@123',
+    phone: '0916789012',
+    companyId: 1,
+    companyName: 'Vinasun Taxi',
+    createdAt: '2024-03-10T00:00:00Z'
+  },
+  {
+    id: 'dispatcher-002',
+    username: 'dispatcher002',
+    email: 'dispatcher002@radiocabs.in',
+    fullName: 'Phạm Văn Q',
+    role: 'DISPATCHER',
+    password: 'Dispatcher002@123',
+    phone: '0917890123',
+    companyId: 2,
+    companyName: 'Mai Linh Taxi',
+    createdAt: '2024-03-15T00:00:00Z'
+  },
+  // Customer accounts
+  {
+    id: 'customer-001',
+    username: 'customer001',
+    email: 'customer001@radiocabs.in',
+    fullName: 'Nguyễn Văn R',
+    role: 'CUSTOMER',
+    password: 'Customer001@123',
+    phone: '0918901234',
+    createdAt: '2024-03-20T00:00:00Z'
+  },
+  {
+    id: 'customer-002',
+    username: 'customer002',
+    email: 'customer002@radiocabs.in',
+    fullName: 'Trần Thị S',
+    role: 'CUSTOMER',
+    password: 'Customer002@123',
+    phone: '0919012345',
+    createdAt: '2024-03-25T00:00:00Z'
+  },
 ]
 
-// Authentication functions
 export const login = (username: string, password: string): User | null => {
   const user = DEMO_ACCOUNTS.find(
-    (account) => 
-      (account.username.toLowerCase() === username.toLowerCase() || 
-       account.email.toLowerCase() === username.toLowerCase()) &&
+    (account) =>
+      (account.username.toLowerCase() === username.toLowerCase() ||
+        account.email.toLowerCase() === username.toLowerCase()) &&
       account.password === password
   )
-  
+
   if (user) {
-    // Store user session in localStorage
     const session = {
       id: user.id,
       username: user.username,
@@ -199,7 +280,7 @@ export const login = (username: string, password: string): User | null => {
     localStorage.setItem('user_session', JSON.stringify(session))
     return user
   }
-  
+
   return null
 }
 
@@ -209,10 +290,10 @@ export const logout = (): void => {
 
 export const getCurrentUser = (): Omit<User, 'password'> | null => {
   if (typeof window === 'undefined') return null
-  
+
   const session = localStorage.getItem('user_session')
   if (!session) return null
-  
+
   try {
     return JSON.parse(session)
   } catch {
@@ -224,12 +305,18 @@ export const isAuthenticated = (): boolean => {
   return getCurrentUser() !== null
 }
 
-export const hasRole = (role: 'admin' | 'company' | 'driver'): boolean => {
+export const hasRole = (role: 'ADMIN' | 'MANAGER' | 'ACCOUNTANT' | 'DISPATCHER' | 'DRIVER' | 'CUSTOMER'): boolean => {
   const user = getCurrentUser()
   return user?.role === role
 }
 
-export const isAdmin = (): boolean => hasRole('admin')
-export const isCompany = (): boolean => hasRole('company')
-export const isDriver = (): boolean => hasRole('driver')
+export const isAdmin = (): boolean => hasRole('ADMIN')
+export const isManager = (): boolean => hasRole('MANAGER')
+export const isDriver = (): boolean => hasRole('DRIVER')
+export const isAccountant = (): boolean => hasRole('ACCOUNTANT')
+export const isDispatcher = (): boolean => hasRole('DISPATCHER')
+export const isCustomer = (): boolean => hasRole('CUSTOMER')
 
+// Legacy support
+export const isCompany = (): boolean => hasRole('MANAGER')
+export const isCoordinator = (): boolean => hasRole('DISPATCHER')

@@ -18,7 +18,7 @@ import {
 import Link from "next/link"
 
 export default function AdminDashboardPage() {
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const stats = {
     totalCompanies: 156,
     totalDrivers: 1247,
@@ -137,7 +137,7 @@ export default function AdminDashboardPage() {
         </p>
       </div>
 
-      {/* Stats Grid */}
+      {}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -196,7 +196,7 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
 
-      {/* System Health & Pending Approvals */}
+      {}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 md:grid-cols-2">
         <Card>
           <CardHeader>
@@ -261,9 +261,9 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
 
-      {/* Recent Activity */}
+      {}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-3">
-        {/* Recent Companies */}
+        {}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -292,7 +292,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Recent Drivers */}
+        {}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -320,7 +320,7 @@ export default function AdminDashboardPage() {
           </CardContent>
         </Card>
 
-        {/* Recent Ads */}
+        {}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -350,7 +350,7 @@ export default function AdminDashboardPage() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thao tác nhanh</CardTitle>
@@ -390,3 +390,4 @@ export default function AdminDashboardPage() {
     </div>
   )
 }
+

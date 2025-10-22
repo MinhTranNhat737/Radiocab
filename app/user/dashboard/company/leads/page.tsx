@@ -28,7 +28,7 @@ import {
   Edit,
   Trash2
 } from "lucide-react"
-// Define a simple Lead interface for this page
+
 interface Lead {
   lead_id: number
   company_id: number
@@ -58,7 +58,7 @@ export default function CompanyLeadsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
 
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const mockLeads: Lead[] = [
     {
       lead_id: 1,
@@ -117,7 +117,7 @@ export default function CompanyLeadsPage() {
   ]
 
   useEffect(() => {
-    // Simulate API call
+    
     const fetchLeads = async () => {
       setLoading(true)
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -220,7 +220,7 @@ export default function CompanyLeadsPage() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -281,7 +281,7 @@ export default function CompanyLeadsPage() {
         </Card>
       </div>
 
-      {/* Filters */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Bộ lọc</CardTitle>
@@ -341,7 +341,7 @@ export default function CompanyLeadsPage() {
         </CardContent>
       </Card>
 
-      {/* Leads Table */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Danh sách Leads</CardTitle>
@@ -426,7 +426,7 @@ export default function CompanyLeadsPage() {
         </CardContent>
       </Card>
 
-      {/* Lead Detail Dialog */}
+      {}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -560,3 +560,4 @@ export default function CompanyLeadsPage() {
     </div>
   )
 }
+

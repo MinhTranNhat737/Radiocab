@@ -14,7 +14,6 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguage] = useState<Language>('vi')
 
-  // Load language from localStorage on mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem('language') as Language
     if (savedLanguage && (savedLanguage === 'vi' || savedLanguage === 'en')) {
@@ -22,7 +21,6 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
     }
   }, [])
 
-  // Save language to localStorage when it changes
   useEffect(() => {
     localStorage.setItem('language', language)
   }, [language])

@@ -30,7 +30,7 @@ const userNavigation = [
   { name: "Settings", href: "/user/dashboard/settings", icon: Settings },
 ]
 
-// Dynamic navigation based on user role
+
 const getNavigationByRole = (role: 'company' | 'driver') => {
   const baseNav = [
     { name: "Dashboard", href: "/user/dashboard", icon: Home },
@@ -65,29 +65,29 @@ export default function UserDashboardLayout({
   const pathname = usePathname()
   const router = useRouter()
   
-  // Mock user role - sẽ được lấy từ context/state
-  // Tạm thời set thành 'driver' để test driver dashboard
-  const userRole: 'company' | 'driver' = 'driver'
+  
+  
+  const userRole: 'company' | 'driver' = 'company' // This should be dynamic based on user context
   const navigation = getNavigationByRole(userRole)
 
   const handleLogout = () => {
-    // Clear any stored authentication data
+    
     if (typeof window !== 'undefined') {
       localStorage.removeItem('auth_token')
       localStorage.removeItem('user_token')
       sessionStorage.clear()
     }
     
-    // Show confirmation message
+    
     if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-      // Redirect to login page
+      
       router.push('/login')
     }
   }
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar */}
+      {}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
         <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border">
@@ -141,7 +141,7 @@ export default function UserDashboardLayout({
         </div>
       </div>
 
-      {/* Desktop sidebar */}
+      {}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-card border-r border-border px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
@@ -196,9 +196,9 @@ export default function UserDashboardLayout({
         </div>
       </div>
 
-      {/* Main content */}
+      {}
       <div className="lg:pl-64">
-        {/* Top bar */}
+        {}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             variant="ghost"
@@ -229,7 +229,7 @@ export default function UserDashboardLayout({
           </div>
         </div>
 
-        {/* Page content */}
+        {}
         <main className="py-10">
           <div className="px-4 sm:px-6 lg:px-8">
             {children}
@@ -239,3 +239,4 @@ export default function UserDashboardLayout({
     </div>
   )
 }
+

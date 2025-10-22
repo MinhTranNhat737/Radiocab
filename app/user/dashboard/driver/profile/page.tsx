@@ -27,14 +27,14 @@ export default function DriverProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
-  // Mock data - sẽ được fetch từ API
+  
   const [formData, setFormData] = useState<Partial<Driver>>({
     driver_id: 1,
     driver_code: "DRV001",
     user_id: 1,
     name: "Nguyễn Văn A",
     address_line: "123 Đường ABC, Quận 1, TP.HCM",
-    city_id: 1, // Thay vì dùng city name
+    city_id: 1, 
     phone: "0123-456-789",
     telephone: "028-1234-5678",
     email: "nguyenvana@email.com",
@@ -54,13 +54,33 @@ export default function DriverProfilePage() {
     specialties: ["Taxi sân bay", "Taxi nội thành", "Taxi tour"]
   })
 
-  // Mock cities data - sẽ được fetch từ API
+  
   const cities: City[] = [
-    { city_id: 1, state_id: 1, code: "Q1", name: "Quận 1" },
-    { city_id: 2, state_id: 1, code: "Q2", name: "Quận 2" },
-    { city_id: 3, state_id: 1, code: "Q3", name: "Quận 3" },
-    { city_id: 4, state_id: 2, code: "BD", name: "Ba Đình" },
-    { city_id: 5, state_id: 2, code: "HK", name: "Hoàn Kiếm" }
+    {
+      city_id: 1, state_id: 1, code: "Q1", name: "Quận 1",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 2, state_id: 1, code: "Q2", name: "Quận 2",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 3, state_id: 1, code: "Q3", name: "Quận 3",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 4, state_id: 2, code: "BD", name: "Ba Đình",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 5, state_id: 2, code: "HK", name: "Hoàn Kiếm",
+      country_id: 0,
+      status: "active"
+    }
   ]
 
   const licenseTypes = [
@@ -121,7 +141,7 @@ export default function DriverProfilePage() {
 
   const handleSave = async () => {
     setIsSaving(true)
-    // Simulate API call
+    
     await new Promise(resolve => setTimeout(resolve, 1000))
     setIsSaving(false)
     setIsEditing(false)
@@ -162,7 +182,7 @@ export default function DriverProfilePage() {
         </div>
       </div>
 
-      {/* Profile Photo */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Ảnh đại diện</CardTitle>
@@ -188,7 +208,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Personal Information */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thông tin cá nhân</CardTitle>
@@ -290,7 +310,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Professional Information */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thông tin chuyên môn</CardTitle>
@@ -357,7 +377,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Vehicle Information */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thông tin phương tiện</CardTitle>
@@ -411,7 +431,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Skills & Specialties */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Kỹ năng và chuyên môn</CardTitle>
@@ -460,7 +480,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Performance Stats */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thống kê hiệu suất</CardTitle>
@@ -489,7 +509,7 @@ export default function DriverProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Status */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Trạng thái hồ sơ</CardTitle>
@@ -529,3 +549,4 @@ export default function DriverProfilePage() {
     </div>
   )
 }
+

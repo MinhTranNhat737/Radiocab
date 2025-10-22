@@ -22,7 +22,7 @@ export default function CompanyDashboard() {
 
   return (
     <div className="space-y-8 p-6">
-      {/* Welcome Section */}
+      {}
       <div>
         <h1 className="text-3xl font-bold text-gray-900 dark:text-yellow-400 mb-2">
           Chào mừng, {user?.fullName || 'Công ty'}!
@@ -32,7 +32,7 @@ export default function CompanyDashboard() {
         </p>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/10 border-blue-200 dark:border-blue-800">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -87,7 +87,7 @@ export default function CompanyDashboard() {
         </Card>
       </div>
 
-      {/* Quick Actions */}
+      {}
       <div>
         <h2 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-4">
           Truy cập nhanh
@@ -145,7 +145,7 @@ export default function CompanyDashboard() {
         </div>
       </div>
 
-      {/* Recent Activity */}
+      {}
       <Card className="bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <CardHeader>
           <CardTitle className="text-gray-900 dark:text-yellow-400">Hoạt động gần đây</CardTitle>
@@ -188,5 +188,6 @@ export default function CompanyDashboard() {
     </div>
   )
 }
+
 
 

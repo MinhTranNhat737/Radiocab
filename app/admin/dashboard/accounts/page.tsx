@@ -30,7 +30,7 @@ export default function AccountsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [activeTab, setActiveTab] = useState("admins")
 
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const adminAccounts = [
     {
       id: 1,
@@ -170,7 +170,7 @@ export default function AccountsPage() {
         </p>
       </div>
 
-      {/* Demo Login Credentials */}
+      {}
       <Card className="bg-blue-50 border-blue-200">
         <CardHeader>
           <CardTitle className="text-blue-800 flex items-center gap-2">
@@ -221,7 +221,7 @@ export default function AccountsPage() {
         </CardContent>
       </Card>
 
-      {/* Search */}
+      {}
       <div className="flex items-center space-x-4">
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -234,7 +234,7 @@ export default function AccountsPage() {
         </div>
       </div>
 
-      {/* Tabs */}
+      {}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="admins">
@@ -247,7 +247,7 @@ export default function AccountsPage() {
           </TabsTrigger>
         </TabsList>
 
-        {/* Admin Accounts Tab */}
+        {}
         <TabsContent value="admins" className="space-y-6">
           <div className="grid gap-6">
             {filteredAdmins.map((admin) => (
@@ -326,7 +326,7 @@ export default function AccountsPage() {
           </div>
         </TabsContent>
 
-        {/* User Accounts Tab */}
+        {}
         <TabsContent value="users" className="space-y-6">
           <div className="grid gap-6">
             {filteredUsers.map((user) => (
@@ -419,3 +419,4 @@ export default function AccountsPage() {
     </div>
   )
 }
+

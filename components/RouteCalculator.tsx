@@ -46,7 +46,7 @@ export default function RouteCalculator() {
   const dropoffMarker = useRef<any>(null)
   const routeLayer = useRef<any>(null)
 
-  // Mapbox configuration
+  
   const mapboxAccessToken = 'pk.eyJ1Ijoic3ViaGFtcHJlZXQiLCJhIjoiY2toY2IwejF1MDdodzJxbWRuZHAweDV6aiJ9.Ys8MP5kVTk5P9V2TDvnuDg'
   const tomtomApiKey = 'bQrbmvGHDhZA0DUXLOFxLRnYNNrbqgEq'
 
@@ -54,7 +54,7 @@ export default function RouteCalculator() {
     if (typeof window !== 'undefined' && window.mapboxgl) {
       initializeMap()
     } else {
-      // Load Mapbox GL JS dynamically
+      
       const script = document.createElement('script')
       script.src = 'https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js'
       script.onload = () => {
@@ -76,7 +76,7 @@ export default function RouteCalculator() {
     mapInstance.current = new window.mapboxgl.Map({
       container: mapRef.current,
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [105.8342, 21.0285], // Hanoi coordinates
+      center: [105.8342, 21.0285], 
       zoom: 12
     })
 
@@ -153,7 +153,7 @@ export default function RouteCalculator() {
         } else if (currentSelection === 'dropoff') {
           setDropoffLocation({ coords, name })
         } else {
-          // Nếu không có selection mode, tự động chọn pickup
+          
           setPickupLocation({ coords, name })
         }
         
@@ -162,7 +162,7 @@ export default function RouteCalculator() {
         setSearchResults([])
         setIsGettingLocation(false)
         
-        // Zoom to current location
+        
         if (mapInstance.current) {
           mapInstance.current.flyTo({
             center: coords,
@@ -193,7 +193,7 @@ export default function RouteCalculator() {
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 300000 // 5 minutes
+        maximumAge: 300000 
       }
     )
   }
@@ -201,7 +201,7 @@ export default function RouteCalculator() {
   const updateMarkers = () => {
     if (!mapInstance.current) return
 
-    // Remove existing markers
+    
     if (pickupMarker.current) {
       pickupMarker.current.remove()
     }
@@ -209,7 +209,7 @@ export default function RouteCalculator() {
       dropoffMarker.current.remove()
     }
 
-    // Add pickup marker
+    
     if (pickupLocation) {
       pickupMarker.current = new window.mapboxgl.Marker({ color: '#10b981' })
         .setLngLat(pickupLocation.coords)
@@ -222,7 +222,7 @@ export default function RouteCalculator() {
         .addTo(mapInstance.current)
     }
 
-    // Add dropoff marker
+    
     if (dropoffLocation) {
       dropoffMarker.current = new window.mapboxgl.Marker({ color: '#ef4444' })
         .setLngLat(dropoffLocation.coords)
@@ -270,7 +270,7 @@ export default function RouteCalculator() {
       console.error('Traffic API error:', error)
     }
     
-    // Fallback: random traffic level for demo
+    
     const levels = [
       { level: 'Thông thoáng', multiplier: 1.0 },
       { level: 'Hơi chậm', multiplier: 1.1 },
@@ -295,25 +295,25 @@ export default function RouteCalculator() {
         const data = await response.json()
         const route = data.routes[0]
         
-        // Calculate pricing with proper rounding
-        const distance = Math.round((route.distance / 1000) * 10) / 10 // Round to 1 decimal place
-        const duration = Math.round((route.duration / 60) * 10) / 10 // Round to 1 decimal place
         
-        const baseFare = 15000 // 15,000 VND
-        const perKmRate = 12000 // 12,000 VND per km
-        const perMinuteRate = 500 // 500 VND per minute
+        const distance = Math.round((route.distance / 1000) * 10) / 10 
+        const duration = Math.round((route.duration / 60) * 10) / 10 
+        
+        const baseFare = 15000 
+        const perKmRate = 12000 
+        const perMinuteRate = 500 
         
         const distanceFare = Math.round(distance * perKmRate)
         const timeFare = Math.round(duration * perMinuteRate)
         
-        // Get traffic level
+        
         const trafficInfo = await getTrafficLevel(pickupLocation.coords)
         const trafficMultiplier = trafficInfo.multiplier
         
         const subtotal = baseFare + distanceFare + timeFare
         const total = Math.round(subtotal * trafficMultiplier)
         
-        // Ensure all prices are integers
+        
         const finalBaseFare = Math.round(baseFare)
         const finalDistanceFare = Math.round(distanceFare)
         const finalTimeFare = Math.round(timeFare)
@@ -330,7 +330,7 @@ export default function RouteCalculator() {
           trafficMultiplier
         })
 
-        // Display route on map
+        
         displayRoute(route.geometry)
       }
     } catch (error) {
@@ -343,13 +343,13 @@ export default function RouteCalculator() {
   const displayRoute = (geometry: any) => {
     if (!mapInstance.current) return
 
-    // Remove existing route
+    
     if (mapInstance.current.getSource('route')) {
       mapInstance.current.removeLayer('route')
       mapInstance.current.removeSource('route')
     }
 
-    // Add route to map
+    
     mapInstance.current.addSource('route', {
       type: 'geojson',
       data: {
@@ -373,7 +373,7 @@ export default function RouteCalculator() {
       }
     })
 
-    // Fit map to route
+    
     const coordinates = geometry.coordinates
     const bounds = coordinates.reduce((bounds: any, coord: any) => {
       return bounds.extend(coord)
@@ -381,7 +381,7 @@ export default function RouteCalculator() {
 
     mapInstance.current.fitBounds(bounds, { padding: 50 })
     
-    // Add traffic layer after route is displayed
+    
     addTrafficLayer()
   }
 
@@ -389,7 +389,7 @@ export default function RouteCalculator() {
     if (!mapInstance.current || !tomtomApiKey) return
 
     try {
-      // Get traffic incidents from TomTom
+      
       const response = await fetch(
         `https://api.tomtom.com/traffic/services/4/incidentDetails/s3/21.0285,105.8342,21.1,105.9/json?key=${tomtomApiKey}&projection=EPSG4326&expandCluster=true`
       )
@@ -408,13 +408,13 @@ export default function RouteCalculator() {
   const displayTrafficIncidents = (incidents: any[]) => {
     if (!mapInstance.current) return
 
-    // Remove existing traffic layer
+    
     if (mapInstance.current.getSource('traffic-incidents')) {
       mapInstance.current.removeLayer('traffic-incidents')
       mapInstance.current.removeSource('traffic-incidents')
     }
 
-    // Create GeoJSON for traffic incidents
+    
     const trafficFeatures = incidents.map(incident => ({
       type: 'Feature',
       geometry: {
@@ -431,7 +431,7 @@ export default function RouteCalculator() {
       }
     }))
 
-    // Add traffic incidents source
+    
     mapInstance.current.addSource('traffic-incidents', {
       type: 'geojson',
       data: {
@@ -440,7 +440,7 @@ export default function RouteCalculator() {
       }
     })
 
-    // Add traffic incidents layer
+    
     mapInstance.current.addLayer({
       id: 'traffic-incidents',
       type: 'circle',
@@ -450,18 +450,18 @@ export default function RouteCalculator() {
           'interpolate',
           ['linear'],
           ['get', 'severity'],
-          1, 6,  // Low severity - small circle
-          2, 8,  // Medium severity - medium circle
-          3, 12, // High severity - large circle
-          4, 16  // Very high severity - very large circle
+          1, 6,  
+          2, 8,  
+          3, 12, 
+          4, 16  
         ],
         'circle-color': [
           'case',
-          ['==', ['get', 'severity'], 1], '#10b981', // Green for low severity
-          ['==', ['get', 'severity'], 2], '#f59e0b', // Yellow for medium severity
-          ['==', ['get', 'severity'], 3], '#f97316', // Orange for high severity
-          ['==', ['get', 'severity'], 4], '#ef4444', // Red for very high severity
-          '#6b7280' // Gray for unknown
+          ['==', ['get', 'severity'], 1], '#10b981', 
+          ['==', ['get', 'severity'], 2], '#f59e0b', 
+          ['==', ['get', 'severity'], 3], '#f97316', 
+          ['==', ['get', 'severity'], 4], '#ef4444', 
+          '#6b7280' 
         ],
         'circle-stroke-width': 2,
         'circle-stroke-color': '#ffffff',
@@ -469,7 +469,7 @@ export default function RouteCalculator() {
       }
     })
 
-    // Add click handler for traffic incidents
+    
     mapInstance.current.on('click', 'traffic-incidents', (e: any) => {
       const feature = e.features[0]
       const coordinates = feature.geometry.coordinates.slice()
@@ -477,7 +477,7 @@ export default function RouteCalculator() {
       const description = feature.properties.description
       const type = feature.properties.type
 
-      // Create popup
+      
       new window.mapboxgl.Popup()
         .setLngLat(coordinates)
         .setHTML(`
@@ -491,7 +491,7 @@ export default function RouteCalculator() {
         .addTo(mapInstance.current)
     })
 
-    // Change cursor on hover
+    
     mapInstance.current.on('mouseenter', 'traffic-incidents', () => {
       mapInstance.current.getCanvas().style.cursor = 'pointer'
     })
@@ -515,14 +515,14 @@ export default function RouteCalculator() {
     if (!mapInstance.current) return
 
     if (showTraffic) {
-      // Hide traffic layer
+      
       if (mapInstance.current.getSource('traffic-incidents')) {
         mapInstance.current.removeLayer('traffic-incidents')
         mapInstance.current.removeSource('traffic-incidents')
       }
       setShowTraffic(false)
     } else {
-      // Show traffic layer
+      
       addTrafficLayer()
       setShowTraffic(true)
     }
@@ -553,7 +553,7 @@ export default function RouteCalculator() {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Location Selection */}
+          {}
           <Card className="p-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -565,7 +565,7 @@ export default function RouteCalculator() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {/* Pickup Location */}
+              {}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Điểm đón
@@ -619,7 +619,7 @@ export default function RouteCalculator() {
                 )}
               </div>
 
-              {/* Dropoff Location */}
+              {}
               <div className="space-y-2">
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Điểm đến
@@ -673,7 +673,7 @@ export default function RouteCalculator() {
                 )}
               </div>
 
-              {/* Search Results */}
+              {}
               {searchResults.length > 0 && (
                 <div className="max-h-48 overflow-y-auto border rounded-lg bg-white dark:bg-gray-800">
                   {searchResults.map((result, index) => (
@@ -693,7 +693,7 @@ export default function RouteCalculator() {
                 </div>
               )}
 
-              {/* Calculate Button */}
+              {}
               <Button
                 onClick={calculateRoute}
                 disabled={!pickupLocation || !dropoffLocation || isCalculating}
@@ -714,7 +714,7 @@ export default function RouteCalculator() {
             </CardContent>
           </Card>
 
-          {/* Map */}
+          {}
           <Card className="p-6">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -732,7 +732,7 @@ export default function RouteCalculator() {
                   className="w-full h-96 rounded-lg border border-gray-200 dark:border-gray-700"
                   style={{ minHeight: '384px' }}
                 />
-                {/* Current Location Button */}
+                {}
                 <Button
                   type="button"
                   size="sm"
@@ -748,7 +748,7 @@ export default function RouteCalculator() {
                   )}
                 </Button>
                 
-                {/* Traffic Toggle Button */}
+                {}
                 <Button
                   type="button"
                   size="sm"
@@ -767,7 +767,7 @@ export default function RouteCalculator() {
           </Card>
         </div>
 
-        {/* Route Information */}
+        {}
         {routeInfo && (
           <Card className="mt-8 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
             <CardHeader>
@@ -778,7 +778,7 @@ export default function RouteCalculator() {
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-4 gap-4">
-                {/* Distance */}
+                {}
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                   <div className="flex items-center justify-center mb-2">
                     <Route className="h-6 w-6 text-blue-600" />
@@ -789,7 +789,7 @@ export default function RouteCalculator() {
                   <div className="text-sm text-gray-500">Khoảng cách</div>
                 </div>
 
-                {/* Duration */}
+                {}
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                   <div className="flex items-center justify-center mb-2">
                     <Clock className="h-6 w-6 text-green-600" />
@@ -800,7 +800,7 @@ export default function RouteCalculator() {
                   <div className="text-sm text-gray-500">Thời gian dự kiến</div>
                 </div>
 
-                {/* Traffic Level */}
+                {}
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                   <div className="flex items-center justify-center mb-2">
                     <Navigation className="h-6 w-6 text-orange-600" />
@@ -811,7 +811,7 @@ export default function RouteCalculator() {
                   <div className="text-sm text-gray-500">Tình trạng giao thông</div>
                 </div>
 
-                {/* Price */}
+                {}
                 <div className="text-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow-sm">
                   <div className="flex items-center justify-center mb-2">
                     <DollarSign className="h-6 w-6 text-yellow-600" />
@@ -823,7 +823,7 @@ export default function RouteCalculator() {
                 </div>
               </div>
 
-              {/* Price Breakdown */}
+              {}
               <div className="mt-6 p-4 bg-white dark:bg-gray-800 rounded-lg">
                 <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-3">
                   Chi Tiết Giá Tiền

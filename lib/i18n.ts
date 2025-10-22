@@ -1,7 +1,6 @@
 export type Language = 'vi' | 'en'
 
 export interface Translations {
-  // Header
   home: string
   taxiCompanies: string
   drivers: string
@@ -10,8 +9,6 @@ export interface Translations {
   login: string
   register: string
   downloadApp: string
-  
-  // Hero Section
   heroTitle: string
   heroSubtitle: string
   searchPlaceholder: string
@@ -21,8 +18,6 @@ export interface Translations {
   pickupTime: string
   registerCompany: string
   registerDriver: string
-  
-  // Features
   featuresTitle: string
   featuresSubtitle: string
   feature1Title: string
@@ -33,23 +28,15 @@ export interface Translations {
   feature3Desc: string
   feature4Title: string
   feature4Desc: string
-  
-  // Video Section
   videoTitle: string
   videoSubtitle: string
-  
-  // Pricing
   pricingTitle: string
   pricingSubtitle: string
   basicPlan: string
   premiumPlan: string
   enterprisePlan: string
-  
-  // Partners
   partnersTitle: string
   partnersSubtitle: string
-  
-  // Sidebar
   featuredTaxis: string
   partners: string
   viewAll: string
@@ -57,14 +44,9 @@ export interface Translations {
   call: string
   online: string
   featured: string
-  
-  // Common
   getStarted: string
   learnMore: string
   contactUs: string
-  
-
-  // Listing Page
   listingTitle: string
   listingSubtitle: string
   registerCompanyTab: string
@@ -94,15 +76,11 @@ export interface Translations {
   premium: string
   monthlyFee: string
   quarterlyFee: string
-  register: string
   reset: string
   searchCompanyTitle: string
   searchCompanyDesc: string
-  searchPlaceholder: string
   searchResults: string
   enterKeyword: string
-
-  // Drivers Page
   driversTitle: string
   driversSubtitle: string
   registerDriverTab: string
@@ -124,20 +102,14 @@ export interface Translations {
   searchDriverDesc: string
   searchDriverPlaceholder: string
   enterDriverKeyword: string
-
-
-  // Services Page
   servicesTitle: string
   servicesSubtitle: string
   ourServices: string
   whyChooseUs: string
   whatCustomersSay: string
   howItWorks: string
-  contactUs: string
   startToday: string
   chooseService: string
-  registerCompany: string
-  registerDriver: string
   sendFeedback: string
   step1: string
   step2: string
@@ -148,8 +120,6 @@ export interface Translations {
   step3Desc: string
   step4Desc: string
   hotline: string
-  email: string
-  address: string
   workingHours: string
   service1Title: string
   service1Desc: string
@@ -182,12 +152,10 @@ export interface Translations {
   testimonial2Role: string
   testimonial3Role: string
   mainFeatures: string
-  learnMore: string
 }
 
 export const translations: Record<Language, Translations> = {
   vi: {
-    // Header
     home: 'Trang Chủ',
     taxiCompanies: 'Công Ty Taxi',
     drivers: 'Tài Xế',
@@ -196,8 +164,6 @@ export const translations: Record<Language, Translations> = {
     login: 'Đăng Nhập',
     register: 'Đăng Ký',
     downloadApp: 'TẢI ỨNG DỤNG NGAY',
-    
-    // Hero Section
     heroTitle: 'Kết Nối Taxi Thông Minh',
     heroSubtitle: 'Tìm kiếm và đặt taxi nhanh chóng, an toàn với công nghệ tiên tiến',
     searchPlaceholder: 'Tìm kiếm dịch vụ taxi',
@@ -207,8 +173,6 @@ export const translations: Record<Language, Translations> = {
     pickupTime: 'Ngày giờ đón',
     registerCompany: 'Đăng Ký Công Ty Taxi',
     registerDriver: 'Đăng Ký Tài Xế',
-    
-    // Features
     featuresTitle: 'Tại Sao Chọn Chúng Tôi',
     featuresSubtitle: 'Dịch vụ taxi hàng đầu với công nghệ hiện đại',
     feature1Title: 'Đặt Xe Nhanh Chóng',
@@ -219,23 +183,15 @@ export const translations: Record<Language, Translations> = {
     feature3Desc: 'Bảng giá rõ ràng, không phát sinh chi phí ẩn',
     feature4Title: 'Hỗ Trợ 24/7',
     feature4Desc: 'Đội ngũ hỗ trợ khách hàng 24/7 sẵn sàng giúp đỡ',
-    
-    // Video Section
     videoTitle: 'Trải Nghiệm Dịch Vụ Taxi',
     videoSubtitle: 'Xem video để hiểu rõ hơn về dịch vụ của chúng tôi',
-    
-    // Pricing
     pricingTitle: 'Bảng Giá Dịch Vụ',
     pricingSubtitle: 'Lựa chọn gói dịch vụ phù hợp với nhu cầu của bạn',
     basicPlan: 'Gói Cơ Bản',
     premiumPlan: 'Gói Cao Cấp',
     enterprisePlan: 'Gói Doanh Nghiệp',
-    
-    // Partners
     partnersTitle: 'Đối Tác Tin Cậy',
     partnersSubtitle: 'Hơn 500+ công ty taxi và 10,000+ tài xế đã tin tưởng sử dụng RadioCabs.in',
-    
-    // Sidebar
     featuredTaxis: 'Taxi Nổi Bật',
     partners: 'Đối Tác',
     viewAll: 'Xem Tất Cả',
@@ -243,14 +199,9 @@ export const translations: Record<Language, Translations> = {
     call: 'Gọi',
     online: 'Online',
     featured: 'Nổi Bật',
-    
-    // Common
     getStarted: 'Bắt Đầu',
     learnMore: 'Tìm Hiểu Thêm',
     contactUs: 'Liên Hệ',
-    
-
-    // Listing Page
     listingTitle: 'Đăng ký & Tìm kiếm Công ty Taxi',
     listingSubtitle: 'Đăng ký công ty taxi của bạn hoặc tìm kiếm các công ty taxi đã đăng ký trên hệ thống RadioCabs.in',
     registerCompanyTab: 'Đăng ký công ty',
@@ -280,15 +231,11 @@ export const translations: Record<Language, Translations> = {
     premium: 'Premium',
     monthlyFee: 'Phí hàng tháng',
     quarterlyFee: 'Phí hàng quý',
-    register: 'Đăng ký',
     reset: 'Đặt lại',
     searchCompanyTitle: 'Tìm kiếm công ty taxi',
     searchCompanyDesc: 'Tìm kiếm các công ty taxi đã đăng ký trên hệ thống',
-    searchPlaceholder: 'Nhập tên công ty, mã công ty hoặc địa chỉ...',
     searchResults: 'Kết quả tìm kiếm',
     enterKeyword: 'Nhập từ khóa để tìm kiếm công ty taxi',
-
-    // Drivers Page
     driversTitle: 'Đăng ký & Tìm kiếm Tài xế',
     driversSubtitle: 'Đăng ký làm tài xế taxi hoặc tìm kiếm các tài xế có kinh nghiệm trên hệ thống RadioCabs.in',
     registerDriverTab: 'Đăng ký tài xế',
@@ -310,20 +257,14 @@ export const translations: Record<Language, Translations> = {
     searchDriverDesc: 'Tìm kiếm các tài xế có kinh nghiệm đã đăng ký trên hệ thống',
     searchDriverPlaceholder: 'Nhập tên tài xế, mã tài xế, thành phố hoặc kinh nghiệm...',
     enterDriverKeyword: 'Nhập từ khóa để tìm kiếm tài xế',
-
-
-    // Services Page
     servicesTitle: 'Dịch vụ & Thông tin',
     servicesSubtitle: 'Khám phá các dịch vụ toàn diện của RadioCabs.in - nền tảng kết nối hàng đầu trong ngành taxi tại Việt Nam',
     ourServices: 'Các dịch vụ của chúng tôi',
     whyChooseUs: 'Tại sao chọn RadioCabs.in?',
     whatCustomersSay: 'Khách hàng nói gì về chúng tôi',
     howItWorks: 'Cách thức hoạt động',
-    contactUs: 'Liên hệ với chúng tôi',
     startToday: 'Bắt đầu ngay hôm nay',
     chooseService: 'Chọn dịch vụ phù hợp với nhu cầu của bạn',
-    registerCompany: 'Đăng ký Công ty',
-    registerDriver: 'Đăng ký Tài xế',
     sendFeedback: 'Gửi Góp ý',
     step1: 'Đăng ký',
     step2: 'Xác thực',
@@ -334,8 +275,6 @@ export const translations: Record<Language, Translations> = {
     step3Desc: 'Tài khoản được kích hoạt và sẵn sàng sử dụng',
     step4Desc: 'Bắt đầu kết nối và sử dụng dịch vụ',
     hotline: 'Hotline',
-    email: 'Email',
-    address: 'Địa chỉ',
     workingHours: 'Giờ làm việc',
     service1Title: 'Đăng ký Công ty Taxi',
     service1Desc: 'Đăng ký công ty taxi của bạn lên hệ thống để tiếp cận nhiều khách hàng hơn',
@@ -349,6 +288,10 @@ export const translations: Record<Language, Translations> = {
     service3Desc: 'Hệ thống hỗ trợ và góp ý toàn diện cho mọi người dùng',
     service3Features: 'Hỗ trợ 24/7, Xử lý khiếu nại, Tư vấn dịch vụ, Phản hồi nhanh chóng',
     service3Pricing: 'Miễn phí',
+    service4Title: 'Quản lý Đội Xe',
+    service4Desc: 'Giải pháp quản lý đội xe, theo dõi hành trình và tối ưu hóa lịch trình',
+    service4Features: 'Quản lý đội xe, Tối ưu lộ trình, Báo cáo nâng cao',
+    service4Pricing: 'Liên hệ để nhận báo giá',
     benefit1Title: 'Mạng lưới rộng khắp',
     benefit1Desc: 'Kết nối toàn quốc với hàng nghìn công ty taxi và tài xế',
     benefit2Title: 'Bảo mật tuyệt đối',
@@ -363,12 +306,10 @@ export const translations: Record<Language, Translations> = {
     testimonial1Role: 'Giám đốc Taxi Mai Linh',
     testimonial2Role: 'Tài xế độc lập',
     testimonial3Role: 'Chủ công ty vận tải',
-    mainFeatures: 'Tính năng chính',
-    learnMore: 'Tìm hiểu thêm'
+    mainFeatures: 'Tính năng chính'
   },
-  
+
   en: {
-    // Header
     home: 'Home',
     taxiCompanies: 'Taxi Companies',
     drivers: 'Drivers',
@@ -377,8 +318,6 @@ export const translations: Record<Language, Translations> = {
     login: 'Login',
     register: 'Register',
     downloadApp: 'DOWNLOAD APP NOW',
-    
-    // Hero Section
     heroTitle: 'Smart Taxi Connection',
     heroSubtitle: 'Find and book taxis quickly and safely with advanced technology',
     searchPlaceholder: 'Search taxi service',
@@ -388,8 +327,6 @@ export const translations: Record<Language, Translations> = {
     pickupTime: 'Pickup Time',
     registerCompany: 'Register Taxi Company',
     registerDriver: 'Register Driver',
-    
-    // Features
     featuresTitle: 'Why Choose Us',
     featuresSubtitle: 'Leading taxi service with modern technology',
     feature1Title: 'Quick Booking',
@@ -400,23 +337,15 @@ export const translations: Record<Language, Translations> = {
     feature3Desc: 'Clear pricing table, no hidden costs',
     feature4Title: '24/7 Support',
     feature4Desc: '24/7 customer support team ready to help',
-    
-    // Video Section
     videoTitle: 'Taxi Service Experience',
     videoSubtitle: 'Watch the video to better understand our service',
-    
-    // Pricing
     pricingTitle: 'Service Pricing',
     pricingSubtitle: 'Choose the service package that suits your needs',
     basicPlan: 'Basic Plan',
     premiumPlan: 'Premium Plan',
     enterprisePlan: 'Enterprise Plan',
-    
-    // Partners
     partnersTitle: 'Trusted Partners',
     partnersSubtitle: 'Over 500+ taxi companies and 10,000+ drivers trust RadioCabs.in',
-    
-    // Sidebar
     featuredTaxis: 'Featured Taxis',
     partners: 'Partners',
     viewAll: 'View All',
@@ -424,14 +353,9 @@ export const translations: Record<Language, Translations> = {
     call: 'Call',
     online: 'Online',
     featured: 'Featured',
-    
-    // Common
     getStarted: 'Get Started',
     learnMore: 'Learn More',
     contactUs: 'Contact Us',
-    
-
-    // Listing Page
     listingTitle: 'Register & Search Taxi Companies',
     listingSubtitle: 'Register your taxi company or search for registered taxi companies on RadioCabs.in system',
     registerCompanyTab: 'Register Company',
@@ -461,15 +385,11 @@ export const translations: Record<Language, Translations> = {
     premium: 'Premium',
     monthlyFee: 'Monthly Fee',
     quarterlyFee: 'Quarterly Fee',
-    register: 'Register',
     reset: 'Reset',
     searchCompanyTitle: 'Search Taxi Companies',
     searchCompanyDesc: 'Search for registered taxi companies on the system',
-    searchPlaceholder: 'Enter company name, company ID or address...',
     searchResults: 'Search Results',
     enterKeyword: 'Enter keywords to search for taxi companies',
-
-    // Drivers Page
     driversTitle: 'Register & Search Drivers',
     driversSubtitle: 'Register as a taxi driver or search for experienced drivers on RadioCabs.in system',
     registerDriverTab: 'Register Driver',
@@ -491,20 +411,14 @@ export const translations: Record<Language, Translations> = {
     searchDriverDesc: 'Search for experienced drivers registered on the system',
     searchDriverPlaceholder: 'Enter driver name, driver ID, city or experience...',
     enterDriverKeyword: 'Enter keywords to search for drivers',
-
-
-    // Services Page
     servicesTitle: 'Services & Information',
     servicesSubtitle: 'Discover comprehensive services of RadioCabs.in - the leading connection platform in Vietnam taxi industry',
     ourServices: 'Our Services',
     whyChooseUs: 'Why Choose RadioCabs.in?',
     whatCustomersSay: 'What Our Customers Say',
     howItWorks: 'How It Works',
-    contactUs: 'Contact Us',
     startToday: 'Start Today',
     chooseService: 'Choose the service that suits your needs',
-    registerCompany: 'Register Company',
-    registerDriver: 'Register Driver',
     sendFeedback: 'Send Feedback',
     step1: 'Register',
     step2: 'Verify',
@@ -515,8 +429,6 @@ export const translations: Record<Language, Translations> = {
     step3Desc: 'Account is activated and ready to use',
     step4Desc: 'Start connecting and using services',
     hotline: 'Hotline',
-    email: 'Email',
-    address: 'Address',
     workingHours: 'Working Hours',
     service1Title: 'Taxi Company Registration',
     service1Desc: 'Register your taxi company on the system to reach more customers',
@@ -530,6 +442,10 @@ export const translations: Record<Language, Translations> = {
     service3Desc: 'Comprehensive support and feedback system for all users',
     service3Features: '24/7 support, Complaint handling, Service consultation, Quick response',
     service3Pricing: 'Free',
+    service4Title: 'Fleet Management',
+    service4Desc: 'Solutions to manage your fleet, track trips and optimize schedules',
+    service4Features: 'Fleet administration, Route optimization, Advanced reporting',
+    service4Pricing: 'Contact us for pricing',
     benefit1Title: 'Wide Network',
     benefit1Desc: 'Nationwide connection with thousands of taxi companies and drivers',
     benefit2Title: 'Absolute Security',
@@ -544,7 +460,6 @@ export const translations: Record<Language, Translations> = {
     testimonial1Role: 'Mai Linh Taxi Director',
     testimonial2Role: 'Independent Driver',
     testimonial3Role: 'Transport Company Owner',
-    mainFeatures: 'Main Features',
-    learnMore: 'Learn More'
+    mainFeatures: 'Main Features'
   }
 }

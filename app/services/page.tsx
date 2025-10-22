@@ -3,7 +3,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import Header from "@/components/Header"
 import {
   Info,
   Building2,
@@ -104,9 +103,8 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400 page-enter">
-      <Header />
 
-      {/* Hero Section */}
+      {}
       <section className="hero-section py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fade-in-scale">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_60%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -119,7 +117,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black slide-in-right">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -133,7 +131,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {}
       <section className="py-16 slide-in-left">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Các dịch vụ của chúng tôi</h2>
@@ -184,7 +182,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Benefits Section */}
+      {}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Tại sao chọn RadioCabs.in?</h2>
@@ -207,7 +205,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+      {}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Khách hàng nói gì về chúng tôi</h2>
@@ -235,7 +233,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* How it Works Section */}
+      {}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Cách thức hoạt động</h2>
@@ -272,7 +270,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Contact Section */}
+      {}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -364,3 +362,4 @@ export default function ServicesPage() {
     </div>
   )
 }
+

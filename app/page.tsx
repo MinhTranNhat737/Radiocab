@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import Header from "@/components/Header"
 import RouteCalculator from "@/components/RouteCalculator"
 import { useLanguage } from "@/contexts/LanguageContext"
 import {
@@ -23,29 +22,24 @@ import {
   Check,
 } from "lucide-react"
 
-
-
 function HeroSection() {
   const { t } = useLanguage()
   
   return (
     <section className="homepage relative py-8 sm:py-12 lg:py-16 overflow-hidden page-enter">
-      {/* Background Image */}
       <div
         className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
         style={{
-          backgroundImage: "url('/taxi.png')",
+          backgroundImage: "url('/Taxi.png')",
           backgroundSize: "150% auto",
           backgroundPosition: "center center",
           backgroundRepeat: "no-repeat",
         }}
       />
 
-      {/* Overlay gradients - darker background for better text visibility */}
       <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
 
-      {/* Left to right gradient to ensure taxi front is visible on the right */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
 
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -73,12 +67,21 @@ function HeroSection() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-              <Link href="/listing">
+              <Link href="/booking">
                 <Button
                   size="default"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 animate-glow hover-lift w-full sm:w-auto transition-all duration-300"
                 >
                   <Zap className="h-4 w-4 mr-2" />
+                  Đặt xe ngay
+                </Button>
+              </Link>
+              <Link href="/listing">
+                <Button
+                  size="default"
+                  variant="outline"
+                  className="border-primary text-primary hover:bg-primary hover:text-primary-foreground hover-glow bg-transparent w-full sm:w-auto transition-all duration-300"
+                >
                   {t.registerCompany}
                 </Button>
               </Link>
@@ -185,18 +188,18 @@ function FeaturesSection() {
       id="features"
       className="relative py-12 sm:py-16 lg:py-20 bg-background/50 bg-gradient-to-br from-yellow-100/80 via-yellow-200/80 to-yellow-300/80 dark:bg-background/50 overflow-hidden slide-in-left"
     >
-      {/* Background Image */}
+      {}
       <div
         className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
         style={{
-          backgroundImage: "url('/taxibg2.jpg')",
+          backgroundImage: "url('/Taxi2.jpg')",
           backgroundSize: "100% auto",
           backgroundPosition: "10% center",
           backgroundRepeat: "no-repeat",
         }}
       />
 
-      {/* Overlay gradients - darker background for better text visibility */}
+      {}
       <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
       <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
@@ -297,18 +300,18 @@ function PricingSection() {
       id="pricing"
       className="relative py-20 bg-gradient-to-br from-yellow-100/60 via-yellow-200/60 to-yellow-300/60 dark:bg-transparent overflow-hidden slide-in-right"
     >
-      {/* Background Image */}
+      {}
       <div
         className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
         style={{
-          backgroundImage: "url('/taxi3.jpg')",
+          backgroundImage: "url('/Taxi3.jpg')",
           backgroundSize: "100% auto",
           backgroundPosition: "10% center",
           backgroundRepeat: "no-repeat",
         }}
       />
 
-      {/* Overlay gradients - darker background for better text visibility */}
+      {}
       <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
       <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
@@ -382,14 +385,14 @@ function PartnersSection() {
   const { t } = useLanguage()
   
   const partners = [
-    { name: "Vinasun", logo: "/vinasun-taxi-logo.jpg" },
-    { name: "Mai Linh", logo: "/mai-linh-taxi-logo.jpg" },
-    { name: "Taxi Group", logo: "/taxi-group-logo.jpg" },
-    { name: "Saigon Taxi", logo: "/saigon-taxi-logo.jpg" },
-    { name: "Hanoi Taxi", logo: "/hanoi-taxi-logo.jpg" },
-    { name: "ABC Taxi", logo: "/abc-taxi-logo.jpg" },
-    { name: "Vina Taxi", logo: "/vina-taxi-logo.jpg" },
-    { name: "Green Taxi", logo: "/green-taxi-logo.jpg" },
+    { name: "Vinasun", logo: "/TaxiLogoVinaSun.jpg" },
+    { name: "Mai Linh", logo: "/TaxiLogoMaiLinh.jpg" },
+    { name: "Taxi Group", logo: "/TaxiGroupLogo.jpg" },
+    { name: "Saigon Taxi", logo: "/TaxiLogoSaigon.jpg" },
+    { name: "Hanoi Taxi", logo: "/TaxiLogoHanoi.jpg" },
+    { name: "ABC Taxi", logo: "/TaxiLogoAbc.jpg" },
+    { name: "Vina Taxi", logo: "/TaxiLogoVina.jpg" },
+    { name: "Green Taxi", logo: "/TaxiLogoGreen.jpg" },
   ]
 
   return (
@@ -397,18 +400,18 @@ function PartnersSection() {
       id="partners"
       className="relative py-20 bg-gradient-to-br from-yellow-100/70 via-yellow-200/70 to-yellow-300/70 dark:bg-muted/30 overflow-hidden fade-in-scale"
     >
-      {/* Background Image */}
+      {}
       <div
         className="absolute inset-0 bg-no-repeat opacity-100 dark:opacity-60"
         style={{
-          backgroundImage: "url('/taxi4.jpg')",
+          backgroundImage: "url('/Taxi4.jpg')",
           backgroundSize: "100% auto",
           backgroundPosition: "10% center",
           backgroundRepeat: "no-repeat",
         }}
       />
 
-      {/* Overlay gradients - darker background for better text visibility */}
+      {}
       <div className="absolute inset-0 gradient-black-yellow opacity-40 dark:opacity-60" />
       <div className="absolute inset-0 bg-gradient-to-br from-yellow-100/50 via-yellow-200/50 to-yellow-300/50 dark:opacity-0" />
       <div className="absolute inset-0 bg-gradient-to-r from-white/80 via-white/50 to-transparent dark:from-background/95 dark:via-background/70" />
@@ -472,7 +475,7 @@ function TaxiVideoSection() {
           </p>
         </div>
 
-        {/* Video container that extends beyond section boundaries */}
+        {}
         <div className="relative -mx-4 sm:-mx-8 lg:-mx-16 xl:-mx-24">
           <div className="relative">
             <video 
@@ -482,14 +485,14 @@ function TaxiVideoSection() {
               muted 
               playsInline
             >
-              <source src="/taxivideo.mp4" type="video/mp4" />
+              <source src="/TaxiVideo.mp4" type="video/mp4" />
               Trình duyệt của bạn không hỗ trợ video.
             </video>
 
-            {/* Video overlay with play indicator */}
+            {}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
 
-            {/* Floating badge */}
+            {}
             <div className="absolute top-4 right-4">
               <Badge className="bg-primary/90 text-primary-foreground backdrop-blur">
                 <Car className="h-3 w-3 mr-1" />
@@ -499,7 +502,7 @@ function TaxiVideoSection() {
           </div>
         </div>
 
-        {/* Call to action buttons */}
+        {}
         <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12 animate-fade-in-up">
           <Link href="/listing">
             <Button
@@ -529,7 +532,6 @@ function TaxiVideoSection() {
 function HomePageContent() {
   return (
     <div className="min-h-screen gradient-radial-yellow bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:gradient-radial-yellow">
-      <Header />
       
       <main className="relative overflow-hidden" id="main-content">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -544,7 +546,7 @@ function HomePageContent() {
           ></div>
         </div>
 
-        {/* QuickStatsSection removed */}
+        {}
         <HeroSection />
         <RouteCalculator />
         <FeaturesSection />
@@ -559,3 +561,4 @@ function HomePageContent() {
 export default function HomePage() {
   return <HomePageContent />
 }
+

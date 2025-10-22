@@ -16,17 +16,17 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const previousPathname = useRef(pathname)
 
   useEffect(() => {
-    // Only trigger transition if pathname actually changed
+    
     if (previousPathname.current !== pathname) {
       setIsExiting(true)
       
-      // Brief exit animation
+      
       const exitTimer = setTimeout(() => {
         setIsLoading(true)
         setDisplayChildren(children)
         setIsExiting(false)
         
-        // Brief loading state for smooth transition
+        
         const loadingTimer = setTimeout(() => {
           setIsLoading(false)
         }, 150)
@@ -41,12 +41,12 @@ export default function PageTransition({ children }: PageTransitionProps) {
 
   return (
     <div className="page-container relative">
-      {/* Exit overlay */}
+      {}
       {isExiting && (
         <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 transition-opacity duration-200" />
       )}
       
-      {/* Loading overlay */}
+      {}
       {isLoading && (
         <div className="fixed inset-0 bg-background/95 backdrop-blur-md z-50 flex items-center justify-center">
           <div className="page-enter">
@@ -65,3 +65,4 @@ export default function PageTransition({ children }: PageTransitionProps) {
     </div>
   )
 }
+

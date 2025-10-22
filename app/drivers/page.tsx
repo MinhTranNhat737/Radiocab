@@ -72,7 +72,7 @@ export default function DriversPage() {
     <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400 page-enter">
       <Header />
 
-      {/* Hero Section */}
+      {}
       <section className="hero-section py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fade-in-scale">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -85,7 +85,7 @@ export default function DriversPage() {
         </div>
       </section>
 
-      {/* Main Content */}
+      {}
       <section className="py-16 slide-in-right">
         <div className="container mx-auto px-4">
           <Tabs defaultValue="register" className="w-full">
@@ -101,7 +101,7 @@ export default function DriversPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* Registration Form */}
+            {}
             <TabsContent value="register">
               <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
                 <CardHeader className="text-center">
@@ -113,7 +113,7 @@ export default function DriversPage() {
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Personal Information */}
+                      {}
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                           <User className="w-5 h-5" />
@@ -199,7 +199,7 @@ export default function DriversPage() {
                         </div>
                       </div>
 
-                      {/* Contact & Experience */}
+                      {}
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 flex items-center gap-2">
                           <Phone className="w-5 h-5" />
@@ -274,7 +274,7 @@ export default function DriversPage() {
                       </div>
                     </div>
 
-                    {/* Payment */}
+                    {}
                     <div className="pt-6 border-t border-yellow-500/30">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-4">
@@ -300,7 +300,7 @@ export default function DriversPage() {
                           </Select>
                         </div>
 
-                        {/* Price Display */}
+                        {}
                         {formData.paymentType && (
                           <div className="space-y-4">
                             <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400">Chi phí</h3>
@@ -317,7 +317,7 @@ export default function DriversPage() {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
+                    {}
                     <div className="flex gap-4 pt-6">
                       <Button
                         type="submit"
@@ -339,7 +339,7 @@ export default function DriversPage() {
               </Card>
             </TabsContent>
 
-            {/* Search Section */}
+            {}
             <TabsContent value="search">
               <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30 shadow-2xl shadow-yellow-500/10">
                 <CardHeader className="text-center">
@@ -365,7 +365,7 @@ export default function DriversPage() {
                       </Button>
                     </div>
 
-                    {/* Search Results Placeholder */}
+                    {}
                     <div className="space-y-4">
                       <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400">Kết quả tìm kiếm</h3>
                       <div className="text-gray-600 dark:text-yellow-200 text-center py-12 border border-yellow-500/30 rounded-lg bg-yellow-900/10">
@@ -384,3 +384,4 @@ export default function DriversPage() {
     </div>
   )
 }
+

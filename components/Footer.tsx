@@ -20,12 +20,12 @@ export default function Footer() {
     <footer className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white">
       <div className="container max-w-7xl mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Company Info */}
+          {}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <Link href="/" className="flex items-center gap-2 p-2 rounded-xl bg-gradient-to-r from-yellow-400/20 via-yellow-400/10 to-yellow-400/20 backdrop-blur-sm border border-yellow-400/30 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
                 <img
-                  src="/logo2.png"
+                  src="/Logo.png"
                   alt="RadioCabs Logo"
                   className="h-32 w-auto drop-shadow-lg"
                   onError={(e) => {
@@ -61,7 +61,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Services */}
+          {}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-yellow-400">Dịch vụ</h3>
             <ul className="space-y-2 text-gray-300">
@@ -88,7 +88,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Support */}
+          {}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-yellow-400">Hỗ trợ</h3>
             <ul className="space-y-2 text-gray-300">
@@ -120,7 +120,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-yellow-400">Liên hệ</h3>
             <div className="space-y-3 text-gray-300">
@@ -156,7 +156,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter */}
+        {}
         <div className="border-t border-gray-700 mt-12 pt-8">
           <div className="max-w-2xl mx-auto text-center">
             <h3 className="text-xl font-semibold text-yellow-400 mb-4">
@@ -178,7 +178,7 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
+        {}
         <div className="border-t border-gray-700 mt-8 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-gray-400 text-sm">
@@ -201,3 +201,4 @@ export default function Footer() {
     </footer>
   )
 }
+

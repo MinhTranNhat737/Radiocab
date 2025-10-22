@@ -20,7 +20,7 @@ interface Subscription {
   plan_name: string;
   plan_type: 'basic' | 'premium' | 'enterprise';
   price: number;
-  duration: number; // months
+  duration: number; 
   features: string[];
   status: 'active' | 'expired' | 'cancelled' | 'pending';
   start_date: Date;
@@ -32,7 +32,7 @@ export default function DriverSubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [loading, setLoading] = useState(true)
 
-  // Mock data
+  
   const mockSubscriptions: Subscription[] = [
     {
       subscription_id: 1,
@@ -130,7 +130,7 @@ export default function DriverSubscriptionsPage() {
         </p>
       </div>
 
-      {/* Current Subscription */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export default function DriverSubscriptionsPage() {
         </CardContent>
       </Card>
 
-      {/* Available Plans */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Gói đăng ký có sẵn</CardTitle>
@@ -212,7 +212,7 @@ export default function DriverSubscriptionsPage() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-3">
-            {/* Basic Plan */}
+            {}
             <div className="p-6 border rounded-lg">
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">Basic</h3>
@@ -242,7 +242,7 @@ export default function DriverSubscriptionsPage() {
               </Button>
             </div>
 
-            {/* Premium Plan */}
+            {}
             <div className="p-6 border rounded-lg border-primary bg-primary/5">
               <div className="text-center mb-4">
                 <Badge className="mb-2">Phổ biến</Badge>
@@ -281,7 +281,7 @@ export default function DriverSubscriptionsPage() {
               </Button>
             </div>
 
-            {/* Enterprise Plan */}
+            {}
             <div className="p-6 border rounded-lg">
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">Enterprise</h3>
@@ -322,7 +322,7 @@ export default function DriverSubscriptionsPage() {
         </CardContent>
       </Card>
 
-      {/* Subscription History */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Lịch sử đăng ký</CardTitle>
@@ -359,5 +359,6 @@ export default function DriverSubscriptionsPage() {
     </div>
   )
 }
+
 
 

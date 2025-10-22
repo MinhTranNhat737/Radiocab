@@ -25,7 +25,7 @@ export default function CompanyProfilePage() {
   const [isEditing, setIsEditing] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
 
-  // Mock data - sẽ được fetch từ API
+  
   const [formData, setFormData] = useState<Partial<Company>>({
     company_id: 1,
     company_code: "CAB001",
@@ -38,32 +38,93 @@ export default function CompanyProfilePage() {
     telephone: "028-1234-5678",
     fax_number: "028-1234-5679",
     email: "contact@abctaxi.com",
-    membership_type_id: 1, // Premium
+    membership_type_id: 1, 
     owner_user_id: 2,
     status: "active",
     created_at: new Date("2024-03-15"),
     updated_at: new Date("2024-12-20")
   })
 
-  // Mock cities data - sẽ được fetch từ API
+  
   const cities: City[] = [
-    { city_id: 1, state_id: 1, name: "Mumbai" },
-    { city_id: 2, state_id: 2, name: "New Delhi" },
-    { city_id: 3, state_id: 3, name: "Bengaluru" },
-    { city_id: 4, state_id: 4, name: "Chennai" },
-    { city_id: 5, state_id: 5, name: "Kolkata" },
-    { city_id: 6, state_id: 6, name: "Hyderabad" },
-    { city_id: 7, state_id: 1, name: "Pune" },
-    { city_id: 8, state_id: 8, name: "Jaipur" },
-    { city_id: 9, state_id: 7, name: "Ahmedabad" },
-    { city_id: 10, state_id: 1, name: "Nagpur" }
+    {
+      city_id: 1, state_id: 1, name: "Mumbai",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 2, state_id: 2, name: "New Delhi",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 3, state_id: 3, name: "Bengaluru",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 4, state_id: 4, name: "Chennai",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 5, state_id: 5, name: "Kolkata",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 6, state_id: 6, name: "Hyderabad",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 7, state_id: 1, name: "Pune",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 8, state_id: 8, name: "Jaipur",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 9, state_id: 7, name: "Ahmedabad",
+      country_id: 0,
+      status: "active"
+    },
+    {
+      city_id: 10, state_id: 1, name: "Nagpur",
+      country_id: 0,
+      status: "active"
+    }
   ]
 
-  // Mock membership types
+  
   const membershipTypes: MembershipType[] = [
-    { membership_type_id: 1, code: "premium", name: "Premium" },
-    { membership_type_id: 2, code: "basic", name: "Basic" },
-    { membership_type_id: 3, code: "free", name: "Free" }
+    {
+      membership_type_id: 1, code: "premium", name: "Premium",
+      description: "",
+      price: 0,
+      currency: "",
+      features: [],
+      status: "active"
+    },
+    {
+      membership_type_id: 2, code: "basic", name: "Basic",
+      description: "",
+      price: 0,
+      currency: "",
+      features: [],
+      status: "active"
+    },
+    {
+      membership_type_id: 3, code: "free", name: "Free",
+      description: "",
+      price: 0,
+      currency: "",
+      features: [],
+      status: "active"
+    }
   ]
 
   const handleInputChange = (field: keyof Company, value: any) => {
@@ -73,11 +134,11 @@ export default function CompanyProfilePage() {
     }))
   }
 
-  // Remove social media and business hours handlers as they're not in the database schema
+  
 
   const handleSave = async () => {
     setIsSaving(true)
-    // Simulate API call
+    
     await new Promise(resolve => setTimeout(resolve, 1000))
     setIsSaving(false)
     setIsEditing(false)
@@ -118,7 +179,7 @@ export default function CompanyProfilePage() {
         </div>
       </div>
 
-      {/* Status Information */}
+      {}
       {formData.status === 'pending' && (
         <Card className="border-yellow-200 bg-yellow-50">
           <CardHeader>
@@ -135,7 +196,7 @@ export default function CompanyProfilePage() {
         </Card>
       )}
 
-      {/* Company Logo */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Logo công ty</CardTitle>
@@ -161,7 +222,7 @@ export default function CompanyProfilePage() {
         </CardContent>
       </Card>
 
-      {/* Basic Information */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thông tin cơ bản</CardTitle>
@@ -339,7 +400,7 @@ export default function CompanyProfilePage() {
       </Card>
 
 
-      {/* Status */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Trạng thái hồ sơ</CardTitle>
@@ -379,3 +440,4 @@ export default function CompanyProfilePage() {
     </div>
   )
 }
+

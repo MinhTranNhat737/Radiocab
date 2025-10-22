@@ -22,7 +22,25 @@ import {
   Settings,
   Receipt
 } from "lucide-react"
-import type { Subscription, SubscriptionStatus, Plan } from "@/lib/types/database"
+// Local type definitions (replace the missing import)
+type SubscriptionStatus = 1 | 2 | 3 | 4
+
+type Plan = {
+  plan_id: number
+  name: string
+  price: number
+  description?: string
+}
+
+type Subscription = {
+  subscription_id: number
+  plan_id: number
+  status_id: SubscriptionStatus
+  start_date: Date
+  end_date: Date
+  created_at: Date
+  updated_at: Date
+}
 
 export default function CompanySubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
@@ -31,12 +49,12 @@ export default function CompanySubscriptionsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isNewSubscriptionOpen, setIsNewSubscriptionOpen] = useState(false)
 
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const mockSubscriptions: Subscription[] = [
     {
       subscription_id: 1,
       plan_id: 1,
-      status_id: 2, // active
+      status_id: 2, 
       start_date: new Date("2024-12-01"),
       end_date: new Date("2025-01-01"),
       created_at: new Date("2024-12-01T10:00:00"),
@@ -45,7 +63,7 @@ export default function CompanySubscriptionsPage() {
     {
       subscription_id: 2,
       plan_id: 2,
-      status_id: 1, // pending
+      status_id: 1, 
       start_date: new Date("2025-01-01"),
       end_date: new Date("2025-02-01"),
       created_at: new Date("2024-12-20T15:45:00"),
@@ -54,7 +72,7 @@ export default function CompanySubscriptionsPage() {
     {
       subscription_id: 3,
       plan_id: 3,
-      status_id: 4, // cancelled
+      status_id: 4, 
       start_date: new Date("2024-11-01"),
       end_date: new Date("2024-12-01"),
       created_at: new Date("2024-11-01T08:00:00"),
@@ -62,7 +80,7 @@ export default function CompanySubscriptionsPage() {
     }
   ]
 
-  // Mock plans data
+  
   const mockPlans = [
     { plan_id: 1, name: "Basic Monthly", price: 2500000, description: "Gói cơ bản hàng tháng" },
     { plan_id: 2, name: "Premium Monthly", price: 3500000, description: "Gói cao cấp hàng tháng" },
@@ -72,7 +90,7 @@ export default function CompanySubscriptionsPage() {
   ]
 
   useEffect(() => {
-    // Simulate API call
+    
     const fetchSubscriptions = async () => {
       setLoading(true)
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -84,13 +102,13 @@ export default function CompanySubscriptionsPage() {
 
   const getStatusBadge = (statusId: number) => {
     switch (statusId) {
-      case 1: // pending
+      case 1: 
         return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Clock className="h-3 w-3 mr-1" /> Pending</Badge>
-      case 2: // active
+      case 2: 
         return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="h-3 w-3 mr-1" /> Active</Badge>
-      case 3: // expired
+      case 3: 
         return <Badge variant="destructive" className="bg-red-100 text-red-800"><XCircle className="h-3 w-3 mr-1" /> Expired</Badge>
-      case 4: // canceled
+      case 4: 
         return <Badge variant="secondary" className="bg-gray-100 text-gray-800"><XCircle className="h-3 w-3 mr-1" /> Canceled</Badge>
       default:
         return <Badge variant="outline">Unknown</Badge>
@@ -125,7 +143,7 @@ export default function CompanySubscriptionsPage() {
         sub.subscription_id === subscriptionId 
           ? { 
               ...sub, 
-              status_id: 4, // canceled
+              status_id: 4, 
               updated_at: new Date()
             }
           : sub
@@ -139,8 +157,8 @@ export default function CompanySubscriptionsPage() {
         sub.subscription_id === subscriptionId 
           ? { 
               ...sub, 
-              status_id: 2, // active
-              end_date: new Date(sub.end_date.getTime() + 30 * 24 * 60 * 60 * 1000), // Add 30 days
+              status_id: 2, 
+              end_date: new Date(sub.end_date.getTime() + 30 * 24 * 60 * 60 * 1000), 
               updated_at: new Date()
             }
           : sub
@@ -178,7 +196,7 @@ export default function CompanySubscriptionsPage() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -233,7 +251,7 @@ export default function CompanySubscriptionsPage() {
         </Card>
       </div>
 
-      {/* Subscriptions List */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Danh sách Đăng ký</CardTitle>
@@ -321,7 +339,7 @@ export default function CompanySubscriptionsPage() {
         </CardContent>
       </Card>
 
-      {/* Subscription Detail Dialog */}
+      {}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -385,7 +403,7 @@ export default function CompanySubscriptionsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* New Subscription Dialog */}
+      {}
       <Dialog open={isNewSubscriptionOpen} onOpenChange={setIsNewSubscriptionOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -423,3 +441,4 @@ export default function CompanySubscriptionsPage() {
     </div>
   )
 }
+

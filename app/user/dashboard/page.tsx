@@ -19,10 +19,10 @@ import Link from "next/link"
 import type { CompanyDashboardData, DriverDashboardData, Company, Driver, Subscription, Payment } from "@/lib/types/database"
 
 export default function UserDashboardPage() {
-  // Mock user role - sẽ được lấy từ context/state
-  const userRole: 'company' | 'driver' = 'company'
   
-  // Mock data based on database schema
+  const userRole: 'company' | 'driver' = 'company' // This should be dynamic based on user context
+  
+  
   const companyData: CompanyDashboardData = {
     company: {
       company_id: 1,
@@ -36,7 +36,7 @@ export default function UserDashboardPage() {
       telephone: "028-1234-5678",
       fax_number: "028-1234-5679",
       email: "contact@abctaxi.com",
-      membership_type_id: 1, // Premium
+      membership_type_id: 1, 
       owner_user_id: 2,
       status: "active",
       created_at: new Date("2024-03-15"),
@@ -133,7 +133,7 @@ export default function UserDashboardPage() {
     ]
   }
 
-  const currentData = userRole === 'company' ? companyData : driverData
+  const currentData: CompanyDashboardData = companyData
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -165,7 +165,7 @@ export default function UserDashboardPage() {
         </p>
       </div>
 
-      {/* Profile Overview */}
+      {}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -178,18 +178,14 @@ export default function UserDashboardPage() {
                 )}
               </div>
               <div>
-                <CardTitle className="text-2xl">
-                  {userRole === 'company' ? currentData.company.name : currentData.driver.name}
+                <CardTitle className="text-2xl">                  {currentData.company.name}
                 </CardTitle>
                 <CardDescription>
-                  {userRole === 'company' 
-                    ? `Mã công ty: ${currentData.company.company_code} • Thành viên từ ${currentData.company.created_at.toLocaleDateString('vi-VN')}`
-                    : `Mã tài xế: ${currentData.driver.driver_code} • Kinh nghiệm ${currentData.driver.experience_years} năm`
-                  }
+                  Mã công ty: {currentData.company.company_code} • Thành viên từ {currentData.company.created_at.toLocaleDateString('vi-VN')}
                 </CardDescription>
               </div>
             </div>
-            {getStatusBadge(userRole === 'company' ? currentData.company.status : currentData.driver.status)}
+            {getStatusBadge(currentData.company.status)}
           </div>
         </CardHeader>
         <CardContent>
@@ -197,34 +193,18 @@ export default function UserDashboardPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="font-medium">Email:</span>
-                <span>{userRole === 'company' ? currentData.company.email : currentData.driver.email}</span>
+                <span>{currentData.company.email}</span>
               </div>
-              {userRole === 'company' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Liên hệ:</span>
-                  <span>{currentData.company.contact_person}</span>
-                </div>
-              )}
-              {userRole === 'driver' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Số điện thoại:</span>
-                  <span>{currentData.driver.mobile}</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Liên hệ:</span>
+                <span>{currentData.company.contact_person}</span>
+              </div>
             </div>
             <div className="space-y-3">
-              {userRole === 'company' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Địa chỉ:</span>
-                  <span>{currentData.company.address_line}</span>
-                </div>
-              )}
-              {userRole === 'driver' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Kinh nghiệm:</span>
-                  <span>{currentData.driver.experience_years} năm</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Địa chỉ:</span>
+                <span>{currentData.company.address_line}</span>
+              </div>
               <div className="flex items-center gap-2">
                 <span className="font-medium">Đánh giá:</span>
                 <div className="flex items-center gap-1">
@@ -237,7 +217,7 @@ export default function UserDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Stats Grid */}
+      {}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -261,7 +241,7 @@ export default function UserDashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {userRole === 'company' ? currentData.stats.totalLeads : currentData.stats.totalApplications}
+              {currentData.stats.totalLeads}
             </div>
             <p className="text-xs text-muted-foreground">
               {userRole === 'company' ? 'Khách hàng tiềm năng' : 'Đơn ứng tuyển'}
@@ -296,7 +276,7 @@ export default function UserDashboardPage() {
         </Card>
       </div>
 
-      {/* Subscription Status */}
+      {}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -324,7 +304,7 @@ export default function UserDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Recent Activity */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Hoạt động gần đây</CardTitle>
@@ -362,7 +342,7 @@ export default function UserDashboardPage() {
         </CardContent>
       </Card>
 
-      {/* Quick Actions */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Thao tác nhanh</CardTitle>
@@ -416,3 +396,4 @@ export default function UserDashboardPage() {
     </div>
   )
 }
+

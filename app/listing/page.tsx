@@ -11,11 +11,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Search, Building2, Phone, Mail, MapPin, CreditCard, Users } from "lucide-react"
 import Link from "next/link"
-import Header from "@/components/Header"
 import { useLanguage } from "@/contexts/LanguageContext"
+import { getCurrentUser, isManager, isAccountant, isDispatcher, isDriver, isAdmin } from "@/lib/auth"
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 
 export default function ListingPage() {
   const { t } = useLanguage()
+  const router = useRouter()
   
   const [formData, setFormData] = useState({
     companyName: "",
@@ -33,6 +36,14 @@ export default function ListingPage() {
   })
 
   const [searchQuery, setSearchQuery] = useState("")
+
+  // Redirect nhân viên công ty đến trang công ty
+  useEffect(() => {
+    const user = getCurrentUser()
+    if (user && (isManager() || isAccountant() || isDispatcher() || isDriver())) {
+      router.push('/company')
+    }
+  }, [router])
 
   const membershipPrices = {
     Premium: { monthly: 500000, quarterly: 1350000 },
@@ -75,9 +86,8 @@ export default function ListingPage() {
 
   return (
     <div className="min-h-screen bg-black text-primary bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-primary page-enter">
-      <Header />
 
-      {/* Hero Section */}
+      {}
       <section className="hero-section py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fade-in-scale">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 sm:px-6 text-center relative z-10">
@@ -90,7 +100,7 @@ export default function ListingPage() {
         </div>
       </section>
 
-      {/* Main Content */}
+      {}
       <section className="py-12 sm:py-16 slide-in-left">
         <div className="container mx-auto px-4 sm:px-6">
           <Tabs defaultValue="register" className="w-full">
@@ -106,7 +116,7 @@ export default function ListingPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* Registration Form */}
+            {}
             <TabsContent value="register">
               <Card className="bg-white/90 dark:bg-card/80 backdrop-blur border-primary/30 shadow-xl">
                 <CardHeader className="text-center">
@@ -118,7 +128,7 @@ export default function ListingPage() {
                 <CardContent>
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {/* Company Information */}
+                      {}
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-primary flex items-center gap-2">
                           <Building2 className="w-5 h-5" />
@@ -191,7 +201,7 @@ export default function ListingPage() {
                         </div>
                       </div>
 
-                      {/* Contact Information */}
+                      {}
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-primary flex items-center gap-2">
                           <Phone className="w-5 h-5" />
@@ -264,7 +274,7 @@ export default function ListingPage() {
                       </div>
                     </div>
 
-                    {/* Membership & Payment */}
+                    {}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t border-yellow-500/30">
                       <div className="space-y-4">
                         <h3 className="text-xl font-semibold text-primary flex items-center gap-2">
@@ -316,7 +326,7 @@ export default function ListingPage() {
                       </div>
                     </div>
 
-                    {/* Price Display */}
+                    {}
                     {formData.membershipType && formData.paymentType && (
                       <div className="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 p-4 rounded-lg border border-yellow-500/30">
                         <p className="text-yellow-300 text-lg">
@@ -328,7 +338,7 @@ export default function ListingPage() {
                       </div>
                     )}
 
-                    {/* Action Buttons */}
+                    {}
                     <div className="flex gap-4 pt-6">
                       <Button
                         type="submit"
@@ -350,7 +360,7 @@ export default function ListingPage() {
               </Card>
             </TabsContent>
 
-            {/* Search Section */}
+            {}
             <TabsContent value="search">
               <Card className="bg-white/90 dark:bg-card/80 backdrop-blur border-primary/30 shadow-xl">
                 <CardHeader className="text-center">
@@ -376,7 +386,7 @@ export default function ListingPage() {
                       </Button>
                     </div>
 
-                    {/* Search Results Placeholder */}
+                    {}
                     <div className="space-y-4">
                       <h3 className="text-xl font-semibold text-primary">Kết quả tìm kiếm</h3>
                       <div className="text-gray-600 dark:text-muted-foreground text-center py-12 border border-border rounded-lg bg-muted/50">
@@ -395,3 +405,4 @@ export default function ListingPage() {
     </div>
   )
 }
+

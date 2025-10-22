@@ -38,56 +38,64 @@ export default function CompanyPaymentsPage() {
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const mockPayments: Payment[] = [
     {
       payment_id: 1,
       subscription_id: 1,
-      status_id: 2, // paid
+      status_id: 2,
       amount: 2500000,
       currency: "USD",
-      method_id: 1, // card
+      method_id: 1,
       txn_ref: "TXN123456789",
       paid_at: new Date("2024-12-15T10:30:00"),
-      created_at: new Date("2024-12-15T10:30:00")
+      created_at: new Date("2024-12-15T10:30:00"),
+      user_id: 0,
+      updated_at: new Date("2024-12-15T10:30:00")
     },
     {
       payment_id: 2,
       subscription_id: 1,
-      status_id: 1, // pending
+      status_id: 1,
       amount: 1500000,
       currency: "USD",
-      method_id: 2, // bank_transfer
+      method_id: 2,
       txn_ref: "TXN123456790",
-      paid_at: undefined,
-      created_at: new Date("2024-12-20T14:15:00")
+      paid_at: new Date("2024-12-15T10:30:00"),
+      created_at: new Date("2024-12-20T14:15:00"),
+      user_id: 0,
+      updated_at: new Date("2024-12-15T10:30:00")
     },
     {
       payment_id: 3,
       subscription_id: 2,
-      status_id: 3, // failed
+      status_id: 3,
       amount: 800000,
       currency: "USD",
-      method_id: 3, // wallet
+      method_id: 3,
       txn_ref: "TXN123456791",
-      paid_at: undefined,
-      created_at: new Date("2024-12-18T09:45:00")
+      paid_at: new Date("2024-12-15T10:30:00"),
+      created_at: new Date("2024-12-18T09:45:00"),
+      user_id: 0,
+      updated_at: new Date("2024-12-15T10:30:00")
     },
     {
       payment_id: 4,
       subscription_id: 1,
-      status_id: 4, // refunded
+      status_id: 4,
       amount: 500000,
       currency: "USD",
-      method_id: 1, // card
+      method_id: 1,
       txn_ref: "TXN987654321",
       paid_at: new Date("2024-12-10T16:20:00"),
-      created_at: new Date("2024-12-10T16:20:00")
+      created_at: new Date("2024-12-10T16:20:00"),
+      user_id: 0,
+      updated_at: new Date("2024-12-15T10:30:00")
     }
   ]
 
   useEffect(() => {
-    // Simulate API call
+    
     const fetchPayments = async () => {
       setLoading(true)
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -99,13 +107,13 @@ export default function CompanyPaymentsPage() {
 
   const getStatusBadge = (statusId: number) => {
     switch (statusId) {
-      case 1: // pending
+      case 1: 
         return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Clock className="h-3 w-3 mr-1" /> Pending</Badge>
-      case 2: // paid
+      case 2: 
         return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="h-3 w-3 mr-1" /> Paid</Badge>
-      case 3: // failed
+      case 3: 
         return <Badge variant="destructive" className="bg-red-100 text-red-800"><XCircle className="h-3 w-3 mr-1" /> Failed</Badge>
-      case 4: // refunded
+      case 4: 
         return <Badge variant="secondary" className="bg-purple-100 text-purple-800"><Receipt className="h-3 w-3 mr-1" /> Refunded</Badge>
       default:
         return <Badge variant="outline">Unknown</Badge>
@@ -114,11 +122,11 @@ export default function CompanyPaymentsPage() {
 
   const getMethodIcon = (methodId: number) => {
     switch (methodId) {
-      case 1: // card
+      case 1: 
         return <CreditCard className="h-4 w-4" />
-      case 2: // bank_transfer
+      case 2: 
         return <Banknote className="h-4 w-4" />
-      case 3: // wallet
+      case 3: 
         return <Smartphone className="h-4 w-4" />
       default:
         return <CreditCard className="h-4 w-4" />
@@ -157,12 +165,12 @@ export default function CompanyPaymentsPage() {
 
   const handleRefundPayment = (paymentId: number) => {
     if (confirm("Bạn có chắc chắn muốn hoàn tiền cho giao dịch này?")) {
-      // Simulate refund
+      
       setPayments(prev => prev.map(payment => 
         payment.payment_id === paymentId 
           ? { 
               ...payment, 
-              status_id: 4 // refunded
+              status_id: 4 
             }
           : payment
       ))
@@ -206,7 +214,7 @@ export default function CompanyPaymentsPage() {
         </div>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -261,7 +269,7 @@ export default function CompanyPaymentsPage() {
         </Card>
       </div>
 
-      {/* Filters */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Bộ lọc</CardTitle>
@@ -333,7 +341,7 @@ export default function CompanyPaymentsPage() {
         </CardContent>
       </Card>
 
-      {/* Payments Table */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Danh sách Giao dịch</CardTitle>
@@ -437,7 +445,7 @@ export default function CompanyPaymentsPage() {
         </CardContent>
       </Card>
 
-      {/* Payment Detail Dialog */}
+      {}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -511,3 +519,4 @@ export default function CompanyPaymentsPage() {
     </div>
   )
 }
+

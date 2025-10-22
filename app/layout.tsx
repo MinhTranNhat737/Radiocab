@@ -5,11 +5,12 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { LanguageProvider } from "@/contexts/LanguageContext"
+import Header from "@/components/Header"
 import Footer from "@/components/Footer"
 import SmoothTransition from "@/components/SmoothTransition"
 import "./globals.css"
 
-// Font configurations
+
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
@@ -51,6 +52,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
+            <Header />
             <SmoothTransition>
               <Suspense fallback={
                 <div className="min-h-screen flex items-center justify-center">
@@ -68,3 +70,4 @@ export default function RootLayout({
     </html>
   )
 }
+

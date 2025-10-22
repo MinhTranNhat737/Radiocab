@@ -60,7 +60,7 @@ export default function DriverApplicationsPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [isNewApplicationOpen, setIsNewApplicationOpen] = useState(false)
 
-  // Mock data - sẽ được thay thế bằng API calls
+  
   const mockApplications: JobApplication[] = [
     {
       application_id: 1,
@@ -145,7 +145,7 @@ export default function DriverApplicationsPage() {
   ]
 
   useEffect(() => {
-    // Simulate API call
+    
     const fetchApplications = async () => {
       setLoading(true)
       await new Promise(resolve => setTimeout(resolve, 1000))
@@ -222,7 +222,7 @@ export default function DriverApplicationsPage() {
         </Button>
       </div>
 
-      {/* Stats Cards */}
+      {}
       <div className="grid gap-6 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -277,7 +277,7 @@ export default function DriverApplicationsPage() {
         </Card>
       </div>
 
-      {/* Filters */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Bộ lọc</CardTitle>
@@ -322,7 +322,7 @@ export default function DriverApplicationsPage() {
         </CardContent>
       </Card>
 
-      {/* Applications List */}
+      {}
       <Card>
         <CardHeader>
           <CardTitle>Danh sách Ứng tuyển</CardTitle>
@@ -424,7 +424,7 @@ export default function DriverApplicationsPage() {
         </CardContent>
       </Card>
 
-      {/* Application Detail Dialog */}
+      {}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="max-w-4xl">
           <DialogHeader>
@@ -552,7 +552,7 @@ export default function DriverApplicationsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* New Application Dialog */}
+      {}
       <Dialog open={isNewApplicationOpen} onOpenChange={setIsNewApplicationOpen}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
@@ -619,3 +619,4 @@ export default function DriverApplicationsPage() {
     </div>
   )
 }
+

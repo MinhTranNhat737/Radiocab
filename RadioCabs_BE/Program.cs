@@ -30,6 +30,8 @@ builder.Services.AddDbContext<RadiocabsDbContext>(opt =>
         npg.MapEnum<FuelType>("fuel_type_enum");
         npg.MapEnum<VehicleCategory>("vehicle_category_enum");
         npg.MapEnum<ShiftStatus>("shift_status");
+        npg.MapEnum<RevocationReason>("revocation_reason");
+        npg.MapEnum<VerificationPurpose>("verification_purpose");
         
         opt.UseSnakeCaseNamingConvention();
     })
@@ -60,30 +62,39 @@ builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
 // Repo chuyên biệt
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IDrivingOrderRepository, DrivingOrderRepository>();
 builder.Services.AddScoped<IModelPriceProvinceRepository, ModelPriceProvinceRepository>();
-// Nếu có repo riêng cho DriverSchedule thì mở dòng sau:
-// builder.Services.AddScoped<IDriverScheduleRepository, DriverScheduleRepository>();
+builder.Services.AddScoped<IDriverScheduleRepository, DriverScheduleRepository>();
+builder.Services.AddScoped<IDriverScheduleTemplateRepository, DriverScheduleTemplateRepository>();
+builder.Services.AddScoped<IMembershipRepository, MembershipRepository>();
+builder.Services.AddScoped<IProvinceRepository, ProvinceRepository>();
+builder.Services.AddScoped<IWardRepository, WardRepository>();
+builder.Services.AddScoped<IZoneRepository, ZoneRepository>();
+builder.Services.AddScoped<IZoneWardRepository, ZoneWardRepository>();
 
 // Services
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IDrivingOrderService, DrivingOrderService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
+builder.Services.AddScoped<IVehicleModelService, VehicleModelService>();
 builder.Services.AddScoped<IDriverScheduleService, DriverScheduleService>();
 builder.Services.AddScoped<IMembershipService, MembershipService>();
+builder.Services.AddScoped<IProvinceService, ProvinceService>();
+builder.Services.AddScoped<IWardService, WardService>();
+builder.Services.AddScoped<IZoneService, ZoneService>();
 
 // ===== MVC / Swagger =====
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services
-    .AddControllers()
+builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
         o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         o.JsonSerializerOptions.PropertyNameCaseInsensitive = true; // cho chắc
     });
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

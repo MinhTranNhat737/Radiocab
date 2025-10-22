@@ -1,0 +1,10 @@
+{
+    "configurations": [
+        {
+            "name": "C#: RadioCabs_BE [Default Configuration]",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\RadioCabs_BE\\RadioCabs_BE.csproj"
+        }
+    ]
+}

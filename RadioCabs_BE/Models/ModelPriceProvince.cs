@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace RadioCabs_BE.Models
 {
@@ -18,17 +18,18 @@ namespace RadioCabs_BE.Models
 
         public TimeOnly? TimeStart { get; set; }
         public TimeOnly? TimeEnd { get; set; }
-
         public long? ParentId { get; set; }
         public DateOnly DateStart { get; set; }
         public DateOnly DateEnd { get; set; }
         public bool IsActive { get; set; } = true;
         public string? Note { get; set; }
 
-        // Navigations (khớp DbContext)
+        // Navigation properties
         public Company Company { get; set; } = null!;
         public Province Province { get; set; } = null!;
         public VehicleModel Model { get; set; } = null!;
         public ModelPriceProvince? Parent { get; set; }
+        public ICollection<ModelPriceProvince> Children { get; set; } = new List<ModelPriceProvince>();
+        public ICollection<DrivingOrder> DrivingOrders { get; set; } = new List<DrivingOrder>();
     }
 }

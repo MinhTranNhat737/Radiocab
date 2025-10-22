@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class DriverVehicleAssignment
     {
@@ -8,7 +8,7 @@
         public DateTimeOffset StartAt { get; set; }
         public DateTimeOffset? EndAt { get; set; }
 
-        // Navigation
+        // Navigation properties
         public Account Driver { get; set; } = null!;
         public Vehicle Vehicle { get; set; } = null!;
     }

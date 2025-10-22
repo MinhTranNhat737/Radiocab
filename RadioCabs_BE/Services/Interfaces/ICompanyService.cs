@@ -1,14 +1,13 @@
-using RadioCabs_BE.Models;
+using RadioCabs_BE.DTOs;
 
 namespace RadioCabs_BE.Services.Interfaces
 {
     public interface ICompanyService
     {
-        Task<Company?> GetAsync(long companyId, CancellationToken ct = default);
-        Task<Company>  CreateAsync(Company company, CancellationToken ct = default);
-        Task<bool>     UpdateAsync(Company company, CancellationToken ct = default);
-        Task<IReadOnlyList<Company>> ListActiveAsync(CancellationToken ct = default);
-         Task<IReadOnlyList<Company>> ListAsync(ActiveFlag? status = null, CancellationToken ct = default);
-          Task SetStatusAsync(long id, ActiveFlag status, CancellationToken ct = default);
+        Task<CompanyDto?> GetByIdAsync(long id);
+        Task<PagedResult<CompanyDto>> GetPagedAsync(PageRequest request);
+        Task<CompanyDto> CreateAsync(CreateCompanyDto dto);
+        Task<CompanyDto?> UpdateAsync(long id, UpdateCompanyDto dto);
+        Task<bool> DeleteAsync(long id);
     }
 }

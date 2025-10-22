@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace RadioCabs_BE.Models
 {
@@ -19,12 +19,12 @@ namespace RadioCabs_BE.Models
         public DateTimeOffset? PickupTime { get; set; }
         public DateTimeOffset? DropoffTime { get; set; }
 
-        public OrderStatus Status { get; set; } = OrderStatus.NEW;
+        public string Status { get; set; } = "NEW";
 
-        [Precision(9, 2)]  public decimal TotalKm { get; set; }
-        [Precision(9, 2)]  public decimal InnerCityKm { get; set; } = 0;
-        [Precision(9, 2)]  public decimal IntercityKm { get; set; } = 0;
-        [Precision(9, 2)]  public decimal TrafficKm { get; set; } = 0;
+        [Precision(9, 2)] public decimal TotalKm { get; set; }
+        [Precision(9, 2)] public decimal InnerCityKm { get; set; } = 0;
+        [Precision(9, 2)] public decimal IntercityKm { get; set; } = 0;
+        [Precision(9, 2)] public decimal TrafficKm { get; set; } = 0;
 
         public bool IsRaining { get; set; } = false;
         public int WaitMinutes { get; set; } = 0;
@@ -38,16 +38,15 @@ namespace RadioCabs_BE.Models
         [Precision(14, 2)] public decimal OtherFee { get; set; } = 0;
         [Precision(14, 2)] public decimal TotalAmount { get; set; }
 
-        // jsonb: bạn đang để string; OK. (có thể nâng cấp lên JsonDocument)
         public string? FareBreakdown { get; set; }
 
-        public PaymentMethod? PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
         public DateTimeOffset? PaidAt { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
 
-        // Navigations (khớp DbContext)
+        // Navigation properties
         public Company Company { get; set; } = null!;
         public Account? Customer { get; set; }
         public Account? Driver { get; set; }

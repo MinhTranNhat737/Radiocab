@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class Zone
     {
@@ -10,12 +10,10 @@
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
 
-        // Navs
+        // Navigation properties
         public Company Company { get; set; } = null!;
         public Province Province { get; set; } = null!;
-
-        // (tuỳ chọn) tập con liên quan
-        public ICollection<ZoneWard>? ZoneWards { get; set; }
-        public ICollection<VehicleZonePreference>? VehicleZonePreferences { get; set; }
+        public ICollection<ZoneWard> ZoneWards { get; set; } = new List<ZoneWard>();
+        public ICollection<VehicleZonePreference> VehicleZonePreferences { get; set; } = new List<VehicleZonePreference>();
     }
 }

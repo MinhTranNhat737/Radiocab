@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 
 namespace RadioCabs_BE.Models
 {
@@ -12,9 +12,10 @@ namespace RadioCabs_BE.Models
         public DateTimeOffset ExpiresAt { get; set; }
         public DateTimeOffset? RevokedAt { get; set; }
         public Guid? ReplacedBy { get; set; }
-        public IPAddress? Ip { get; set; }          // inet → IPAddress (khuyến nghị)
+        public IPAddress? Ip { get; set; }
         public string? UserAgent { get; set; }
 
+        // Navigation properties
         public Account Account { get; set; } = null!;
     }
 }

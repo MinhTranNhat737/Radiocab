@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class DriverSchedule
     {
@@ -8,12 +8,12 @@
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public long? VehicleId { get; set; }
-        public ShiftStatus Status { get; set; } = ShiftStatus.PLANNED;
+        public string Status { get; set; } = "PLANNED";
         public string? Note { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
 
-        // Navigation (khớp DbContext đang dùng)
+        // Navigation properties
         public Account Driver { get; set; } = null!;
         public Vehicle? Vehicle { get; set; }
     }

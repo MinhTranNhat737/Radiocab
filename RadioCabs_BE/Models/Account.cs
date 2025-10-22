@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class Account
     {
@@ -9,13 +9,13 @@
         public string FullName { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public RoleType Role { get; set; } = RoleType.CUSTOMER;
-        public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
+        public string Role { get; set; } = "CUSTOMER";
+        public string Status { get; set; } = "ACTIVE";
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public DateTimeOffset? EmailVerifiedAt { get; set; }
 
-        // (tuỳ chọn) điều hướng ngược về Company nếu bạn muốn:
-        // public Company? Company { get; set; }
+        // Navigation properties
+        public Company? Company { get; set; }
     }
 }

@@ -1,70 +1,184 @@
 using Microsoft.AspNetCore.Mvc;
-using RadioCabs_BE.Models;
-using RadioCabs_BE.Services.Interfaces;
 using RadioCabs_BE.DTOs;
+using RadioCabs_BE.Services.Interfaces;
+
 namespace RadioCabs_BE.Controllers.Api.v1
 {
     [ApiController]
-    [Route("api/v1/driving-orders")]
+    [Route("api/v1/[controller]")]
     public class DrivingOrdersController : ControllerBase
     {
-        private readonly IDrivingOrderService _svc;
-        public DrivingOrdersController(IDrivingOrderService svc) => _svc = svc;
+        private readonly IDrivingOrderService _drivingOrderService;
 
-        // GET: api/v1/driving-orders/{id}
-        [HttpGet("{id:long}")]
-        public async Task<ActionResult<DrivingOrder>> GetById(long id, CancellationToken ct)
+        public DrivingOrdersController(IDrivingOrderService drivingOrderService)
         {
-            var entity = await _svc.GetAsync(id, ct);
-            if (entity == null) return NotFound();
-            return Ok(entity);
+            _drivingOrderService = drivingOrderService;
         }
 
-        // GET: api/v1/driving-orders?companyId=1&status=ONGOING&from=2025-10-01T00:00:00Z&to=2025-10-31T23:59:59Z
+        [HttpGet("{id}")]
+        public async Task<ActionResult<DrivingOrderDto>> GetById(long id)
+        {
+            var order = await _drivingOrderService.GetByIdAsync(id);
+            if (order == null)
+                return NotFound();
+
+            return Ok(order);
+        }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<DrivingOrder>>> ListByCompany(
-            [FromQuery] long companyId,
-            [FromQuery] OrderStatus? status,
-            [FromQuery] DateTimeOffset? from,
-            [FromQuery] DateTimeOffset? to,
-            CancellationToken ct)
+        public async Task<ActionResult<PagedResult<DrivingOrderDto>>> GetPaged([FromQuery] PageRequest request)
         {
-            if (companyId <= 0) return BadRequest("companyId is required");
-            if (from.HasValue && to.HasValue && to < from) return BadRequest("'to' must be >= 'from'.");
-
-            var list = await _svc.ListByCompanyAsync(companyId, status, from, to, ct);
-            return Ok(list);
-        }
-
-        // POST: api/v1/driving-orders/quote
-        // Body: QuoteRequest { CompanyId, ProvinceId, ModelId, TotalKm, IntercityKm, TrafficKm, IsRaining, PickupTime? }
-        [HttpPost("quote")]
-        public async Task<ActionResult<QuoteResult>> Quote([FromBody] QuoteRequest req, CancellationToken ct)
-        {
-            if (req == null) return BadRequest("Invalid request");
-            var result = await _svc.QuoteAsync(req, ct);
+            var result = await _drivingOrderService.GetPagedAsync(request);
             return Ok(result);
         }
 
-        // POST: api/v1/driving-orders
-        // Body: DrivingOrder (hoặc DTO map về DrivingOrder trước khi gọi service)
         [HttpPost]
-        public async Task<ActionResult<long>> Create([FromBody] DrivingOrder order, CancellationToken ct)
+        public async Task<ActionResult<DrivingOrderDto>> Create([FromBody] CreateDrivingOrderDto dto)
         {
-            if (order == null) return BadRequest("Invalid order");
-            var id = await _svc.CreateAsync(order, ct);
-            return CreatedAtAction(nameof(GetById), new { id }, id);
+            try
+            {
+                var order = await _drivingOrderService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = order.OrderId }, order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // PATCH: api/v1/driving-orders/{id}/status
-        // Body: { "status": "ASSIGNED" }
-        public class UpdateStatusRequest { public OrderStatus Status { get; set; } }
-
-        [HttpPatch("{id:long}/status")]
-        public async Task<IActionResult> UpdateStatus(long id, [FromBody] UpdateStatusRequest req, CancellationToken ct)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<DrivingOrderDto>> Update(long id, [FromBody] UpdateDrivingOrderDto dto)
         {
-            await _svc.UpdateStatusAsync(id, req.Status, ct);
+            try
+            {
+                var order = await _drivingOrderService.UpdateAsync(id, dto);
+                if (order == null)
+                    return NotFound();
+
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(long id)
+        {
+            var success = await _drivingOrderService.DeleteAsync(id);
+            if (!success)
+                return NotFound();
+
             return NoContent();
         }
+
+        [HttpGet("driver/{driverId}")]
+        public async Task<ActionResult<PagedResult<DrivingOrderDto>>> GetByDriver(long driverId, [FromQuery] PageRequest request)
+        {
+            var result = await _drivingOrderService.GetByDriverAsync(driverId, request);
+            return Ok(result);
+        }
+
+        [HttpGet("customer/{customerId}")]
+        public async Task<ActionResult<PagedResult<DrivingOrderDto>>> GetByCustomer(long customerId, [FromQuery] PageRequest request)
+        {
+            var result = await _drivingOrderService.GetByCustomerAsync(customerId, request);
+            return Ok(result);
+        }
+
+        [HttpPost("{id}/assign-driver")]
+        public async Task<ActionResult<DrivingOrderDto>> AssignDriver(long id, [FromBody] AssignDriverDto dto)
+        {
+            try
+            {
+                var order = await _drivingOrderService.AssignDriverAsync(id, dto.DriverId, dto.VehicleId);
+                if (order == null)
+                    return NotFound();
+
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{id}/status")]
+        public async Task<ActionResult<DrivingOrderDto>> UpdateStatus(long id, [FromBody] UpdateStatusDto dto)
+        {
+            try
+            {
+                var order = await _drivingOrderService.UpdateStatusAsync(id, dto.Status);
+                if (order == null)
+                    return NotFound();
+
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{id}/complete")]
+        public async Task<ActionResult<DrivingOrderDto>> CompleteOrder(long id, [FromBody] CompleteOrderDto dto)
+        {
+            try
+            {
+                var order = await _drivingOrderService.CompleteOrderAsync(id, dto.TotalKm, dto.InnerCityKm, dto.IntercityKm, dto.TrafficKm, dto.IsRaining, dto.WaitMinutes);
+                if (order == null)
+                    return NotFound();
+
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("{id}/cancel")]
+        public async Task<ActionResult<DrivingOrderDto>> CancelOrder(long id, [FromBody] CancelOrderDto dto)
+        {
+            try
+            {
+                var order = await _drivingOrderService.CancelOrderAsync(id, dto.Reason);
+                if (order == null)
+                    return NotFound();
+
+                return Ok(order);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+
+    public class AssignDriverDto
+    {
+        public long DriverId { get; set; }
+        public long VehicleId { get; set; }
+    }
+
+    public class UpdateStatusDto
+    {
+        public string Status { get; set; } = null!;
+    }
+
+    public class CompleteOrderDto
+    {
+        public decimal TotalKm { get; set; }
+        public decimal InnerCityKm { get; set; }
+        public decimal IntercityKm { get; set; }
+        public decimal TrafficKm { get; set; }
+        public bool IsRaining { get; set; }
+        public int WaitMinutes { get; set; }
+    }
+
+    public class CancelOrderDto
+    {
+        public string Reason { get; set; } = null!;
     }
 }

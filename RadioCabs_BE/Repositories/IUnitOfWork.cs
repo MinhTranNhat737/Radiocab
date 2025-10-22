@@ -1,7 +1,11 @@
 namespace RadioCabs_BE.Repositories
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
-        Task<int> SaveChangesAsync(CancellationToken ct = default);
+        IGenericRepository<T> Repository<T>() where T : class;
+        Task<int> SaveChangesAsync();
+        Task BeginTransactionAsync();
+        Task CommitTransactionAsync();
+        Task RollbackTransactionAsync();
     }
 }

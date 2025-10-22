@@ -15,10 +15,18 @@ var builder = WebApplication.CreateBuilder(args);
 // ===== Connection string =====
 var connStr = builder.Configuration.GetConnectionString("Postgres");
 
-// ===== DbContext với string mapping (không dùng enum) =====
+// ===== DbContext với enum mapping =====
 builder.Services.AddDbContext<RadiocabsDbContext>(opt =>
 {
-    opt.UseNpgsql(connStr);
+    opt.UseNpgsql(connStr, npgsqlOpt =>
+    {
+        npgsqlOpt.MapEnum<RoleType>("role_type");
+        npgsqlOpt.MapEnum<ActiveFlag>("active_flag");
+        npgsqlOpt.MapEnum<PaymentMethod>("payment_method");
+        npgsqlOpt.MapEnum<OrderStatus>("order_status");
+        npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
+        npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
+    });
     opt.UseSnakeCaseNamingConvention();
 });
 

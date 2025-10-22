@@ -62,7 +62,7 @@ namespace RadioCabs_BE.Services
                 PickupAddress = dto.PickupAddress,
                 DropoffAddress = dto.DropoffAddress,
                 PickupTime = dto.PickupTime,
-                Status = "NEW",
+                Status = OrderStatus.NEW,
                 IsRaining = dto.IsRaining,
                 WaitMinutes = dto.WaitMinutes,
                 PaymentMethod = dto.PaymentMethod,
@@ -89,7 +89,7 @@ namespace RadioCabs_BE.Services
             if (dto.DropoffAddress != null) order.DropoffAddress = dto.DropoffAddress;
             if (dto.PickupTime.HasValue) order.PickupTime = dto.PickupTime.Value;
             if (dto.DropoffTime.HasValue) order.DropoffTime = dto.DropoffTime.Value;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) order.Status = dto.Status;
+            if (dto.Status.HasValue) order.Status = dto.Status.Value;
             if (dto.TotalKm.HasValue) order.TotalKm = dto.TotalKm.Value;
             if (dto.InnerCityKm.HasValue) order.InnerCityKm = dto.InnerCityKm.Value;
             if (dto.IntercityKm.HasValue) order.IntercityKm = dto.IntercityKm.Value;
@@ -105,7 +105,7 @@ namespace RadioCabs_BE.Services
             if (dto.OtherFee.HasValue) order.OtherFee = dto.OtherFee.Value;
             if (dto.TotalAmount.HasValue) order.TotalAmount = dto.TotalAmount.Value;
             if (dto.FareBreakdown != null) order.FareBreakdown = dto.FareBreakdown;
-            if (!string.IsNullOrWhiteSpace(dto.PaymentMethod)) order.PaymentMethod = dto.PaymentMethod;
+            if (dto.PaymentMethod.HasValue) order.PaymentMethod = dto.PaymentMethod.Value;
             if (dto.PaidAt.HasValue) order.PaidAt = dto.PaidAt.Value;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
@@ -177,7 +177,7 @@ namespace RadioCabs_BE.Services
 
             order.DriverAccountId = driverId;
             order.VehicleId = vehicleId;
-            order.Status = "ASSIGNED";
+            order.Status = OrderStatus.ASSIGNED;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<DrivingOrder>().Update(order);
@@ -186,7 +186,7 @@ namespace RadioCabs_BE.Services
             return MapToDrivingOrderDto(order);
         }
 
-        public async Task<DrivingOrderDto?> UpdateStatusAsync(long orderId, string status)
+        public async Task<DrivingOrderDto?> UpdateStatusAsync(long orderId, OrderStatus status)
         {
             var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
             if (order == null) return null;
@@ -211,7 +211,7 @@ namespace RadioCabs_BE.Services
             order.TrafficKm = trafficKm;
             order.IsRaining = isRaining;
             order.WaitMinutes = waitMinutes;
-            order.Status = "DONE";
+            order.Status = OrderStatus.DONE;
             order.DropoffTime = DateTimeOffset.UtcNow;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
@@ -229,7 +229,7 @@ namespace RadioCabs_BE.Services
             var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
             if (order == null) return null;
 
-            order.Status = "CANCELLED";
+            order.Status = OrderStatus.CANCELLED;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<DrivingOrder>().Update(order);

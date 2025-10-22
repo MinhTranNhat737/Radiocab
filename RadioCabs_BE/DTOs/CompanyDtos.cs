@@ -22,7 +22,7 @@ namespace RadioCabs_BE.DTOs
         public string? TaxCode { get; set; }
         public string? Fax { get; set; }
         public long? ContactAccountId { get; set; }
-        public string? Status { get; set; }
+        public ActiveFlag? Status { get; set; }
     }
 
     public class CompanyDto
@@ -34,7 +34,7 @@ namespace RadioCabs_BE.DTOs
         public string Address { get; set; } = null!;
         public string TaxCode { get; set; } = null!;
         public string Fax { get; set; } = string.Empty;
-        public string Status { get; set; } = null!;
+        public ActiveFlag Status { get; set; }
         public long? ContactAccountId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }

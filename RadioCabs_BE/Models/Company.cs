@@ -8,7 +8,7 @@ namespace RadioCabs_BE.Models
         public string Email { get; set; } = null!;
         public string Address { get; set; } = null!;
         public string TaxCode { get; set; } = null!;
-        public string Status { get; set; } = "ACTIVE";
+        public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
         public long? ContactAccountId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }

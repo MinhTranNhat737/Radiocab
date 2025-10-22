@@ -1,3 +1,5 @@
+using RadioCabs_BE.Models;
+
 namespace RadioCabs_BE.Models
 {
     public class Account
@@ -9,8 +11,8 @@ namespace RadioCabs_BE.Models
         public string FullName { get; set; } = null!;
         public string? Phone { get; set; }
         public string? Email { get; set; }
-        public string Role { get; set; } = "CUSTOMER";
-        public string Status { get; set; } = "ACTIVE";
+        public RoleType Role { get; set; } = RoleType.CUSTOMER;
+        public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public DateTimeOffset? EmailVerifiedAt { get; set; }

@@ -65,8 +65,8 @@ namespace RadioCabs_BE.Services
                 FullName = dto.FullName,
                 Phone = dto.Phone,
                 Email = dto.Email,
-                Role = dto.Role.ToString(),
-                Status = "ACTIVE",
+                Role = dto.Role,
+                Status = ActiveFlag.ACTIVE,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
@@ -84,8 +84,8 @@ namespace RadioCabs_BE.Services
             if (dto.FullName != null) account.FullName = dto.FullName;
             if (dto.Phone != null) account.Phone = dto.Phone;
             if (dto.Email != null) account.Email = dto.Email;
-            if (!string.IsNullOrWhiteSpace(dto.Role)) account.Role = dto.Role;
-            if (!string.IsNullOrWhiteSpace(dto.Status)) account.Status = dto.Status;
+            if (dto.Role.HasValue) account.Role = dto.Role.Value;
+            if (dto.Status.HasValue) account.Status = dto.Status.Value;
             account.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<Account>().Update(account);
@@ -113,7 +113,7 @@ namespace RadioCabs_BE.Services
                 throw new UnauthorizedAccessException("Invalid username or password");
             }
 
-            if (account.Status != "ACTIVE")
+            if (account.Status != ActiveFlag.ACTIVE)
             {
                 throw new UnauthorizedAccessException("Account is not active");
             }

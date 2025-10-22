@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RadioCabs_BE.Models;
 
 namespace RadioCabs_BE.Models
 {
@@ -19,7 +20,7 @@ namespace RadioCabs_BE.Models
         public DateTimeOffset? PickupTime { get; set; }
         public DateTimeOffset? DropoffTime { get; set; }
 
-        public string Status { get; set; } = "NEW";
+        public OrderStatus Status { get; set; } = OrderStatus.NEW;
 
         [Precision(9, 2)] public decimal TotalKm { get; set; }
         [Precision(9, 2)] public decimal InnerCityKm { get; set; } = 0;
@@ -40,7 +41,7 @@ namespace RadioCabs_BE.Models
 
         public string? FareBreakdown { get; set; }
 
-        public string? PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public DateTimeOffset? PaidAt { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; }

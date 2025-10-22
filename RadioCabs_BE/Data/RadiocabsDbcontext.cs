@@ -54,8 +54,8 @@ namespace RadioCabs_BE.Data
                 entity.HasKey(e => e.AccountId).HasName("account_pkey");
                 entity.HasIndex(e => e.Username).IsUnique().HasDatabaseName("account_username_key");
                 entity.HasIndex(e => new { e.CompanyId, e.Role }).HasDatabaseName("ix_account_company_role");
-                entity.Property(e => e.Role).HasColumnType("varchar(20)");
-                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.Role).HasColumnType("role_type");
+                entity.Property(e => e.Status).HasColumnType("active_flag");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
                 
                 entity.HasOne(e => e.Company)
@@ -71,7 +71,7 @@ namespace RadioCabs_BE.Data
                 entity.ToTable("company");
                 entity.HasKey(e => e.CompanyId).HasName("company_pkey");
                 entity.HasIndex(e => e.Status).HasDatabaseName("ix_company_status");
-                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.Status).HasColumnType("active_flag");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
                 
                 entity.HasOne(e => e.ContactAccount)
@@ -164,8 +164,8 @@ namespace RadioCabs_BE.Data
                 entity.ToTable("vehicle_model");
                 entity.HasKey(e => e.ModelId).HasName("vehicle_model_pkey");
                 entity.HasIndex(e => new { e.CompanyId, e.Brand, e.ModelName }).IsUnique().HasDatabaseName("vehicle_model_company_id_brand_model_name_key");
-                entity.Property(e => e.FuelType).HasColumnType("varchar(20)");
-                entity.Property(e => e.SeatCategory).HasColumnType("varchar(20)");
+                entity.Property(e => e.FuelType).HasColumnType("fuel_type_enum");
+                entity.Property(e => e.SeatCategory).HasColumnType("vehicle_category_enum");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 
                 entity.HasOne(e => e.Company)
@@ -187,7 +187,7 @@ namespace RadioCabs_BE.Data
                 entity.ToTable("vehicle");
                 entity.HasKey(e => e.VehicleId).HasName("vehicle_pkey");
                 entity.HasIndex(e => e.PlateNumber).IsUnique().HasDatabaseName("vehicle_plate_number_key");
-                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.Status).HasColumnType("active_flag");
                 entity.Property(e => e.OdometerKm).HasDefaultValue(0);
                 
                 entity.HasOne(e => e.Company)
@@ -250,6 +250,17 @@ namespace RadioCabs_BE.Data
                 entity.HasKey(e => e.ModelPriceId).HasName("model_price_province_pkey");
                 entity.HasIndex(e => new { e.CompanyId, e.ProvinceId, e.ModelId, e.IsActive, e.DateStart }).HasDatabaseName("ix_mpp_lookup");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                // Column mappings
+                entity.Property(e => e.RateFirst20Km).HasColumnName("rate_first20_km");
+                entity.Property(e => e.RateOver20Km).HasColumnName("rate_over20_km");
+                entity.Property(e => e.TrafficAddPerKm).HasColumnName("traffic_add_per_km");
+                entity.Property(e => e.RainAddPerTrip).HasColumnName("rain_add_per_trip");
+                entity.Property(e => e.IntercityRatePerKm).HasColumnName("intercity_rate_per_km");
+                entity.Property(e => e.TimeStart).HasColumnName("time_start");
+                entity.Property(e => e.TimeEnd).HasColumnName("time_end");
+                entity.Property(e => e.DateStart).HasColumnName("date_start");
+                entity.Property(e => e.DateEnd).HasColumnName("date_end");
                 
                 entity.HasOne(e => e.Company)
                     .WithMany(c => c.ModelPriceProvinces)
@@ -351,8 +362,9 @@ namespace RadioCabs_BE.Data
                 entity.HasIndex(e => new { e.CompanyId, e.Status, e.CreatedAt }).HasDatabaseName("ix_order_company_status");
                 entity.HasIndex(e => new { e.DriverAccountId, e.PickupTime }).HasDatabaseName("ix_order_driver_time");
                 entity.HasIndex(e => new { e.FromProvinceId, e.ToProvinceId }).HasDatabaseName("ix_order_route");
-                entity.Property(e => e.Status).HasColumnType("varchar(20)");
-                entity.Property(e => e.PaymentMethod).HasColumnType("varchar(20)");
+                entity.Property(e => e.Status).HasColumnType("order_status");
+                entity.Property(e => e.PaymentMethod).HasColumnType("payment_method");
+                entity.Property(e => e.FareBreakdown).HasColumnType("jsonb");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
                 
                 entity.HasOne(e => e.Company)

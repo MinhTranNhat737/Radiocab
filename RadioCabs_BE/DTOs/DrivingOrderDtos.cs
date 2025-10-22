@@ -17,7 +17,7 @@ namespace RadioCabs_BE.DTOs
         public DateTimeOffset? PickupTime { get; set; }
         public bool IsRaining { get; set; } = false;
         public int WaitMinutes { get; set; } = 0;
-        public string? PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
     }
 
     public class UpdateDrivingOrderDto
@@ -28,7 +28,7 @@ namespace RadioCabs_BE.DTOs
         public string? DropoffAddress { get; set; }
         public DateTimeOffset? PickupTime { get; set; }
         public DateTimeOffset? DropoffTime { get; set; }
-        public string? Status { get; set; }
+        public OrderStatus? Status { get; set; }
         public decimal? TotalKm { get; set; }
         public decimal? InnerCityKm { get; set; }
         public decimal? IntercityKm { get; set; }
@@ -44,7 +44,7 @@ namespace RadioCabs_BE.DTOs
         public decimal? OtherFee { get; set; }
         public decimal? TotalAmount { get; set; }
         public string? FareBreakdown { get; set; }
-        public string? PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public DateTimeOffset? PaidAt { get; set; }
     }
 
@@ -63,7 +63,7 @@ namespace RadioCabs_BE.DTOs
         public string? DropoffAddress { get; set; }
         public DateTimeOffset? PickupTime { get; set; }
         public DateTimeOffset? DropoffTime { get; set; }
-        public string Status { get; set; } = null!;
+        public OrderStatus Status { get; set; }
         public decimal TotalKm { get; set; }
         public decimal InnerCityKm { get; set; }
         public decimal IntercityKm { get; set; }
@@ -79,7 +79,7 @@ namespace RadioCabs_BE.DTOs
         public decimal OtherFee { get; set; }
         public decimal TotalAmount { get; set; }
         public string? FareBreakdown { get; set; }
-        public string? PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public DateTimeOffset? PaidAt { get; set; }
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }

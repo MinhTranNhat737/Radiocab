@@ -1,1 +1,12 @@
-{"Version":1,"Hash":"1jfejG++7XiVP9dervaZiqcN5LOqh0BYCBO5Y70DBPM=","Source":"RadioCabs_BE","BasePath":"_content/RadioCabs_BE","Mode":"Default","ManifestType":"Build","ReferencedProjectsConfiguration":[],"DiscoveryPatterns":[],"Assets":[],"Endpoints":[]}
+{
+  "Version": 1,
+  "Hash": "1jfejG++7XiVP9dervaZiqcN5LOqh0BYCBO5Y70DBPM=",
+  "Source": "RadioCabs_BE",
+  "BasePath": "_content/RadioCabs_BE",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

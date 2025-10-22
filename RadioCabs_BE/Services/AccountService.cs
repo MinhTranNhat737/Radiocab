@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using RadioCabs_BE.Data;
 using RadioCabs_BE.DTOs;
 using RadioCabs_BE.Models;
-using RadioCabs_BE.Repositories.Interfaces;
+using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,136 +10,258 @@ namespace RadioCabs_BE.Services
 {
     public class AccountService : IAccountService
     {
-        private readonly IAccountRepository _repo;
-        private readonly RadiocabsDbContext _db;
-        private readonly IUnitOfWork _uow;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AccountService(IAccountRepository repo, RadiocabsDbContext db, IUnitOfWork uow)
+        public AccountService(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
-            _db = db;
-            _uow = uow;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<Account?> GetAsync(long id, CancellationToken ct = default)
-            => await _repo.GetByIdAsync(id, ct);
+        public async Task<AccountDto?> GetByIdAsync(long id)
+        {
+            var account = await _unitOfWork.Repository<Account>().GetByIdAsync(id);
+            return account != null ? MapToAccountDto(account) : null;
+        }
 
-        public async Task<Account?> GetByUsernameAsync(string username, CancellationToken ct = default)
-            => await _repo.GetByUsernameAsync(username, ct);
+        public async Task<AccountDto?> GetByUsernameAsync(string username)
+        {
+            var account = await _unitOfWork.Repository<Account>().SingleOrDefaultAsync(a => a.Username == username);
+            return account != null ? MapToAccountDto(account) : null;
+        }
 
-        public async Task<IReadOnlyList<Account>> ListByCompanyAsync(long companyId, CancellationToken ct = default)
-            => await _repo.ListByCompanyAsync(companyId, ct);
+        public async Task<PagedResult<AccountDto>> GetPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<Account>();
+            var query = repository.FindAsync(a => true).Result.AsQueryable();
 
-        public async Task<IReadOnlyList<Account>> ListByRoleAsync(RoleType role, CancellationToken ct = default)
-            => await _repo.ListByRoleAsync(role, ct);
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(a => a.FullName.Contains(request.Search) || a.Username.Contains(request.Search) || a.Email!.Contains(request.Search));
+            }
 
-        public async Task<Account> CreateAsync(CreateAccountDto dto, CancellationToken ct = default)
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(a => MapToAccountDto(a))
+                .ToList();
+
+            return new PagedResult<AccountDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<AccountDto> CreateAsync(CreateAccountDto dto)
         {
             var account = new Account
             {
+                CompanyId = dto.CompanyId,
                 Username = dto.Username,
+                PasswordHash = HashPassword(dto.Password),
                 FullName = dto.FullName,
                 Phone = dto.Phone,
                 Email = dto.Email,
-                Role = dto.Role,
-                CompanyId = dto.CompanyId,
-                Status = ActiveFlag.ACTIVE,
-                CreatedAt = DateTimeOffset.Now
+                Role = dto.Role.ToString(),
+                Status = "ACTIVE",
+                CreatedAt = DateTimeOffset.UtcNow
             };
 
-            // TODO: Hash password properly in production
-            account.PasswordHash = HashPassword("defaultPassword123"); // Temporary default password
+            await _unitOfWork.Repository<Account>().AddAsync(account);
+            await _unitOfWork.SaveChangesAsync();
 
-            await _repo.AddAsync(account, ct);
-            await _uow.SaveChangesAsync(ct);
-            return account;
+            return MapToAccountDto(account);
         }
 
-        public async Task<bool> UpdateAsync(long id, UpdateAccountDto dto, CancellationToken ct = default)
+        public async Task<AccountDto?> UpdateAsync(long id, UpdateAccountDto dto)
         {
-            var account = await _repo.GetByIdAsync(id, ct);
+            var account = await _unitOfWork.Repository<Account>().GetByIdAsync(id);
+            if (account == null) return null;
+
+            if (dto.FullName != null) account.FullName = dto.FullName;
+            if (dto.Phone != null) account.Phone = dto.Phone;
+            if (dto.Email != null) account.Email = dto.Email;
+            if (!string.IsNullOrWhiteSpace(dto.Role)) account.Role = dto.Role;
+            if (!string.IsNullOrWhiteSpace(dto.Status)) account.Status = dto.Status;
+            account.UpdatedAt = DateTimeOffset.UtcNow;
+
+            _unitOfWork.Repository<Account>().Update(account);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToAccountDto(account);
+        }
+
+        public async Task<bool> DeleteAsync(long id)
+        {
+            var account = await _unitOfWork.Repository<Account>().GetByIdAsync(id);
             if (account == null) return false;
 
-            if (!string.IsNullOrEmpty(dto.FullName))
-                account.FullName = dto.FullName;
-            if (!string.IsNullOrEmpty(dto.Phone))
-                account.Phone = dto.Phone;
-            if (!string.IsNullOrEmpty(dto.Email))
-                account.Email = dto.Email;
-            if (dto.Status.HasValue)
-                account.Status = dto.Status.Value;
+            _unitOfWork.Repository<Account>().Remove(account);
+            await _unitOfWork.SaveChangesAsync();
 
-            account.UpdatedAt = DateTimeOffset.Now;
-
-            _repo.Update(account);
-            return await _uow.SaveChangesAsync(ct) > 0;
+            return true;
         }
 
-        public async Task<bool> ChangePasswordAsync(long id, ChangePasswordDto dto, CancellationToken ct = default)
+        public async Task<AuthResponseDto> LoginAsync(LoginDto dto)
         {
-            var account = await _repo.GetByIdAsync(id, ct);
-            if (account == null) return false;
-
-            // TODO: Verify current password
-            account.PasswordHash = HashPassword(dto.NewPassword);
-            account.UpdatedAt = DateTimeOffset.Now;
-
-            _repo.Update(account);
-            return await _uow.SaveChangesAsync(ct) > 0;
-        }
-
-        public async Task<bool> SetStatusAsync(long id, ActiveFlag status, CancellationToken ct = default)
-        {
-            var account = await _repo.GetByIdAsync(id, ct);
-            if (account == null) return false;
-
-            account.Status = status;
-            account.UpdatedAt = DateTimeOffset.Now;
-
-            _repo.Update(account);
-            return await _uow.SaveChangesAsync(ct) > 0;
-        }
-
-        public async Task<AuthResponseDto?> LoginAsync(LoginDto dto, CancellationToken ct = default)
-        {
-            var account = await _repo.GetByUsernameAsync(dto.Username, ct);
+            var account = await _unitOfWork.Repository<Account>().SingleOrDefaultAsync(a => a.Username == dto.Username);
             if (account == null || !VerifyPassword(dto.Password, account.PasswordHash))
-                return null;
+            {
+                throw new UnauthorizedAccessException("Invalid username or password");
+            }
 
-            if (account.Status != ActiveFlag.ACTIVE)
-                return null;
+            if (account.Status != "ACTIVE")
+            {
+                throw new UnauthorizedAccessException("Account is not active");
+            }
 
-            // TODO: Generate JWT tokens properly
+            // Generate JWT token (simplified - in real implementation, use proper JWT library)
+            var accessToken = GenerateJwtToken(account);
+            var refreshToken = Guid.NewGuid().ToString();
+
+            // Save refresh session
+            var session = new AuthRefreshSession
+            {
+                SessionId = Guid.NewGuid(),
+                AccountId = account.AccountId,
+                TokenHash = HashPassword(refreshToken),
+                Jti = Guid.NewGuid(),
+                CreatedAt = DateTimeOffset.UtcNow,
+                ExpiresAt = DateTimeOffset.UtcNow.AddDays(7)
+            };
+
+            await _unitOfWork.Repository<AuthRefreshSession>().AddAsync(session);
+            await _unitOfWork.SaveChangesAsync();
+
             return new AuthResponseDto
             {
-                AccountId = account.AccountId,
-                Username = account.Username,
-                FullName = account.FullName,
-                Role = account.Role,
-                CompanyId = account.CompanyId,
-                AccessToken = "temp_access_token", // TODO: Generate real JWT
-                RefreshToken = "temp_refresh_token", // TODO: Generate real refresh token
-                ExpiresAt = DateTimeOffset.Now.AddHours(1)
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                ExpiresAt = DateTimeOffset.UtcNow.AddHours(1),
+                Account = MapToAccountDto(account)
             };
         }
 
-        public async Task<bool> IsUsernameExistsAsync(string username, CancellationToken ct = default)
-            => await _repo.IsUsernameExistsAsync(username, ct);
+        public async Task<bool> ChangePasswordAsync(long accountId, string currentPassword, string newPassword)
+        {
+            var account = await _unitOfWork.Repository<Account>().GetByIdAsync(accountId);
+            if (account == null || !VerifyPassword(currentPassword, account.PasswordHash))
+            {
+                return false;
+            }
 
-        public async Task<bool> IsEmailExistsAsync(string email, CancellationToken ct = default)
-            => await _repo.IsEmailExistsAsync(email, ct);
+            account.PasswordHash = HashPassword(newPassword);
+            account.UpdatedAt = DateTimeOffset.UtcNow;
 
-        private static string HashPassword(string password)
+            _unitOfWork.Repository<Account>().Update(account);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> VerifyEmailAsync(string email, string code)
+        {
+            var emailCode = await _unitOfWork.Repository<AuthEmailCode>()
+                .SingleOrDefaultAsync(ec => ec.Email == email && ec.Purpose == "SIGNUP" && ec.ConsumedAt == null);
+
+            if (emailCode == null || !VerifyPassword(code, emailCode.CodeHash) || emailCode.ExpiresAt < DateTimeOffset.UtcNow)
+            {
+                return false;
+            }
+
+            emailCode.ConsumedAt = DateTimeOffset.UtcNow;
+
+            var account = await _unitOfWork.Repository<Account>().SingleOrDefaultAsync(a => a.Email == email);
+            if (account != null)
+            {
+                account.EmailVerifiedAt = DateTimeOffset.UtcNow;
+                _unitOfWork.Repository<Account>().Update(account);
+            }
+
+            _unitOfWork.Repository<AuthEmailCode>().Update(emailCode);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> SendEmailVerificationAsync(string email)
+        {
+            var code = GenerateRandomCode();
+            var codeHash = HashPassword(code);
+
+            var emailCode = new AuthEmailCode
+            {
+                Email = email,
+                Purpose = "SIGNUP",
+                CodeHash = codeHash,
+                SentAt = DateTimeOffset.UtcNow,
+                ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15),
+                AttemptCount = 0,
+                MaxAttempts = 5
+            };
+
+            await _unitOfWork.Repository<AuthEmailCode>().AddAsync(emailCode);
+            await _unitOfWork.SaveChangesAsync();
+
+            // In real implementation, send email here
+            return true;
+        }
+
+        private AccountDto MapToAccountDto(Account account)
+        {
+            return new AccountDto
+            {
+                AccountId = account.AccountId,
+                CompanyId = account.CompanyId,
+                Username = account.Username,
+                FullName = account.FullName,
+                Phone = account.Phone,
+                Email = account.Email,
+                Role = account.Role,
+                Status = account.Status,
+                CreatedAt = account.CreatedAt,
+                UpdatedAt = account.UpdatedAt,
+                EmailVerifiedAt = account.EmailVerifiedAt,
+                Company = account.Company != null ? new CompanyDto
+                {
+                    CompanyId = account.Company.CompanyId,
+                    Name = account.Company.Name,
+                    Hotline = account.Company.Hotline,
+                    Email = account.Company.Email,
+                    Address = account.Company.Address,
+                    TaxCode = account.Company.TaxCode,
+                    Status = account.Company.Status
+                } : null
+            };
+        }
+
+        private string HashPassword(string password)
         {
             using var sha256 = SHA256.Create();
             var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(hashedBytes);
         }
 
-        private static bool VerifyPassword(string password, string hash)
+        private bool VerifyPassword(string password, string hash)
         {
-            var hashedPassword = HashPassword(password);
-            return hashedPassword == hash;
+            return HashPassword(password) == hash;
+        }
+
+        private string GenerateJwtToken(Account account)
+        {
+            // Simplified JWT generation - in real implementation, use proper JWT library
+            var payload = $"{{\"sub\":\"{account.AccountId}\",\"username\":\"{account.Username}\",\"role\":\"{account.Role}\"}}";
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));
+        }
+
+        private string GenerateRandomCode()
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var random = new Random();
+            return new string(Enumerable.Repeat(chars, 6).Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

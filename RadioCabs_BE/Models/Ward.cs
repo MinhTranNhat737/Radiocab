@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class Ward
     {
@@ -7,10 +7,8 @@
         public string? Code { get; set; }
         public string Name { get; set; } = null!;
 
-        // Nav
+        // Navigation properties
         public Province Province { get; set; } = null!;
-
-        // (tuỳ chọn)
-        public ICollection<ZoneWard>? ZoneWards { get; set; }
+        public ICollection<ZoneWard> ZoneWards { get; set; } = new List<ZoneWard>();
     }
 }

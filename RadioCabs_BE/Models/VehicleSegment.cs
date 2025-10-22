@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class VehicleSegment
     {
@@ -9,10 +9,8 @@
         public string? Description { get; set; }
         public bool IsActive { get; set; } = true;
 
-        // Nav
+        // Navigation properties
         public Company Company { get; set; } = null!;
-
-        // (tuỳ chọn)
-        public ICollection<VehicleModel>? VehicleModels { get; set; }
+        public ICollection<VehicleModel> VehicleModels { get; set; } = new List<VehicleModel>();
     }
 }

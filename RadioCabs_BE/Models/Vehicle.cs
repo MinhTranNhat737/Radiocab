@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class Vehicle
     {
@@ -11,18 +11,16 @@
         public short? YearManufactured { get; set; }
         public DateOnly InServiceFrom { get; set; }
         public int OdometerKm { get; set; } = 0;
-        public ActiveFlag Status { get; set; } = ActiveFlag.ACTIVE;
+        public string Status { get; set; } = "ACTIVE";
 
-        // Navs
+        // Navigation properties
         public Company Company { get; set; } = null!;
         public VehicleModel Model { get; set; } = null!;
-
-        // (tuỳ chọn) quan hệ ngược
-        public ICollection<DriverVehicleAssignment>? DriverAssignments { get; set; }
-        public ICollection<DriverSchedule>? DriverSchedules { get; set; }
-        public ICollection<DriverScheduleTemplate>? DriverScheduleTemplates { get; set; }
-        public ICollection<VehicleInProvince>? VehicleInProvinces { get; set; }
-        public ICollection<VehicleZonePreference>? ZonePreferences { get; set; }
-        public ICollection<DrivingOrder>? DrivingOrders { get; set; }
+        public ICollection<DriverVehicleAssignment> DriverVehicleAssignments { get; set; } = new List<DriverVehicleAssignment>();
+        public ICollection<DriverSchedule> DriverSchedules { get; set; } = new List<DriverSchedule>();
+        public ICollection<DriverScheduleTemplate> DriverScheduleTemplates { get; set; } = new List<DriverScheduleTemplate>();
+        public ICollection<VehicleInProvince> VehicleInProvinces { get; set; } = new List<VehicleInProvince>();
+        public ICollection<VehicleZonePreference> VehicleZonePreferences { get; set; } = new List<VehicleZonePreference>();
+        public ICollection<DrivingOrder> DrivingOrders { get; set; } = new List<DrivingOrder>();
     }
 }

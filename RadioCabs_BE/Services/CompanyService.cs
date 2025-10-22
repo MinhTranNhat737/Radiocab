@@ -1,52 +1,121 @@
 using Microsoft.EntityFrameworkCore;
-using RadioCabs_BE.Data;
+using RadioCabs_BE.DTOs;
 using RadioCabs_BE.Models;
+using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
 
 namespace RadioCabs_BE.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly RadiocabsDbContext _db;
-        public CompanyService(RadiocabsDbContext db) => _db = db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<Company?> GetAsync(long id, CancellationToken ct = default)
-            => await _db.Companies.AsNoTracking()
-                                  .FirstOrDefaultAsync(x => x.CompanyId == id, ct);
-
-        public async Task<IReadOnlyList<Company>> ListActiveAsync(CancellationToken ct = default)
-            => await _db.Companies.AsNoTracking()
-                                  .Where(c => c.Status == ActiveFlag.ACTIVE)
-                                  .OrderBy(c => c.CompanyId)
-                                  .ToListAsync(ct);
-
-        public async Task<IReadOnlyList<Company>> ListAsync(ActiveFlag? status = null, CancellationToken ct = default)
+        public CompanyService(IUnitOfWork unitOfWork)
         {
-            var q = _db.Companies.AsNoTracking();
-            if (status.HasValue) q = q.Where(c => c.Status == status.Value);
-            return await q.OrderBy(c => c.CompanyId).ToListAsync(ct);
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<Company> CreateAsync(Company entity, CancellationToken ct = default)
+        public async Task<CompanyDto?> GetByIdAsync(long id)
         {
-            _db.Companies.Add(entity);
-            await _db.SaveChangesAsync(ct);
-            return entity;
+            var company = await _unitOfWork.Repository<Company>().GetByIdAsync(id);
+            return company != null ? MapToCompanyDto(company) : null;
         }
 
-        public async Task<bool> UpdateAsync(Company entity, CancellationToken ct = default)
+        public async Task<PagedResult<CompanyDto>> GetPagedAsync(PageRequest request)
         {
-            _db.Companies.Update(entity);
-            return await _db.SaveChangesAsync(ct) > 0;
+            var repository = _unitOfWork.Repository<Company>();
+            var query = repository.FindAsync(c => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(c => c.Name.Contains(request.Search) || c.Email.Contains(request.Search) || c.TaxCode.Contains(request.Search));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(c => MapToCompanyDto(c))
+                .ToList();
+
+            return new PagedResult<CompanyDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
         }
 
-        // ⬇️ SỬA CHỮ KÝ: trả về Task (không generic) để khớp interface
-        public async Task SetStatusAsync(long id, ActiveFlag status, CancellationToken ct = default)
+        public async Task<CompanyDto> CreateAsync(CreateCompanyDto dto)
         {
-            var c = await _db.Companies.FirstOrDefaultAsync(x => x.CompanyId == id, ct);
-            if (c == null) throw new KeyNotFoundException("Company not found");
-            c.Status = status;
-            await _db.SaveChangesAsync(ct);
+            var company = new Company
+            {
+                Name = dto.Name,
+                Hotline = dto.Hotline,
+                Email = dto.Email,
+                Address = dto.Address,
+                TaxCode = dto.TaxCode,
+                Fax = dto.Fax,
+                ContactAccountId = dto.ContactAccountId,
+                Status = "ACTIVE",
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+
+            await _unitOfWork.Repository<Company>().AddAsync(company);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToCompanyDto(company);
+        }
+
+        public async Task<CompanyDto?> UpdateAsync(long id, UpdateCompanyDto dto)
+        {
+            var company = await _unitOfWork.Repository<Company>().GetByIdAsync(id);
+            if (company == null) return null;
+
+            if (dto.Name != null) company.Name = dto.Name;
+            if (dto.Hotline != null) company.Hotline = dto.Hotline;
+            if (dto.Email != null) company.Email = dto.Email;
+            if (dto.Address != null) company.Address = dto.Address;
+            if (dto.TaxCode != null) company.TaxCode = dto.TaxCode;
+            if (dto.Fax != null) company.Fax = dto.Fax;
+            if (dto.ContactAccountId.HasValue) company.ContactAccountId = dto.ContactAccountId.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Status)) company.Status = dto.Status;
+            company.UpdatedAt = DateTimeOffset.UtcNow;
+
+            _unitOfWork.Repository<Company>().Update(company);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToCompanyDto(company);
+        }
+
+        public async Task<bool> DeleteAsync(long id)
+        {
+            var company = await _unitOfWork.Repository<Company>().GetByIdAsync(id);
+            if (company == null) return false;
+
+            _unitOfWork.Repository<Company>().Remove(company);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        private CompanyDto MapToCompanyDto(Company company)
+        {
+            return new CompanyDto
+            {
+                CompanyId = company.CompanyId,
+                Name = company.Name,
+                Hotline = company.Hotline,
+                Email = company.Email,
+                Address = company.Address,
+                TaxCode = company.TaxCode,
+                Fax = company.Fax,
+                Status = company.Status,
+                ContactAccountId = company.ContactAccountId,
+                CreatedAt = company.CreatedAt,
+                UpdatedAt = company.UpdatedAt
+            };
         }
     }
 }

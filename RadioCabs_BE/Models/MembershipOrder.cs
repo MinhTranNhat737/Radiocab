@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace RadioCabs_BE.Models
 {
@@ -16,10 +16,10 @@ namespace RadioCabs_BE.Models
         public DateOnly EndDate { get; set; }
 
         public DateTimeOffset? PaidAt { get; set; }
-        public PaymentMethod? PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
         public string? Note { get; set; }
 
-        // Navigations (khớp DbContext)
+        // Navigation properties
         public Company Company { get; set; } = null!;
         public Account Payer { get; set; } = null!;
     }

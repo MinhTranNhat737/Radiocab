@@ -1,221 +1,389 @@
 using Microsoft.EntityFrameworkCore;
-using RadioCabs_BE.Data;
 using RadioCabs_BE.DTOs;
 using RadioCabs_BE.Models;
 using RadioCabs_BE.Repositories;
-using RadioCabs_BE.Repositories.Interfaces;
 using RadioCabs_BE.Services.Interfaces;
 
 namespace RadioCabs_BE.Services
 {
     public class DrivingOrderService : IDrivingOrderService
     {
-        private readonly IModelPriceProvinceRepository _priceRepo;
-        private readonly IDrivingOrderRepository _orderRepo;
-        private readonly IVehicleRepository _vehicleRepo;
-        private readonly IUnitOfWork _uow;
-        private readonly RadiocabsDbContext _db;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DrivingOrderService(
-            IModelPriceProvinceRepository priceRepo,
-            IDrivingOrderRepository orderRepo,
-            IVehicleRepository vehicleRepo,
-            IUnitOfWork uow,
-            RadiocabsDbContext db)
+        public DrivingOrderService(IUnitOfWork unitOfWork)
         {
-            _priceRepo = priceRepo;
-            _orderRepo = orderRepo;
-            _vehicleRepo = vehicleRepo;
-            _uow = uow;
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
 
-        // ===== Interface methods =====
-
-        public async Task<DrivingOrder?> GetAsync(long id, CancellationToken ct = default)
+        public async Task<DrivingOrderDto?> GetByIdAsync(long id)
         {
-            // Dùng repo nếu bạn muốn, ở đây mình gọi repo để tận dụng cache/hook (nếu có)
-            return await _orderRepo.GetByIdAsync(id, ct);
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(id);
+            return order != null ? MapToDrivingOrderDto(order) : null;
         }
 
-        public async Task<IReadOnlyList<DrivingOrder>> ListByCompanyAsync(
-            long companyId,
-            OrderStatus? status = null,
-            DateTimeOffset? from = null,
-            DateTimeOffset? to   = null,
-            CancellationToken ct = default)
+        public async Task<PagedResult<DrivingOrderDto>> GetPagedAsync(PageRequest request)
         {
-            var q = _db.DrivingOrders.AsNoTracking()
-                                     .Where(o => o.CompanyId == companyId);
+            var repository = _unitOfWork.Repository<DrivingOrder>();
+            var query = repository.FindAsync(o => true).Result.AsQueryable();
 
-            if (status.HasValue)
-                q = q.Where(o => o.Status == status.Value);
-
-            if (from.HasValue)
-                q = q.Where(o => o.CreatedAt >= from.Value);
-
-            if (to.HasValue)
-                q = q.Where(o => o.CreatedAt <= to.Value);
-
-            return await q.OrderByDescending(o => o.CreatedAt).ToListAsync(ct);
-        }
-
-        public async Task<long> CreateAsync(DrivingOrder order, CancellationToken ct = default)
-        {
-            // Nếu client chưa tính giá, tự quote trước khi lưu
-            if (order.TotalAmount <= 0)
+            if (!string.IsNullOrEmpty(request.Search))
             {
-                var quote = await QuoteAsync(new QuoteRequest(
-                    CompanyId:   order.CompanyId,
-                    ProvinceId:  order.FromProvinceId,
-                    ModelId:     order.ModelId,
-                    TotalKm:     order.TotalKm,
-                    IntercityKm: order.IntercityKm,
-                    TrafficKm:   order.TrafficKm,
-                    IsRaining:   order.IsRaining,
-                    PickupTime:  order.PickupTime
-                ), ct);
-
-                order.BaseFare     = quote.BaseFare;
-                order.IntercityFee = quote.IntercityFee;
-                order.TrafficFee   = quote.TrafficFee;
-                order.RainFee      = quote.RainFee;
-                order.OtherFee     = quote.OtherFee;
-                order.TotalAmount  = quote.TotalAmount;
-                order.PriceRefId   = quote.PriceRefId;
-                order.CreatedAt    = DateTimeOffset.Now;
-                order.Status       = OrderStatus.NEW;
+                query = query.Where(o => o.PickupAddress!.Contains(request.Search) || o.DropoffAddress!.Contains(request.Search));
             }
 
-            await _orderRepo.AddAsync(order, ct);
-            await _uow.SaveChangesAsync(ct);
-            return order.OrderId;
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .OrderByDescending(o => o.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(o => MapToDrivingOrderDto(o))
+                .ToList();
+
+            return new PagedResult<DrivingOrderDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
         }
 
-        public async Task UpdateStatusAsync(long orderId, OrderStatus status, CancellationToken ct = default)
+        public async Task<DrivingOrderDto> CreateAsync(CreateDrivingOrderDto dto)
         {
-            var order = await _orderRepo.GetByIdAsync(orderId, ct);
-            if (order == null) throw new KeyNotFoundException("Order not found");
+            var order = new DrivingOrder
+            {
+                CompanyId = dto.CompanyId,
+                CustomerAccountId = dto.CustomerAccountId,
+                VehicleId = dto.VehicleId,
+                DriverAccountId = dto.DriverAccountId,
+                ModelId = dto.ModelId,
+                FromProvinceId = dto.FromProvinceId,
+                ToProvinceId = dto.ToProvinceId,
+                PickupAddress = dto.PickupAddress,
+                DropoffAddress = dto.DropoffAddress,
+                PickupTime = dto.PickupTime,
+                Status = "NEW",
+                IsRaining = dto.IsRaining,
+                WaitMinutes = dto.WaitMinutes,
+                PaymentMethod = dto.PaymentMethod,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
 
-            order.Status   = status;
-            order.UpdatedAt = DateTimeOffset.Now;
+            // Calculate base fare (simplified calculation)
+            order.BaseFare = await CalculateBaseFare(dto.ModelId, dto.FromProvinceId);
 
-            _orderRepo.Update(order);
-            await _uow.SaveChangesAsync(ct);
+            await _unitOfWork.Repository<DrivingOrder>().AddAsync(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToDrivingOrderDto(order);
         }
 
-        public async Task<QuoteResult> QuoteAsync(QuoteRequest req, CancellationToken ct = default)
+        public async Task<DrivingOrderDto?> UpdateAsync(long id, UpdateDrivingOrderDto dto)
         {
-            // Chuẩn hoá thời điểm đón về local DateOnly/TimeOnly để đối chiếu DATE/TIME trong DB
-            var pickupLocal = (req.PickupTime ?? DateTimeOffset.Now).LocalDateTime;
-            var day = DateOnly.FromDateTime(pickupLocal);
-            var tod = TimeOnly.FromDateTime(pickupLocal);
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(id);
+            if (order == null) return null;
 
-            // Lấy bảng giá hiệu lực
-            var q = _db.ModelPriceProvinces
-                       .AsNoTracking()
-                       .Where(x => x.CompanyId == req.CompanyId
-                                && x.ProvinceId == req.ProvinceId
-                                && x.ModelId == req.ModelId
-                                && x.IsActive
-                                && day >= x.DateStart && day <= x.DateEnd);
+            if (dto.VehicleId.HasValue) order.VehicleId = dto.VehicleId.Value;
+            if (dto.DriverAccountId.HasValue) order.DriverAccountId = dto.DriverAccountId.Value;
+            if (dto.PickupAddress != null) order.PickupAddress = dto.PickupAddress;
+            if (dto.DropoffAddress != null) order.DropoffAddress = dto.DropoffAddress;
+            if (dto.PickupTime.HasValue) order.PickupTime = dto.PickupTime.Value;
+            if (dto.DropoffTime.HasValue) order.DropoffTime = dto.DropoffTime.Value;
+            if (!string.IsNullOrWhiteSpace(dto.Status)) order.Status = dto.Status;
+            if (dto.TotalKm.HasValue) order.TotalKm = dto.TotalKm.Value;
+            if (dto.InnerCityKm.HasValue) order.InnerCityKm = dto.InnerCityKm.Value;
+            if (dto.IntercityKm.HasValue) order.IntercityKm = dto.IntercityKm.Value;
+            if (dto.TrafficKm.HasValue) order.TrafficKm = dto.TrafficKm.Value;
+            if (dto.IsRaining.HasValue) order.IsRaining = dto.IsRaining.Value;
+            if (dto.WaitMinutes.HasValue) order.WaitMinutes = dto.WaitMinutes.Value;
+            if (dto.BaseFare.HasValue) order.BaseFare = dto.BaseFare.Value;
+            if (dto.TrafficUnitPrice.HasValue) order.TrafficUnitPrice = dto.TrafficUnitPrice.Value;
+            if (dto.TrafficFee.HasValue) order.TrafficFee = dto.TrafficFee.Value;
+            if (dto.RainFee.HasValue) order.RainFee = dto.RainFee.Value;
+            if (dto.IntercityUnitPrice.HasValue) order.IntercityUnitPrice = dto.IntercityUnitPrice.Value;
+            if (dto.IntercityFee.HasValue) order.IntercityFee = dto.IntercityFee.Value;
+            if (dto.OtherFee.HasValue) order.OtherFee = dto.OtherFee.Value;
+            if (dto.TotalAmount.HasValue) order.TotalAmount = dto.TotalAmount.Value;
+            if (dto.FareBreakdown != null) order.FareBreakdown = dto.FareBreakdown;
+            if (!string.IsNullOrWhiteSpace(dto.PaymentMethod)) order.PaymentMethod = dto.PaymentMethod;
+            if (dto.PaidAt.HasValue) order.PaidAt = dto.PaidAt.Value;
+            order.UpdatedAt = DateTimeOffset.UtcNow;
 
-            // Theo khung giờ (hỗ trợ cả ca qua đêm)
-            q = q.Where(x =>
-                (x.TimeStart == null && x.TimeEnd == null)
-                ||
-                (x.TimeStart != null && x.TimeEnd != null &&
-                 (
-                     (x.TimeStart <= x.TimeEnd && tod >= x.TimeStart && tod <= x.TimeEnd) ||
-                     (x.TimeStart  > x.TimeEnd && (tod >= x.TimeStart || tod <= x.TimeEnd))
-                 ))
-            );
+            _unitOfWork.Repository<DrivingOrder>().Update(order);
+            await _unitOfWork.SaveChangesAsync();
 
-            var price = await q.OrderByDescending(x => x.DateStart).FirstOrDefaultAsync(ct);
-            if (price == null)
-                throw new InvalidOperationException("Không tìm thấy bảng giá phù hợp.");
-
-            // Tính giá
-            var kmFirst = Math.Min(req.TotalKm, 20m);
-            var kmOver  = Math.Max(0m, req.TotalKm - 20m);
-
-            var baseFare = price.OpeningFare
-                          + kmFirst * price.RateFirst20Km
-                          + kmOver  * price.RateOver20Km;
-
-            var intercityFee = req.IntercityKm * price.IntercityRatePerKm;
-            var trafficFee   = req.TrafficKm   * price.TrafficAddPerKm;
-            var rainFee      = req.IsRaining   ? price.RainAddPerTrip : 0m;
-
-            var otherFee = 0m; // nếu có phí chờ thì cộng tại đây
-            var total    = baseFare + intercityFee + trafficFee + rainFee + otherFee;
-
-            // Làm tròn (nếu muốn)
-            baseFare     = decimal.Round(baseFare, 2);
-            intercityFee = decimal.Round(intercityFee, 2);
-            trafficFee   = decimal.Round(trafficFee, 2);
-            rainFee      = decimal.Round(rainFee, 2);
-            otherFee     = decimal.Round(otherFee, 2);
-            total        = decimal.Round(total, 2);
-
-            return new QuoteResult(
-                BaseFare:     baseFare,
-                IntercityFee: intercityFee,
-                TrafficFee:   trafficFee,
-                RainFee:      rainFee,
-                OtherFee:     otherFee,
-                TotalAmount:  total,
-                PriceRefId:   price.ModelPriceId
-            );
+            return MapToDrivingOrderDto(order);
         }
 
-        // ===== (Tuỳ chọn) Các helper ngoài interface, giữ lại nếu bạn còn dùng nơi khác =====
-
-        public Task<IReadOnlyList<DrivingOrder>> ListByStatusAsync(
-            long companyId, OrderStatus status, CancellationToken ct = default)
-            => _orderRepo.ListByCompanyAndStatusAsync(companyId, status, ct);
-
-        public async Task<bool> AssignDriverAsync(
-            long orderId, long driverAccountId, long? vehicleId, CancellationToken ct = default)
+        public async Task<bool> DeleteAsync(long id)
         {
-            var order = await _orderRepo.GetByIdAsync(orderId, ct);
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(id);
             if (order == null) return false;
 
-            order.DriverAccountId = driverAccountId;
+            _unitOfWork.Repository<DrivingOrder>().Remove(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<PagedResult<DrivingOrderDto>> GetByDriverAsync(long driverId, PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<DrivingOrder>();
+            var query = repository.FindAsync(o => o.DriverAccountId == driverId).Result.AsQueryable();
+
+            var totalCount = await repository.CountAsync(o => o.DriverAccountId == driverId);
+            var items = query
+                .OrderByDescending(o => o.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(o => MapToDrivingOrderDto(o))
+                .ToList();
+
+            return new PagedResult<DrivingOrderDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<PagedResult<DrivingOrderDto>> GetByCustomerAsync(long customerId, PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<DrivingOrder>();
+            var query = repository.FindAsync(o => o.CustomerAccountId == customerId).Result.AsQueryable();
+
+            var totalCount = await repository.CountAsync(o => o.CustomerAccountId == customerId);
+            var items = query
+                .OrderByDescending(o => o.CreatedAt)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(o => MapToDrivingOrderDto(o))
+                .ToList();
+
+            return new PagedResult<DrivingOrderDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<DrivingOrderDto?> AssignDriverAsync(long orderId, long driverId, long vehicleId)
+        {
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
+            if (order == null) return null;
+
+            order.DriverAccountId = driverId;
             order.VehicleId = vehicleId;
-            order.Status = OrderStatus.ASSIGNED;
-            order.UpdatedAt = DateTimeOffset.Now;
+            order.Status = "ASSIGNED";
+            order.UpdatedAt = DateTimeOffset.UtcNow;
 
-            _orderRepo.Update(order);
-            return await _uow.SaveChangesAsync(ct) > 0;
+            _unitOfWork.Repository<DrivingOrder>().Update(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToDrivingOrderDto(order);
         }
 
-        public async Task<bool> CompleteOrderAsync(
-            long orderId, DateTimeOffset dropoffTime, CancellationToken ct = default)
+        public async Task<DrivingOrderDto?> UpdateStatusAsync(long orderId, string status)
         {
-            var order = await _orderRepo.GetByIdAsync(orderId, ct);
-            if (order == null) return false;
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
+            if (order == null) return null;
 
-            order.DropoffTime = dropoffTime;
-            order.Status = OrderStatus.DONE;
-            order.UpdatedAt = DateTimeOffset.Now;
+            order.Status = status;
+            order.UpdatedAt = DateTimeOffset.UtcNow;
 
-            _orderRepo.Update(order);
-            return await _uow.SaveChangesAsync(ct) > 0;
+            _unitOfWork.Repository<DrivingOrder>().Update(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToDrivingOrderDto(order);
         }
 
-        public async Task<bool> MarkPaidAsync(
-            long orderId, PaymentMethod method, DateTimeOffset paidAt, CancellationToken ct = default)
+        public async Task<DrivingOrderDto?> CompleteOrderAsync(long orderId, decimal totalKm, decimal innerCityKm, decimal intercityKm, decimal trafficKm, bool isRaining, int waitMinutes)
         {
-            var order = await _orderRepo.GetByIdAsync(orderId, ct);
-            if (order == null) return false;
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
+            if (order == null) return null;
 
-            order.PaymentMethod = method;
-            order.PaidAt = paidAt;
-            order.UpdatedAt = DateTimeOffset.Now;
+            order.TotalKm = totalKm;
+            order.InnerCityKm = innerCityKm;
+            order.IntercityKm = intercityKm;
+            order.TrafficKm = trafficKm;
+            order.IsRaining = isRaining;
+            order.WaitMinutes = waitMinutes;
+            order.Status = "DONE";
+            order.DropoffTime = DateTimeOffset.UtcNow;
+            order.UpdatedAt = DateTimeOffset.UtcNow;
 
-            _orderRepo.Update(order);
-            return await _uow.SaveChangesAsync(ct) > 0;
+            // Calculate total amount
+            order.TotalAmount = await CalculateTotalAmount(order);
+
+            _unitOfWork.Repository<DrivingOrder>().Update(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToDrivingOrderDto(order);
+        }
+
+        public async Task<DrivingOrderDto?> CancelOrderAsync(long orderId, string reason)
+        {
+            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
+            if (order == null) return null;
+
+            order.Status = "CANCELLED";
+            order.UpdatedAt = DateTimeOffset.UtcNow;
+
+            _unitOfWork.Repository<DrivingOrder>().Update(order);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToDrivingOrderDto(order);
+        }
+
+        private async Task<decimal> CalculateBaseFare(long modelId, long provinceId)
+        {
+            // Get the most recent price for this model in this province
+            var price = await _unitOfWork.Repository<ModelPriceProvince>()
+                .SingleOrDefaultAsync(p => p.ModelId == modelId && p.ProvinceId == provinceId && p.IsActive);
+
+            return price?.OpeningFare ?? 0;
+        }
+
+        private async Task<decimal> CalculateTotalAmount(DrivingOrder order)
+        {
+            var price = await _unitOfWork.Repository<ModelPriceProvince>()
+                .SingleOrDefaultAsync(p => p.ModelId == order.ModelId && p.ProvinceId == order.FromProvinceId && p.IsActive);
+
+            if (price == null) return 0;
+
+            var totalAmount = price.OpeningFare;
+            
+            // Add distance-based fare
+            if (order.InnerCityKm > 0)
+            {
+                totalAmount += order.InnerCityKm * price.RateFirst20Km;
+            }
+            
+            if (order.IntercityKm > 0)
+            {
+                totalAmount += order.IntercityKm * price.IntercityRatePerKm;
+            }
+            
+            if (order.TrafficKm > 0)
+            {
+                totalAmount += order.TrafficKm * price.TrafficAddPerKm;
+            }
+            
+            if (order.IsRaining)
+            {
+                totalAmount += price.RainAddPerTrip;
+            }
+
+            return totalAmount;
+        }
+
+        private DrivingOrderDto MapToDrivingOrderDto(DrivingOrder order)
+        {
+            return new DrivingOrderDto
+            {
+                OrderId = order.OrderId,
+                CompanyId = order.CompanyId,
+                CustomerAccountId = order.CustomerAccountId,
+                VehicleId = order.VehicleId,
+                DriverAccountId = order.DriverAccountId,
+                ModelId = order.ModelId,
+                PriceRefId = order.PriceRefId,
+                FromProvinceId = order.FromProvinceId,
+                ToProvinceId = order.ToProvinceId,
+                PickupAddress = order.PickupAddress,
+                DropoffAddress = order.DropoffAddress,
+                PickupTime = order.PickupTime,
+                DropoffTime = order.DropoffTime,
+                Status = order.Status,
+                TotalKm = order.TotalKm,
+                InnerCityKm = order.InnerCityKm,
+                IntercityKm = order.IntercityKm,
+                TrafficKm = order.TrafficKm,
+                IsRaining = order.IsRaining,
+                WaitMinutes = order.WaitMinutes,
+                BaseFare = order.BaseFare,
+                TrafficUnitPrice = order.TrafficUnitPrice,
+                TrafficFee = order.TrafficFee,
+                RainFee = order.RainFee,
+                IntercityUnitPrice = order.IntercityUnitPrice,
+                IntercityFee = order.IntercityFee,
+                OtherFee = order.OtherFee,
+                TotalAmount = order.TotalAmount,
+                FareBreakdown = order.FareBreakdown,
+                PaymentMethod = order.PaymentMethod,
+                PaidAt = order.PaidAt,
+                CreatedAt = order.CreatedAt,
+                UpdatedAt = order.UpdatedAt,
+                Customer = order.Customer != null ? new AccountDto
+                {
+                    AccountId = order.Customer.AccountId,
+                    CompanyId = order.Customer.CompanyId,
+                    Username = order.Customer.Username,
+                    FullName = order.Customer.FullName,
+                    Phone = order.Customer.Phone,
+                    Email = order.Customer.Email,
+                    Role = order.Customer.Role,
+                    Status = order.Customer.Status,
+                    CreatedAt = order.Customer.CreatedAt,
+                    UpdatedAt = order.Customer.UpdatedAt,
+                    EmailVerifiedAt = order.Customer.EmailVerifiedAt
+                } : null,
+                Driver = order.Driver != null ? new AccountDto
+                {
+                    AccountId = order.Driver.AccountId,
+                    CompanyId = order.Driver.CompanyId,
+                    Username = order.Driver.Username,
+                    FullName = order.Driver.FullName,
+                    Phone = order.Driver.Phone,
+                    Email = order.Driver.Email,
+                    Role = order.Driver.Role,
+                    Status = order.Driver.Status,
+                    CreatedAt = order.Driver.CreatedAt,
+                    UpdatedAt = order.Driver.UpdatedAt,
+                    EmailVerifiedAt = order.Driver.EmailVerifiedAt
+                } : null,
+                Vehicle = order.Vehicle != null ? new VehicleDto
+                {
+                    VehicleId = order.Vehicle.VehicleId,
+                    CompanyId = order.Vehicle.CompanyId,
+                    ModelId = order.Vehicle.ModelId,
+                    PlateNumber = order.Vehicle.PlateNumber,
+                    Vin = order.Vehicle.Vin,
+                    Color = order.Vehicle.Color,
+                    YearManufactured = order.Vehicle.YearManufactured,
+                    InServiceFrom = order.Vehicle.InServiceFrom,
+                    OdometerKm = order.Vehicle.OdometerKm,
+                    Status = order.Vehicle.Status
+                } : null,
+                Model = order.Model != null ? new VehicleModelDto
+                {
+                    ModelId = order.Model.ModelId,
+                    CompanyId = order.Model.CompanyId,
+                    SegmentId = order.Model.SegmentId,
+                    Brand = order.Model.Brand,
+                    ModelName = order.Model.ModelName,
+                    FuelType = order.Model.FuelType,
+                    SeatCategory = order.Model.SeatCategory,
+                    ImageUrl = order.Model.ImageUrl,
+                    Description = order.Model.Description,
+                    IsActive = order.Model.IsActive
+                } : null,
+                FromProvince = order.FromProvince != null ? new ProvinceDto
+                {
+                    ProvinceId = order.FromProvince.ProvinceId,
+                    Code = order.FromProvince.Code,
+                    Name = order.FromProvince.Name
+                } : null,
+                ToProvince = order.ToProvince != null ? new ProvinceDto
+                {
+                    ProvinceId = order.ToProvince.ProvinceId,
+                    Code = order.ToProvince.Code,
+                    Name = order.ToProvince.Name
+                } : null
+            };
         }
     }
 }

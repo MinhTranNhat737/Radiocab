@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RadioCabs_BE.Models;       // namespace models của bạn
-using System;
+using Microsoft.EntityFrameworkCore;
+using RadioCabs_BE.Models;
+using Npgsql;
 
 namespace RadioCabs_BE.Data
 {
@@ -8,43 +8,35 @@ namespace RadioCabs_BE.Data
     {
         public RadiocabsDbContext(DbContextOptions<RadiocabsDbContext> options) : base(options) { }
 
-        // ===== DbSet cho TABLES =====
+        // DbSets
         public DbSet<Account> Accounts => Set<Account>();
         public DbSet<Company> Companies => Set<Company>();
         public DbSet<AuthEmailCode> AuthEmailCodes => Set<AuthEmailCode>();
         public DbSet<AuthRefreshSession> AuthRefreshSessions => Set<AuthRefreshSession>();
-
         public DbSet<DriverSchedule> DriverSchedules => Set<DriverSchedule>();
         public DbSet<DriverScheduleTemplate> DriverScheduleTemplates => Set<DriverScheduleTemplate>();
         public DbSet<DriverVehicleAssignment> DriverVehicleAssignments => Set<DriverVehicleAssignment>();
-
         public DbSet<DrivingOrder> DrivingOrders => Set<DrivingOrder>();
         public DbSet<MembershipOrder> MembershipOrders => Set<MembershipOrder>();
         public DbSet<ModelPriceProvince> ModelPriceProvinces => Set<ModelPriceProvince>();
-
         public DbSet<Province> Provinces => Set<Province>();
         public DbSet<Ward> Wards => Set<Ward>();
         public DbSet<Zone> Zones => Set<Zone>();
         public DbSet<ZoneWard> ZoneWards => Set<ZoneWard>();
-
         public DbSet<VehicleSegment> VehicleSegments => Set<VehicleSegment>();
         public DbSet<VehicleModel> VehicleModels => Set<VehicleModel>();
         public DbSet<Vehicle> Vehicles => Set<Vehicle>();
-        public DbSet<VehicleInProvince> VehiclesInProvince => Set<VehicleInProvince>();
+        public DbSet<VehicleInProvince> VehicleInProvinces => Set<VehicleInProvince>();
         public DbSet<VehicleZonePreference> VehicleZonePreferences => Set<VehicleZonePreference>();
-
-        // ===== DbSet cho VIEW (keyless) =====
         public DbSet<VehicleModelWithSeats> VehicleModelWithSeats => Set<VehicleModelWithSeats>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Schema mặc định
+            // Schema
             modelBuilder.HasDefaultSchema("public");
-
-            // Extension
             modelBuilder.HasPostgresExtension("pgcrypto");
 
-            // Đăng ký Postgres ENUM (tên type đúng như DB)
+            // Enum mappings
             modelBuilder.HasPostgresEnum<RoleType>("public", "role_type");
             modelBuilder.HasPostgresEnum<ActiveFlag>("public", "active_flag");
             modelBuilder.HasPostgresEnum<OrderStatus>("public", "order_status");
@@ -55,259 +47,427 @@ namespace RadioCabs_BE.Data
             modelBuilder.HasPostgresEnum<RevocationReason>("public", "revocation_reason");
             modelBuilder.HasPostgresEnum<VerificationPurpose>("public", "verification_purpose");
 
-            // ====== Account ======
-            modelBuilder.Entity<Account>(e =>
+            // Account configuration
+            modelBuilder.Entity<Account>(entity =>
             {
-                e.ToTable("account");
-                e.HasKey(x => x.AccountId).HasName("account_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.Role }).HasDatabaseName("ix_account_company_role");
-                e.HasIndex(x => x.Username).IsUnique().HasDatabaseName("account_username_key");
-
-                // map enum column types (giúp EF generate đúng type khi migrate)
-                e.Property(x => x.Role).HasColumnType("public.role_type");
-                e.Property(x => x.Status).HasColumnType("public.active_flag");
+                entity.ToTable("account");
+                entity.HasKey(e => e.AccountId).HasName("account_pkey");
+                entity.HasIndex(e => e.Username).IsUnique().HasDatabaseName("account_username_key");
+                entity.HasIndex(e => new { e.CompanyId, e.Role }).HasDatabaseName("ix_account_company_role");
+                entity.Property(e => e.Role).HasColumnType("varchar(20)");
+                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Accounts)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("account_company_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
-            // ====== Company ======
-            modelBuilder.Entity<Company>(e =>
+            // Company configuration
+            modelBuilder.Entity<Company>(entity =>
             {
-                e.ToTable("company");
-                e.HasKey(x => x.CompanyId).HasName("company_pkey");
-                e.HasIndex(x => x.Status).HasDatabaseName("ix_company_status");
-                e.HasOne(x => x.ContactAccount)
+                entity.ToTable("company");
+                entity.HasKey(e => e.CompanyId).HasName("company_pkey");
+                entity.HasIndex(e => e.Status).HasDatabaseName("ix_company_status");
+                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.ContactAccount)
                     .WithMany()
-                    .HasForeignKey(x => x.ContactAccountId)
+                    .HasForeignKey(e => e.ContactAccountId)
                     .HasConstraintName("fk_company_contact_account")
                     .OnDelete(DeleteBehavior.SetNull);
             });
 
-            // ====== AuthEmailCode ======
-            modelBuilder.Entity<AuthEmailCode>(e =>
+            // Province configuration
+            modelBuilder.Entity<Province>(entity =>
             {
-                e.ToTable("auth_email_code");
-                e.HasKey(x => x.CodeId).HasName("auth_email_code_pkey");
-                e.HasIndex(x => new { x.Email, x.Purpose })
-                    .IsUnique()
-                    .HasFilter("\"consumed_at\" IS NULL")
-                    .HasDatabaseName("uq_email_code_active");
-                e.Property(x => x.Purpose).HasColumnType("varchar(30)");
+                entity.ToTable("province");
+                entity.HasKey(e => e.ProvinceId).HasName("province_pkey");
+                entity.HasIndex(e => e.Code).IsUnique().HasDatabaseName("province_code_key");
             });
 
-            // ====== AuthRefreshSession ======
-            modelBuilder.Entity<AuthRefreshSession>(e =>
+            // Ward configuration
+            modelBuilder.Entity<Ward>(entity =>
             {
-                e.ToTable("auth_refresh_session");
-                e.HasKey(x => x.SessionId).HasName("auth_refresh_session_pkey");
-                e.HasIndex(x => x.Jti).IsUnique().HasDatabaseName("auth_refresh_session_jti_key");
-                e.HasOne(x => x.Account)
+                entity.ToTable("ward");
+                entity.HasKey(e => e.WardId).HasName("ward_pkey");
+                entity.HasIndex(e => new { e.ProvinceId, e.Name }).IsUnique().HasDatabaseName("ward_province_id_name_key");
+                
+                entity.HasOne(e => e.Province)
+                    .WithMany(p => p.Wards)
+                    .HasForeignKey(e => e.ProvinceId)
+                    .HasConstraintName("ward_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Zone configuration
+            modelBuilder.Entity<Zone>(entity =>
+            {
+                entity.ToTable("zone");
+                entity.HasKey(e => e.ZoneId).HasName("zone_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.ProvinceId, e.Code }).IsUnique().HasDatabaseName("zone_company_id_province_id_code_key");
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Zones)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("zone_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Province)
+                    .WithMany(p => p.Zones)
+                    .HasForeignKey(e => e.ProvinceId)
+                    .HasConstraintName("zone_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // ZoneWard configuration
+            modelBuilder.Entity<ZoneWard>(entity =>
+            {
+                entity.ToTable("zone_ward");
+                entity.HasKey(e => new { e.ZoneId, e.WardId }).HasName("zone_ward_pkey");
+                
+                entity.HasOne(e => e.Zone)
+                    .WithMany(z => z.ZoneWards)
+                    .HasForeignKey(e => e.ZoneId)
+                    .HasConstraintName("zone_ward_zone_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Ward)
+                    .WithMany(w => w.ZoneWards)
+                    .HasForeignKey(e => e.WardId)
+                    .HasConstraintName("zone_ward_ward_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // VehicleSegment configuration
+            modelBuilder.Entity<VehicleSegment>(entity =>
+            {
+                entity.ToTable("vehicle_segment");
+                entity.HasKey(e => e.SegmentId).HasName("vehicle_segment_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.Code }).IsUnique().HasDatabaseName("vehicle_segment_company_id_code_key");
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.VehicleSegments)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("vehicle_segment_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // VehicleModel configuration
+            modelBuilder.Entity<VehicleModel>(entity =>
+            {
+                entity.ToTable("vehicle_model");
+                entity.HasKey(e => e.ModelId).HasName("vehicle_model_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.Brand, e.ModelName }).IsUnique().HasDatabaseName("vehicle_model_company_id_brand_model_name_key");
+                entity.Property(e => e.FuelType).HasColumnType("varchar(20)");
+                entity.Property(e => e.SeatCategory).HasColumnType("varchar(20)");
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.VehicleModels)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("vehicle_model_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Segment)
+                    .WithMany(s => s.VehicleModels)
+                    .HasForeignKey(e => e.SegmentId)
+                    .HasConstraintName("vehicle_model_segment_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // Vehicle configuration
+            modelBuilder.Entity<Vehicle>(entity =>
+            {
+                entity.ToTable("vehicle");
+                entity.HasKey(e => e.VehicleId).HasName("vehicle_pkey");
+                entity.HasIndex(e => e.PlateNumber).IsUnique().HasDatabaseName("vehicle_plate_number_key");
+                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.OdometerKm).HasDefaultValue(0);
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Vehicles)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("vehicle_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Model)
+                    .WithMany(m => m.Vehicles)
+                    .HasForeignKey(e => e.ModelId)
+                    .HasConstraintName("vehicle_model_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // VehicleInProvince configuration
+            modelBuilder.Entity<VehicleInProvince>(entity =>
+            {
+                entity.ToTable("vehicle_in_province");
+                entity.HasKey(e => new { e.VehicleId, e.ProvinceId }).HasName("vehicle_in_province_pkey");
+                entity.Property(e => e.Allowed).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.VehicleInProvinces)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("vehicle_in_province_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Province)
+                    .WithMany(p => p.VehicleInProvinces)
+                    .HasForeignKey(e => e.ProvinceId)
+                    .HasConstraintName("vehicle_in_province_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // VehicleZonePreference configuration
+            modelBuilder.Entity<VehicleZonePreference>(entity =>
+            {
+                entity.ToTable("vehicle_zone_preference");
+                entity.HasKey(e => new { e.VehicleId, e.ZoneId }).HasName("vehicle_zone_preference_pkey");
+                entity.Property(e => e.Priority).HasDefaultValue(100);
+                
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.VehicleZonePreferences)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("vehicle_zone_preference_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Zone)
+                    .WithMany(z => z.VehicleZonePreferences)
+                    .HasForeignKey(e => e.ZoneId)
+                    .HasConstraintName("vehicle_zone_preference_zone_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // ModelPriceProvince configuration
+            modelBuilder.Entity<ModelPriceProvince>(entity =>
+            {
+                entity.ToTable("model_price_province");
+                entity.HasKey(e => e.ModelPriceId).HasName("model_price_province_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.ProvinceId, e.ModelId, e.IsActive, e.DateStart }).HasDatabaseName("ix_mpp_lookup");
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.ModelPriceProvinces)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("model_price_province_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Province)
+                    .WithMany(p => p.ModelPriceProvinces)
+                    .HasForeignKey(e => e.ProvinceId)
+                    .HasConstraintName("model_price_province_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+                    
+                entity.HasOne(e => e.Model)
+                    .WithMany(m => m.ModelPriceProvinces)
+                    .HasForeignKey(e => e.ModelId)
+                    .HasConstraintName("model_price_province_model_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Parent)
+                    .WithMany(p => p.Children)
+                    .HasForeignKey(e => e.ParentId)
+                    .HasConstraintName("model_price_province_parent_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // DriverVehicleAssignment configuration
+            modelBuilder.Entity<DriverVehicleAssignment>(entity =>
+            {
+                entity.ToTable("driver_vehicle_assignment");
+                entity.HasKey(e => e.AssignmentId).HasName("driver_vehicle_assignment_pkey");
+                entity.HasIndex(e => new { e.DriverAccountId, e.StartAt }).HasDatabaseName("ix_dva_driver_time");
+                entity.HasIndex(e => new { e.VehicleId, e.StartAt }).HasDatabaseName("ix_dva_vehicle_time");
+                entity.HasIndex(e => e.VehicleId).IsUnique().HasDatabaseName("uq_dva_vehicle_open").HasFilter("\"end_at\" IS NULL");
+                
+                entity.HasOne(e => e.Driver)
                     .WithMany()
-                    .HasForeignKey(x => x.AccountId)
+                    .HasForeignKey(e => e.DriverAccountId)
+                    .HasConstraintName("driver_vehicle_assignment_driver_account_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.DriverVehicleAssignments)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("driver_vehicle_assignment_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // DriverScheduleTemplate configuration
+            modelBuilder.Entity<DriverScheduleTemplate>(entity =>
+            {
+                entity.ToTable("driver_schedule_template");
+                entity.HasKey(e => e.TemplateId).HasName("driver_schedule_template_pkey");
+                entity.HasIndex(e => new { e.DriverAccountId, e.Weekday }).HasDatabaseName("ix_dst_driver_weekday").HasFilter("\"is_active\" = true");
+                entity.Property(e => e.Weekday).HasColumnType("smallint");
+                entity.Property(e => e.IsActive).HasDefaultValue(true);
+                
+                entity.HasOne(e => e.Driver)
+                    .WithMany()
+                    .HasForeignKey(e => e.DriverAccountId)
+                    .HasConstraintName("driver_schedule_template_driver_account_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.DriverScheduleTemplates)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("driver_schedule_template_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // DriverSchedule configuration
+            modelBuilder.Entity<DriverSchedule>(entity =>
+            {
+                entity.ToTable("driver_schedule");
+                entity.HasKey(e => e.ScheduleId).HasName("driver_schedule_pkey");
+                entity.HasIndex(e => new { e.WorkDate, e.Status, e.DriverAccountId }).HasDatabaseName("ix_driver_schedule_lookup");
+                entity.HasIndex(e => new { e.DriverAccountId, e.WorkDate, e.StartTime, e.EndTime }).IsUnique().HasDatabaseName("uq_driver_schedule_uni");
+                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.Driver)
+                    .WithMany()
+                    .HasForeignKey(e => e.DriverAccountId)
+                    .HasConstraintName("driver_schedule_driver_account_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.DriverSchedules)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("driver_schedule_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // DrivingOrder configuration
+            modelBuilder.Entity<DrivingOrder>(entity =>
+            {
+                entity.ToTable("driving_order");
+                entity.HasKey(e => e.OrderId).HasName("driving_order_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.Status, e.CreatedAt }).HasDatabaseName("ix_order_company_status");
+                entity.HasIndex(e => new { e.DriverAccountId, e.PickupTime }).HasDatabaseName("ix_order_driver_time");
+                entity.HasIndex(e => new { e.FromProvinceId, e.ToProvinceId }).HasDatabaseName("ix_order_route");
+                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.PaymentMethod).HasColumnType("varchar(20)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.DrivingOrders)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("driving_order_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Customer)
+                    .WithMany()
+                    .HasForeignKey(e => e.CustomerAccountId)
+                    .HasConstraintName("driving_order_customer_account_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+                entity.HasOne(e => e.Driver)
+                    .WithMany()
+                    .HasForeignKey(e => e.DriverAccountId)
+                    .HasConstraintName("driving_order_driver_account_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+                entity.HasOne(e => e.Vehicle)
+                    .WithMany(v => v.DrivingOrders)
+                    .HasForeignKey(e => e.VehicleId)
+                    .HasConstraintName("driving_order_vehicle_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+                entity.HasOne(e => e.Model)
+                    .WithMany(m => m.DrivingOrders)
+                    .HasForeignKey(e => e.ModelId)
+                    .HasConstraintName("driving_order_model_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+                    
+                entity.HasOne(e => e.PriceRef)
+                    .WithMany(p => p.DrivingOrders)
+                    .HasForeignKey(e => e.PriceRefId)
+                    .HasConstraintName("driving_order_price_ref_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
+                entity.HasOne(e => e.FromProvince)
+                    .WithMany(p => p.FromDrivingOrders)
+                    .HasForeignKey(e => e.FromProvinceId)
+                    .HasConstraintName("driving_order_from_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+                    
+                entity.HasOne(e => e.ToProvince)
+                    .WithMany(p => p.ToDrivingOrders)
+                    .HasForeignKey(e => e.ToProvinceId)
+                    .HasConstraintName("driving_order_to_province_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // MembershipOrder configuration
+            modelBuilder.Entity<MembershipOrder>(entity =>
+            {
+                entity.ToTable("membership_order");
+                entity.HasKey(e => e.MembershipOrderId).HasName("membership_order_pkey");
+                entity.HasIndex(e => new { e.CompanyId, e.StartDate }).HasDatabaseName("ix_membership_company");
+                entity.Property(e => e.PaymentMethod).HasColumnType("varchar(20)");
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.MembershipOrders)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("membership_order_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+                    
+                entity.HasOne(e => e.Payer)
+                    .WithMany()
+                    .HasForeignKey(e => e.PayerAccountId)
+                    .HasConstraintName("membership_order_payer_account_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // AuthEmailCode configuration
+            modelBuilder.Entity<AuthEmailCode>(entity =>
+            {
+                entity.ToTable("auth_email_code");
+                entity.HasKey(e => e.CodeId).HasName("auth_email_code_pkey");
+                entity.HasIndex(e => new { e.Email, e.Purpose }).IsUnique().HasDatabaseName("uq_email_code_active").HasFilter("\"consumed_at\" IS NULL");
+                entity.Property(e => e.Purpose).HasColumnType("varchar(30)");
+                entity.Property(e => e.SentAt).HasDefaultValueSql("now()");
+                entity.Property(e => e.AttemptCount).HasDefaultValue(0);
+                entity.Property(e => e.MaxAttempts).HasDefaultValue(5);
+                
+                entity.HasOne(e => e.Account)
+                    .WithMany()
+                    .HasForeignKey(e => e.AccountId)
+                    .HasConstraintName("auth_email_code_account_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // AuthRefreshSession configuration
+            modelBuilder.Entity<AuthRefreshSession>(entity =>
+            {
+                entity.ToTable("auth_refresh_session");
+                entity.HasKey(e => e.SessionId).HasName("auth_refresh_session_pkey");
+                entity.HasIndex(e => e.Jti).IsUnique().HasDatabaseName("auth_refresh_session_jti_key");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.Account)
+                    .WithMany()
+                    .HasForeignKey(e => e.AccountId)
                     .HasConstraintName("auth_refresh_session_account_id_fkey")
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // ====== DriverScheduleTemplate ======
-            modelBuilder.Entity<DriverScheduleTemplate>(e =>
+            // VehicleModelWithSeats view configuration
+            modelBuilder.Entity<VehicleModelWithSeats>(entity =>
             {
-                e.ToTable("driver_schedule_template");
-                e.HasKey(x => x.TemplateId).HasName("driver_schedule_template_pkey");
-                e.HasIndex(x => new { x.DriverAccountId, x.Weekday })
-                    .HasFilter("\"is_active\" = true")
-                    .HasDatabaseName("ix_dst_driver_weekday");
-                e.Property(x => x.Weekday).HasColumnType("smallint"); // 0..6
-                e.Property(x => x.IsActive).HasDefaultValue(true);
-                e.Property(x => x.StartTime).HasColumnType("time without time zone");
-                e.Property(x => x.EndTime).HasColumnType("time without time zone");
-                e.HasOne(x => x.Driver)
-                    .WithMany()
-                    .HasForeignKey(x => x.DriverAccountId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Vehicle)
-                    .WithMany()
-                    .HasForeignKey(x => x.VehicleId)
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
-
-            // ====== DriverSchedule ======
-            modelBuilder.Entity<DriverSchedule>(e =>
-            {
-                e.ToTable("driver_schedule");
-                e.HasKey(x => x.ScheduleId).HasName("driver_schedule_pkey");
-                e.HasIndex(x => new { x.WorkDate, x.Status, x.DriverAccountId })
-                    .HasDatabaseName("ix_driver_schedule_lookup");
-                e.HasIndex(x => new { x.DriverAccountId, x.WorkDate, x.StartTime, x.EndTime })
-                    .IsUnique().HasDatabaseName("uq_driver_schedule_uni");
-                e.Property(x => x.Status).HasColumnType("public.shift_status");
-                e.Property(x => x.StartTime).HasColumnType("time without time zone");
-                e.Property(x => x.EndTime).HasColumnType("time without time zone");
-                e.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
-                e.HasOne(x => x.Driver)
-                    .WithMany()
-                    .HasForeignKey(x => x.DriverAccountId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Vehicle)
-                    .WithMany()
-                    .HasForeignKey(x => x.VehicleId)
-                    .OnDelete(DeleteBehavior.SetNull);
-            });
-
-            // ====== DriverVehicleAssignment ======
-            modelBuilder.Entity<DriverVehicleAssignment>(e =>
-            {
-                e.ToTable("driver_vehicle_assignment");
-                e.HasKey(x => x.AssignmentId).HasName("driver_vehicle_assignment_pkey");
-                e.HasIndex(x => new { x.VehicleId })
-                    .HasDatabaseName("uq_dva_vehicle_open")
-                    .HasFilter("\"end_at\" IS NULL")
-                    .IsUnique();
-                e.HasIndex(x => new { x.DriverAccountId, x.StartAt }).HasDatabaseName("ix_dva_driver_time");
-                e.HasIndex(x => new { x.VehicleId, x.StartAt }).HasDatabaseName("ix_dva_vehicle_time");
-                e.HasOne(x => x.Driver)
-                    .WithMany()
-                    .HasForeignKey(x => x.DriverAccountId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Vehicle)
-                    .WithMany()
-                    .HasForeignKey(x => x.VehicleId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // ====== DrivingOrder ======
-            modelBuilder.Entity<DrivingOrder>(e =>
-            {
-                e.ToTable("driving_order");
-                e.HasKey(x => x.OrderId).HasName("driving_order_pkey");
-                e.Property(x => x.Status).HasColumnType("public.order_status");
-                e.Property(x => x.PaymentMethod).HasColumnType("public.payment_method");
-                e.HasIndex(x => new { x.CompanyId, x.Status, x.CreatedAt }).HasDatabaseName("ix_order_company_status");
-                e.HasIndex(x => new { x.DriverAccountId, x.PickupTime }).HasDatabaseName("ix_order_driver_time");
-                e.HasIndex(x => new { x.FromProvinceId, x.ToProvinceId }).HasDatabaseName("ix_order_route");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Customer).WithMany().HasForeignKey(x => x.CustomerAccountId).OnDelete(DeleteBehavior.SetNull);
-                e.HasOne(x => x.Driver).WithMany().HasForeignKey(x => x.DriverAccountId).OnDelete(DeleteBehavior.SetNull);
-                e.HasOne(x => x.Vehicle).WithMany().HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.SetNull);
-                e.HasOne(x => x.Model).WithMany().HasForeignKey(x => x.ModelId).OnDelete(DeleteBehavior.Restrict);
-                e.HasOne(x => x.PriceRef).WithMany().HasForeignKey(x => x.PriceRefId).OnDelete(DeleteBehavior.SetNull);
-                e.HasOne(x => x.FromProvince).WithMany().HasForeignKey(x => x.FromProvinceId).OnDelete(DeleteBehavior.Restrict);
-                e.HasOne(x => x.ToProvince).WithMany().HasForeignKey(x => x.ToProvinceId).OnDelete(DeleteBehavior.Restrict);
-                e.Property(x => x.CreatedAt).HasDefaultValueSql("now()");
-            });
-
-            // ====== MembershipOrder ======
-            modelBuilder.Entity<MembershipOrder>(e =>
-            {
-                e.ToTable("membership_order");
-                e.HasKey(x => x.MembershipOrderId).HasName("membership_order_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.StartDate }).HasDatabaseName("ix_membership_company");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Payer).WithMany().HasForeignKey(x => x.PayerAccountId).OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // ====== ModelPriceProvince ======
-            modelBuilder.Entity<ModelPriceProvince>(e =>
-            {
-                e.ToTable("model_price_province");
-                e.HasKey(x => x.ModelPriceId).HasName("model_price_province_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.ProvinceId, x.ModelId, x.IsActive, x.DateStart })
-                    .HasDatabaseName("ix_mpp_lookup");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Province).WithMany().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.Restrict);
-                e.HasOne(x => x.Model).WithMany().HasForeignKey(x => x.ModelId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Parent).WithMany().HasForeignKey(x => x.ParentId).OnDelete(DeleteBehavior.SetNull);
-            });
-
-            // ====== Province ======
-            modelBuilder.Entity<Province>(e =>
-            {
-                e.ToTable("province");
-                e.HasKey(x => x.ProvinceId).HasName("province_pkey");
-                e.HasIndex(x => x.Code).IsUnique().HasDatabaseName("province_code_key");
-            });
-
-            // ====== Ward ======
-            modelBuilder.Entity<Ward>(e =>
-            {
-                e.ToTable("ward");
-                e.HasKey(x => x.WardId).HasName("ward_pkey");
-                e.HasIndex(x => new { x.ProvinceId, x.Name }).IsUnique().HasDatabaseName("ward_province_id_name_key");
-                e.HasOne(x => x.Province).WithMany().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.Restrict);
-            });
-
-            // ====== Zone & ZoneWard ======
-            modelBuilder.Entity<Zone>(e =>
-            {
-                e.ToTable("zone");
-                e.HasKey(x => x.ZoneId).HasName("zone_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.ProvinceId, x.Code }).IsUnique().HasDatabaseName("zone_company_id_province_id_code_key");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Province).WithMany().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<ZoneWard>(e =>
-            {
-                e.ToTable("zone_ward");
-                e.HasKey(x => new { x.ZoneId, x.WardId }).HasName("zone_ward_pkey");
-                e.HasOne(x => x.Zone).WithMany().HasForeignKey(x => x.ZoneId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Ward).WithMany().HasForeignKey(x => x.WardId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // ====== VehicleSegment / VehicleModel / Vehicle / VehicleInProvince / VehicleZonePreference ======
-            modelBuilder.Entity<VehicleSegment>(e =>
-            {
-                e.ToTable("vehicle_segment");
-                e.HasKey(x => x.SegmentId).HasName("vehicle_segment_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.Code }).IsUnique().HasDatabaseName("vehicle_segment_company_id_code_key");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<VehicleModel>(e =>
-            {
-                e.ToTable("vehicle_model");
-                e.HasKey(x => x.ModelId).HasName("vehicle_model_pkey");
-                e.HasIndex(x => new { x.CompanyId, x.Brand, x.ModelName })
-                    .IsUnique().HasDatabaseName("vehicle_model_company_id_brand_model_name_key");
-                e.Property(x => x.FuelType).HasColumnType("public.fuel_type_enum");
-                e.Property(x => x.SeatCategory).HasColumnType("public.vehicle_category_enum");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Segment).WithMany().HasForeignKey(x => x.SegmentId).OnDelete(DeleteBehavior.SetNull);
-            });
-
-            modelBuilder.Entity<Vehicle>(e =>
-            {
-                e.ToTable("vehicle");
-                e.HasKey(x => x.VehicleId).HasName("vehicle_pkey");
-                e.HasIndex(x => x.PlateNumber).IsUnique().HasDatabaseName("vehicle_plate_number_key");
-                e.Property(x => x.Status).HasColumnType("public.active_flag");
-                e.HasOne(x => x.Company).WithMany().HasForeignKey(x => x.CompanyId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Model).WithMany().HasForeignKey(x => x.ModelId).OnDelete(DeleteBehavior.Restrict);
-            });
-
-            modelBuilder.Entity<VehicleInProvince>(e =>
-            {
-                e.ToTable("vehicle_in_province");
-                e.HasKey(x => new { x.VehicleId, x.ProvinceId }).HasName("vehicle_in_province_pkey");
-                e.HasOne(x => x.Vehicle).WithMany().HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Province).WithMany().HasForeignKey(x => x.ProvinceId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            modelBuilder.Entity<VehicleZonePreference>(e =>
-            {
-                e.ToTable("vehicle_zone_preference");
-                e.HasKey(x => new { x.VehicleId, x.ZoneId }).HasName("vehicle_zone_preference_pkey");
-                e.HasOne(x => x.Vehicle).WithMany().HasForeignKey(x => x.VehicleId).OnDelete(DeleteBehavior.Cascade);
-                e.HasOne(x => x.Zone).WithMany().HasForeignKey(x => x.ZoneId).OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // ====== VIEW: vehicle_model_with_seats ======
-            modelBuilder.Entity<VehicleModelWithSeats>(e =>
-            {
-                e.ToView("vehicle_model_with_seats"); // view có sẵn trong DB
-                e.HasNoKey();                          // keyless
-                // Nếu cần, map column types (không bắt buộc)
-                e.Property(x => x.Seats);
+                entity.ToView("vehicle_model_with_seats");
+                entity.HasNoKey();
             });
 
             base.OnModelCreating(modelBuilder);
         }
     }
 }
+
+

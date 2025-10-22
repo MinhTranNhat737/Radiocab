@@ -1,4 +1,4 @@
-﻿namespace RadioCabs_BE.Models
+namespace RadioCabs_BE.Models
 {
     public class VehicleInProvince
     {
@@ -7,7 +7,7 @@
         public bool Allowed { get; set; } = true;
         public DateOnly? SinceDate { get; set; }
 
-        // Navs
+        // Navigation properties
         public Vehicle Vehicle { get; set; } = null!;
         public Province Province { get; set; } = null!;
     }

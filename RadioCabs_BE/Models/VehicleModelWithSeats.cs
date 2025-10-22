@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RadioCabs_BE.Models
 {
-    [Keyless] // hoặc cấu hình HasNoKey() trong DbContext (đã có)
+    [Keyless]
     public class VehicleModelWithSeats
     {
         public long ModelId { get; set; }

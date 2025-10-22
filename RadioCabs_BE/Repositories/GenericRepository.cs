@@ -1,50 +1,79 @@
 using Microsoft.EntityFrameworkCore;
-using RadioCabs_BE.Repositories;
-using RadioCabs_BE.Data;
 using System.Linq.Expressions;
+using RadioCabs_BE.Data;
 
 namespace RadioCabs_BE.Repositories
 {
-    public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEntity : class
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly RadiocabsDbContext _db;
-        protected readonly DbSet<TEntity> _set;
+        protected readonly RadiocabsDbContext _context;
+        protected readonly DbSet<T> _dbSet;
+        public IQueryable<T> Query() => _dbSet.AsQueryable();
 
-        public GenericRepository(RadiocabsDbContext db)
+        public GenericRepository(RadiocabsDbContext context)
         {
-            _db = db;
-            _set = db.Set<TEntity>();
+            _context = context;
+            _dbSet = context.Set<T>();
         }
 
-        public virtual async Task<TEntity?> GetByIdAsync(object id, CancellationToken ct = default)
-            => await _set.FindAsync([id], ct);
-
-        public virtual async Task<IReadOnlyList<TEntity>> ListAsync(CancellationToken ct = default)
-            => await _set.AsNoTracking().ToListAsync(ct);
-
-        public virtual async Task<IReadOnlyList<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default)
-            => await _set.AsNoTracking().Where(predicate).ToListAsync(ct);
-
-        public virtual async Task<bool> AnyAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken ct = default)
-            => await _set.AnyAsync(predicate, ct);
-
-        public virtual async Task<int> CountAsync(Expression<Func<TEntity, bool>>? predicate = null, CancellationToken ct = default)
-            => predicate is null ? await _set.CountAsync(ct) : await _set.CountAsync(predicate, ct);
-
-        public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken ct = default)
+        public async Task<T?> GetByIdAsync(object id)
         {
-            await _set.AddAsync(entity, ct);
+            return await _dbSet.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
+
+        public async Task<T?> SingleOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.SingleOrDefaultAsync(predicate);
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);
             return entity;
         }
 
-        public virtual async Task AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken ct = default)
-            => await _set.AddRangeAsync(entities, ct);
+        public async Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            return entities;
+        }
 
-        public virtual void Update(TEntity entity) => _set.Update(entity);
-        public virtual void Remove(TEntity entity) => _set.Remove(entity);
+        public void Remove(T entity)
+        {
+            _dbSet.Remove(entity);
+        }
 
-        public Task<int> SaveChangesAsync(CancellationToken ct = default) => _db.SaveChangesAsync(ct);
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
 
-        public IQueryable<TEntity> Query() => _set.AsQueryable();
+        public void Update(T entity)
+        {
+            _dbSet.Update(entity);
+        }
+
+        public async Task<int> CountAsync(Expression<Func<T, bool>>? predicate = null)
+        {
+            if (predicate == null)
+                return await _dbSet.CountAsync();
+            
+            return await _dbSet.CountAsync(predicate);
+        }
+
+        public async Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.AnyAsync(predicate);
+        }
     }
 }

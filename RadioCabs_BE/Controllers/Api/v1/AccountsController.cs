@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using RadioCabs_BE.DTOs;
-using RadioCabs_BE.Models;
 using RadioCabs_BE.Services.Interfaces;
 
 namespace RadioCabs_BE.Controllers.Api.v1
@@ -9,89 +8,166 @@ namespace RadioCabs_BE.Controllers.Api.v1
     [Route("api/v1/[controller]")]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountService _service;
+        private readonly IAccountService _accountService;
 
-        public AccountsController(IAccountService service) => _service = service;
-
-        [HttpGet("{id:long}")]
-        public async Task<ActionResult<Account>> GetById(long id, CancellationToken ct)
+        public AccountsController(IAccountService accountService)
         {
-            var account = await _service.GetAsync(id, ct);
-            if (account == null) return NotFound();
+            _accountService = accountService;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AccountDto>> GetById(long id)
+        {
+            var account = await _accountService.GetByIdAsync(id);
+            if (account == null)
+                return NotFound();
+
             return Ok(account);
         }
 
-        [HttpGet("by-company/{companyId:long}")]
-        public async Task<ActionResult<IEnumerable<Account>>> ListByCompany(long companyId, CancellationToken ct)
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<AccountDto>> GetByUsername(string username)
         {
-            var accounts = await _service.ListByCompanyAsync(companyId, ct);
-            return Ok(accounts);
+            var account = await _accountService.GetByUsernameAsync(username);
+            if (account == null)
+                return NotFound();
+
+            return Ok(account);
         }
 
-        [HttpGet("by-role/{role}")]
-        public async Task<ActionResult<IEnumerable<Account>>> ListByRole(RoleType role, CancellationToken ct)
+        [HttpGet]
+        public async Task<ActionResult<PagedResult<AccountDto>>> GetPaged([FromQuery] PageRequest request)
         {
-            var accounts = await _service.ListByRoleAsync(role, ct);
-            return Ok(accounts);
+            var result = await _accountService.GetPagedAsync(request);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Account>> Create([FromBody] CreateAccountDto dto, CancellationToken ct)
+        public async Task<ActionResult<AccountDto>> Create([FromBody] CreateAccountDto dto)
         {
-            if (await _service.IsUsernameExistsAsync(dto.Username, ct))
-                return BadRequest("Username already exists");
-
-            if (!string.IsNullOrEmpty(dto.Email) && await _service.IsEmailExistsAsync(dto.Email, ct))
-                return BadRequest("Email already exists");
-
-            var account = await _service.CreateAsync(dto, ct);
-            return CreatedAtAction(nameof(GetById), new { id = account.AccountId }, account);
+            try
+            {
+                var account = await _accountService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = account.AccountId }, account);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPut("{id:long}")]
-        public async Task<IActionResult> Update(long id, [FromBody] UpdateAccountDto dto, CancellationToken ct)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<AccountDto>> Update(long id, [FromBody] UpdateAccountDto dto)
         {
-            var success = await _service.UpdateAsync(id, dto, ct);
-            if (!success) return NotFound();
-            return NoContent();
+            try
+            {
+                var account = await _accountService.UpdateAsync(id, dto);
+                if (account == null)
+                    return NotFound();
+
+                return Ok(account);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPatch("{id:long}/password")]
-        public async Task<IActionResult> ChangePassword(long id, [FromBody] ChangePasswordDto dto, CancellationToken ct)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(long id)
         {
-            var success = await _service.ChangePasswordAsync(id, dto, ct);
-            if (!success) return NotFound();
-            return NoContent();
-        }
+            var success = await _accountService.DeleteAsync(id);
+            if (!success)
+                return NotFound();
 
-        [HttpPatch("{id:long}/status")]
-        public async Task<IActionResult> SetStatus(long id, [FromBody] ActiveFlag status, CancellationToken ct)
-        {
-            var success = await _service.SetStatusAsync(id, status, ct);
-            if (!success) return NotFound();
             return NoContent();
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginDto dto, CancellationToken ct)
+        public async Task<ActionResult<AuthResponseDto>> Login([FromBody] LoginDto dto)
         {
-            var response = await _service.LoginAsync(dto, ct);
-            if (response == null) return Unauthorized("Invalid credentials");
-            return Ok(response);
+            try
+            {
+                var result = await _accountService.LoginAsync(dto);
+                return Ok(result);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpGet("check-username/{username}")]
-        public async Task<ActionResult<bool>> CheckUsername(string username, CancellationToken ct)
+        [HttpPost("change-password")]
+        public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
-            var exists = await _service.IsUsernameExistsAsync(username, ct);
-            return Ok(new { exists });
+            try
+            {
+                var success = await _accountService.ChangePasswordAsync(dto.AccountId, dto.CurrentPassword, dto.NewPassword);
+                if (!success)
+                    return BadRequest("Invalid current password or account not found");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpGet("check-email/{email}")]
-        public async Task<ActionResult<bool>> CheckEmail(string email, CancellationToken ct)
+        [HttpPost("verify-email")]
+        public async Task<ActionResult> VerifyEmail([FromBody] VerifyEmailDto dto)
         {
-            var exists = await _service.IsEmailExistsAsync(email, ct);
-            return Ok(new { exists });
+            try
+            {
+                var success = await _accountService.VerifyEmailAsync(dto.Email, dto.Code);
+                if (!success)
+                    return BadRequest("Invalid verification code");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
+
+        [HttpPost("send-email-verification")]
+        public async Task<ActionResult> SendEmailVerification([FromBody] SendEmailVerificationDto dto)
+        {
+            try
+            {
+                var success = await _accountService.SendEmailVerificationAsync(dto.Email);
+                if (!success)
+                    return BadRequest("Failed to send verification email");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+
+    public class ChangePasswordDto
+    {
+        public long AccountId { get; set; }
+        public string CurrentPassword { get; set; } = null!;
+        public string NewPassword { get; set; } = null!;
+    }
+
+    public class VerifyEmailDto
+    {
+        public string Email { get; set; } = null!;
+        public string Code { get; set; } = null!;
+    }
+
+    public class SendEmailVerificationDto
+    {
+        public string Email { get; set; } = null!;
     }
 }

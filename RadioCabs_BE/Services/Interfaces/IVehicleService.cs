@@ -1,16 +1,28 @@
-// Services/Interfaces/IVehicleService.cs
-using RadioCabs_BE.Models;
+using RadioCabs_BE.DTOs;
 
 namespace RadioCabs_BE.Services.Interfaces
 {
     public interface IVehicleService
     {
-        Task<IReadOnlyList<Vehicle>> ListByCompanyAsync(long companyId, CancellationToken ct = default);
-        Task<Vehicle?> GetAsync(long vehicleId, CancellationToken ct = default);
-        Task<Vehicle>  CreateAsync(Vehicle vehicle, CancellationToken ct = default);
-        Task<bool>     UpdateAsync(Vehicle vehicle, CancellationToken ct = default);
+        // Vehicle methods
+        Task<VehicleDto?> GetVehicleByIdAsync(long id);
+        Task<PagedResult<VehicleDto>> GetVehiclesPagedAsync(PageRequest request);
+        Task<VehicleDto> CreateVehicleAsync(CreateVehicleDto dto);
+        Task<VehicleDto?> UpdateVehicleAsync(long id, UpdateVehicleDto dto);
+        Task<bool> DeleteVehicleAsync(long id);
 
-        // ⬇️ Thêm hàm này để khớp controller
-        Task<bool>     DeactivateAsync(long vehicleId, CancellationToken ct = default);
+        // VehicleModel methods
+        Task<VehicleModelDto?> GetModelByIdAsync(long id);
+        Task<PagedResult<VehicleModelDto>> GetModelsPagedAsync(PageRequest request);
+        Task<VehicleModelDto> CreateModelAsync(CreateVehicleModelDto dto);
+        Task<VehicleModelDto?> UpdateModelAsync(long id, UpdateVehicleModelDto dto);
+        Task<bool> DeleteModelAsync(long id);
+
+        // VehicleSegment methods
+        Task<VehicleSegmentDto?> GetSegmentByIdAsync(long id);
+        Task<PagedResult<VehicleSegmentDto>> GetSegmentsPagedAsync(PageRequest request);
+        Task<VehicleSegmentDto> CreateSegmentAsync(CreateVehicleSegmentDto dto);
+        Task<VehicleSegmentDto?> UpdateSegmentAsync(long id, UpdateVehicleSegmentDto dto);
+        Task<bool> DeleteSegmentAsync(long id);
     }
 }

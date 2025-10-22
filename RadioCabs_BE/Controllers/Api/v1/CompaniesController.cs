@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using RadioCabs_BE.Models;
-using RadioCabs_BE.Services.Interfaces; // ICompanyService
-using System.ComponentModel.DataAnnotations;
+using RadioCabs_BE.DTOs;
+using RadioCabs_BE.Services.Interfaces;
 
 namespace RadioCabs_BE.Controllers.Api.v1
 {
@@ -9,49 +8,68 @@ namespace RadioCabs_BE.Controllers.Api.v1
     [Route("api/v1/[controller]")]
     public class CompaniesController : ControllerBase
     {
-        private readonly ICompanyService _svc;
-        public CompaniesController(ICompanyService svc) => _svc = svc;
+        private readonly ICompanyService _companyService;
 
-        [HttpGet("{id:long}")]
-        public async Task<ActionResult<Company>> GetById(long id, CancellationToken ct)
+        public CompaniesController(ICompanyService companyService)
         {
-            var c = await _svc.GetAsync(id, ct);
-            if (c == null) return NotFound();
-            return Ok(c);
+            _companyService = companyService;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CompanyDto>> GetById(long id)
+        {
+            var company = await _companyService.GetByIdAsync(id);
+            if (company == null)
+                return NotFound();
+
+            return Ok(company);
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> List(
-            [FromQuery] ActiveFlag? status, CancellationToken ct)
+        public async Task<ActionResult<PagedResult<CompanyDto>>> GetPaged([FromQuery] PageRequest request)
         {
-            var list = await _svc.ListAsync(status, ct);
-            return Ok(list);
+            var result = await _companyService.GetPagedAsync(request);
+            return Ok(result);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Company>> Create([FromBody] Company model, CancellationToken ct)
+        public async Task<ActionResult<CompanyDto>> Create([FromBody] CreateCompanyDto dto)
         {
-            // TODO: validate model theo yêu cầu nghiệp vụ
-            var created = await _svc.CreateAsync(model, ct);
-            return CreatedAtAction(
-                nameof(GetById),
-                new { id = created.CompanyId },
-                created
-            );
+            try
+            {
+                var company = await _companyService.CreateAsync(dto);
+                return CreatedAtAction(nameof(GetById), new { id = company.CompanyId }, company);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpPut("{id:long}")]
-        public async Task<IActionResult> Update(long id, [FromBody] Company model, CancellationToken ct)
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CompanyDto>> Update(long id, [FromBody] UpdateCompanyDto dto)
         {
-            if (id != model.CompanyId) return BadRequest("Id không khớp");
-            await _svc.UpdateAsync(model, ct);
-            return NoContent();
+            try
+            {
+                var company = await _companyService.UpdateAsync(id, dto);
+                if (company == null)
+                    return NotFound();
+
+                return Ok(company);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpDelete("{id:long}")]
-        public async Task<IActionResult> Deactivate(long id, CancellationToken ct)
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(long id)
         {
-            await _svc.SetStatusAsync(id, ActiveFlag.INACTIVE, ct);
+            var success = await _companyService.DeleteAsync(id);
+            if (!success)
+                return NotFound();
+
             return NoContent();
         }
     }

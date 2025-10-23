@@ -24,5 +24,25 @@ namespace RadioCabs_BE.Services.Interfaces
         Task<VehicleSegmentDto> CreateSegmentAsync(CreateVehicleSegmentDto dto);
         Task<VehicleSegmentDto?> UpdateSegmentAsync(long id, UpdateVehicleSegmentDto dto);
         Task<bool> DeleteSegmentAsync(long id);
+
+        // Zone methods
+        Task<PagedResult<ZoneDto>> GetZonesPagedAsync(PageRequest request);
+        Task<ZoneDto> CreateZoneAsync(CreateZoneDto dto);
+        Task<ZoneDto?> UpdateZoneAsync(long id, UpdateZoneDto dto);
+        Task<bool> DeleteZoneAsync(long id);
+
+        // Zone Ward methods
+        Task<PagedResult<ZoneWardDto>> GetZoneWardsPagedAsync(PageRequest request);
+        Task<bool> AddWardToZoneAsync(long zoneId, long wardId);
+        Task<bool> RemoveWardFromZoneAsync(long zoneId, long wardId);
+
+        // Province methods
+        Task<PagedResult<ProvinceDto>> GetProvincesPagedAsync(PageRequest request);
+
+        // Ward methods
+        Task<PagedResult<WardDto>> GetWardsPagedAsync(PageRequest request);
+
+        // Vehicle methods
+        Task<PagedResult<VehicleDto>> GetVehiclesPagedAsync(PageRequest request);
     }
 }

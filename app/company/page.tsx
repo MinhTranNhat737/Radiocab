@@ -32,7 +32,7 @@ import {
   Star
 } from "lucide-react"
 import Link from "next/link"
-import RoleBasedAccess from "@/components/RoleBasedAccess"
+import { CompanyStaffOnly } from "@/components/RoleBasedAccess"
 import { getCurrentUser } from "@/lib/auth"
 import { getCompaniesByRole, getVehiclesByRole, getOrdersByRole, getCompanyById } from "@/lib/mockData"
 import { useEffect, useState } from "react"
@@ -113,7 +113,8 @@ export default function CompanyPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <CompanyStaffOnly>
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -254,8 +255,7 @@ export default function CompanyPage() {
         </div>
       )}
 
-      {/* Role Based Access */}
-      <RoleBasedAccess userRole={userRole} currentCompany={currentCompany} />
-    </div>
+      </div>
+    </CompanyStaffOnly>
   )
 }

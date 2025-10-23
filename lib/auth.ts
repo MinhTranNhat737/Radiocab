@@ -257,35 +257,67 @@ export const DEMO_ACCOUNTS: User[] = [
   },
 ]
 
-export const login = (username: string, password: string): User | null => {
-  const user = DEMO_ACCOUNTS.find(
-    (account) =>
-      (account.username.toLowerCase() === username.toLowerCase() ||
-        account.email.toLowerCase() === username.toLowerCase()) &&
-      account.password === password
-  )
-
-  if (user) {
-    const session = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      fullName: user.fullName,
-      role: user.role,
-      phone: user.phone,
-      companyName: user.companyName,
-      driverLicense: user.driverLicense,
-      loginAt: new Date().toISOString()
+export const login = async (username: string, password: string): Promise<User | null> => {
+  try {
+    // Try to login via API first
+    const apiService = (await import('./api')).apiService
+    const response = await apiService.login({ username, password })
+    
+    // Map API response to User interface
+    const user: User = {
+      id: response.account.accountId.toString(),
+      username: response.account.username,
+      email: response.account.email || '',
+      fullName: response.account.fullName,
+      role: response.account.role,
+      password: '', // Don't store password
+      phone: response.account.phone,
+      companyId: response.account.companyId,
+      companyName: response.account.company?.name,
+      createdAt: response.account.createdAt
     }
-    localStorage.setItem('user_session', JSON.stringify(session))
+    
     return user
-  }
+  } catch (error) {
+    console.error('API login failed, falling back to demo accounts:', error)
+    
+    // Fallback to demo accounts if API fails
+    const user = DEMO_ACCOUNTS.find(
+      (account) =>
+        (account.username.toLowerCase() === username.toLowerCase() ||
+          account.email.toLowerCase() === username.toLowerCase()) &&
+        account.password === password
+    )
 
-  return null
+    if (user) {
+      const session = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        phone: user.phone,
+        companyName: user.companyName,
+        driverLicense: user.driverLicense,
+        loginAt: new Date().toISOString()
+      }
+      localStorage.setItem('user_session', JSON.stringify(session))
+      return user
+    }
+
+    return null
+  }
 }
 
-export const logout = (): void => {
-  localStorage.removeItem('user_session')
+export const logout = async (): Promise<void> => {
+  try {
+    const apiService = (await import('./api')).apiService
+    await apiService.logout()
+  } catch (error) {
+    console.error('API logout failed:', error)
+  } finally {
+    localStorage.removeItem('user_session')
+  }
 }
 
 export const getCurrentUser = (): Omit<User, 'password'> | null => {

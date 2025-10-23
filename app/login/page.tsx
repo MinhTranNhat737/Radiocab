@@ -27,37 +27,44 @@ export default function LoginPage() {
     setError("")
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const user = login(loginData.username, loginData.password)
+    setError("")
     
-    if (!user) {
-      setError("Tên đăng nhập hoặc mật khẩu không đúng!")
-      return
-    }
-    
-    // Redirect based on role
-    switch (user.role) {
-      case 'ADMIN':
-        window.location.href = "/admin/dashboard"
-        break
-      case 'MANAGER':
-        window.location.href = "/company"
-        break
-      case 'DRIVER':
-        window.location.href = "/user/dashboard/driver/profile"
-        break
-      case 'ACCOUNTANT':
-        window.location.href = "/company"
-        break
-      case 'DISPATCHER':
-        window.location.href = "/company"
-        break
-      case 'CUSTOMER':
-        window.location.href = "/booking"
-        break
-      default:
-        window.location.href = "/user/dashboard"
+    try {
+      const user = await login(loginData.username, loginData.password)
+      
+      if (!user) {
+        setError("Tên đăng nhập hoặc mật khẩu không đúng!")
+        return
+      }
+      
+      // Redirect based on role
+      switch (user.role) {
+        case 'ADMIN':
+          window.location.href = "/admin/dashboard"
+          break
+        case 'MANAGER':
+          window.location.href = "/company"
+          break
+        case 'DRIVER':
+          window.location.href = "/user/dashboard/driver/profile"
+          break
+        case 'ACCOUNTANT':
+          window.location.href = "/company"
+          break
+        case 'DISPATCHER':
+          window.location.href = "/company"
+          break
+        case 'CUSTOMER':
+          window.location.href = "/booking"
+          break
+        default:
+          window.location.href = "/user/dashboard"
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setError("Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại!")
     }
   }
 

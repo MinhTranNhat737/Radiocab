@@ -4,6 +4,9 @@ using Npgsql;
 using RadioCabs_BE.Data;
 using RadioCabs_BE.Models;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 // Repositories & Services
 using RadioCabs_BE.Repositories;
@@ -41,6 +44,29 @@ builder.Services.AddCors(o =>
                              .AllowAnyMethod());
 });
 
+// ===== JWT Authentication =====
+var jwtSecretKey = builder.Configuration["Jwt:SecretKey"] ?? "your-secret-key-here-must-be-at-least-32-characters-long";
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "RadioCabs";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "RadioCabs";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
+            ValidateIssuer = true,
+            ValidIssuer = jwtIssuer,
+            ValidateAudience = true,
+            ValidAudience = jwtAudience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+builder.Services.AddAuthorization();
+
 // ===== DI =====
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -70,6 +96,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks("/healthz", new HealthCheckOptions());
 

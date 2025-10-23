@@ -5,16 +5,21 @@ using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace RadioCabs_BE.Services
 {
     public class AccountService : IAccountService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IConfiguration _configuration;
 
-        public AccountService(IUnitOfWork unitOfWork)
+        public AccountService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
         }
 
         public async Task<AccountDto?> GetByIdAsync(long id)
@@ -240,21 +245,54 @@ namespace RadioCabs_BE.Services
 
         private string HashPassword(string password)
         {
-            using var sha256 = SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(hashedBytes);
+            // Prefer BCrypt for stronger security
+            return BCrypt.Net.BCrypt.HashPassword(password);
         }
 
         private bool VerifyPassword(string password, string hash)
         {
-            return HashPassword(password) == hash;
+            // Support BCrypt hashes from seeded data (prefix $2a$/$2b$/$2y$)
+            if (!string.IsNullOrEmpty(hash) && (hash.StartsWith("$2a$") || hash.StartsWith("$2b$") || hash.StartsWith("$2y$")))
+            {
+                return BCrypt.Net.BCrypt.Verify(password, hash);
+            }
+
+            // Legacy fallback: SHA-256 Base64
+            using var sha256 = SHA256.Create();
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
+            var shaHash = Convert.ToBase64String(hashedBytes);
+            return shaHash == hash;
         }
 
         private string GenerateJwtToken(Account account)
         {
-            // Simplified JWT generation - in real implementation, use proper JWT library
-            var payload = $"{{\"sub\":\"{account.AccountId}\",\"username\":\"{account.Username}\",\"role\":\"{account.Role}\"}}";
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(payload));
+            var jwtSecretKey = _configuration["Jwt:SecretKey"] ?? "your-secret-key-here-must-be-at-least-32-characters-long";
+            var jwtIssuer = _configuration["Jwt:Issuer"] ?? "RadioCabs";
+            var jwtAudience = _configuration["Jwt:Audience"] ?? "RadioCabs";
+
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()),
+                new Claim(ClaimTypes.Name, account.Username),
+                new Claim(ClaimTypes.Role, account.Role.ToString()),
+                new Claim("company_id", account.CompanyId?.ToString() ?? ""),
+                new Claim("full_name", account.FullName),
+                new Claim("email", account.Email ?? ""),
+                new Claim("phone", account.Phone ?? "")
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: jwtIssuer,
+                audience: jwtAudience,
+                claims: claims,
+                expires: DateTime.UtcNow.AddHours(1),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         private string GenerateRandomCode()

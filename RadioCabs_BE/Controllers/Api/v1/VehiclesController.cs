@@ -191,5 +191,92 @@ namespace RadioCabs_BE.Controllers.Api.v1
 
             return NoContent();
         }
+
+        // Zone endpoints
+        [HttpGet("zones")]
+        public async Task<ActionResult<PagedResult<ZoneDto>>> GetZones([FromQuery] PageRequest request)
+        {
+            var result = await _vehicleService.GetZonesPagedAsync(request);
+            return Ok(result);
+        }
+
+        [HttpPost("zones")]
+        public async Task<ActionResult<ZoneDto>> CreateZone([FromBody] CreateZoneDto dto)
+        {
+            var zone = await _vehicleService.CreateZoneAsync(dto);
+            return CreatedAtAction(nameof(GetZones), new { id = zone.ZoneId }, zone);
+        }
+
+        [HttpPut("zones/{id}")]
+        public async Task<ActionResult<ZoneDto>> UpdateZone(long id, [FromBody] UpdateZoneDto dto)
+        {
+            var zone = await _vehicleService.UpdateZoneAsync(id, dto);
+            if (zone == null)
+                return NotFound();
+
+            return Ok(zone);
+        }
+
+        [HttpDelete("zones/{id}")]
+        public async Task<ActionResult> DeleteZone(long id)
+        {
+            var success = await _vehicleService.DeleteZoneAsync(id);
+            if (!success)
+                return NotFound();
+
+            return NoContent();
+        }
+
+        // Zone Ward endpoints
+        [HttpGet("zone-wards")]
+        public async Task<ActionResult<PagedResult<ZoneWardDto>>> GetZoneWards([FromQuery] PageRequest request)
+        {
+            var result = await _vehicleService.GetZoneWardsPagedAsync(request);
+            return Ok(result);
+        }
+
+        [HttpPost("zones/{zoneId}/wards/{wardId}")]
+        public async Task<ActionResult> AddWardToZone(long zoneId, long wardId)
+        {
+            var success = await _vehicleService.AddWardToZoneAsync(zoneId, wardId);
+            if (!success)
+                return BadRequest("Không thể thêm ward vào zone");
+
+            return Ok();
+        }
+
+        [HttpDelete("zones/{zoneId}/wards/{wardId}")]
+        public async Task<ActionResult> RemoveWardFromZone(long zoneId, long wardId)
+        {
+            var success = await _vehicleService.RemoveWardFromZoneAsync(zoneId, wardId);
+            if (!success)
+                return BadRequest("Không thể xóa ward khỏi zone");
+
+            return NoContent();
+        }
+
+        // Province endpoints
+        [HttpGet("provinces")]
+        public async Task<ActionResult<PagedResult<ProvinceDto>>> GetProvinces([FromQuery] PageRequest request)
+        {
+            var result = await _vehicleService.GetProvincesPagedAsync(request);
+            return Ok(result);
+        }
+
+        // Ward endpoints
+        [HttpGet("wards")]
+        public async Task<ActionResult<PagedResult<WardDto>>> GetWards([FromQuery] PageRequest request)
+        {
+            var result = await _vehicleService.GetWardsPagedAsync(request);
+            return Ok(result);
+        }
+
+        // Vehicle endpoints
+        [HttpGet("vehicles")]
+        public async Task<ActionResult<PagedResult<VehicleDto>>> GetVehicles([FromQuery] PageRequest request)
+        {
+            var result = await _vehicleService.GetVehiclesPagedAsync(request);
+            return Ok(result);
+        }
     }
 }

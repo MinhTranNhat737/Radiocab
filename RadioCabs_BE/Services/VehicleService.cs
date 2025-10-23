@@ -310,5 +310,368 @@ namespace RadioCabs_BE.Services
                 IsActive = segment.IsActive
             };
         }
+
+        // Zone methods
+        public async Task<PagedResult<ZoneDto>> GetZonesPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<Zone>();
+            var query = repository.FindAsync(z => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(z => z.Name.Contains(request.Search) || 
+                                       z.Code.Contains(request.Search) ||
+                                       (z.Description != null && z.Description.Contains(request.Search)));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(z => new ZoneDto
+                {
+                    ZoneId = z.ZoneId,
+                    CompanyId = z.CompanyId,
+                    ProvinceId = z.ProvinceId,
+                    Code = z.Code,
+                    Name = z.Name,
+                    Description = z.Description,
+                    IsActive = z.IsActive,
+                    Province = new ProvinceDto
+                    {
+                        ProvinceId = z.Province.ProvinceId,
+                        Code = z.Province.Code,
+                        Name = z.Province.Name
+                    },
+                    ZoneWards = z.ZoneWards.Select(zw => new ZoneWardDto
+                    {
+                        ZoneId = zw.ZoneId,
+                        WardId = zw.WardId,
+                        Ward = new WardDto
+                        {
+                            WardId = zw.Ward.WardId,
+                            ProvinceId = zw.Ward.ProvinceId,
+                            Code = zw.Ward.Code,
+                            Name = zw.Ward.Name,
+                            Province = new ProvinceDto
+                            {
+                                ProvinceId = zw.Ward.Province.ProvinceId,
+                                Code = zw.Ward.Province.Code,
+                                Name = zw.Ward.Province.Name
+                            }
+                        }
+                    }).ToList()
+                })
+                .ToList();
+
+            return new PagedResult<ZoneDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<ZoneDto> CreateZoneAsync(CreateZoneDto dto)
+        {
+            var zone = new Zone
+            {
+                CompanyId = dto.CompanyId,
+                ProvinceId = dto.ProvinceId,
+                Code = dto.Code,
+                Name = dto.Name,
+                Description = dto.Description,
+                IsActive = dto.IsActive
+            };
+
+            var repository = _unitOfWork.Repository<Zone>();
+            await repository.AddAsync(zone);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ZoneDto
+            {
+                ZoneId = zone.ZoneId,
+                CompanyId = zone.CompanyId,
+                ProvinceId = zone.ProvinceId,
+                Code = zone.Code,
+                Name = zone.Name,
+                Description = zone.Description,
+                IsActive = zone.IsActive,
+                Province = new ProvinceDto
+                {
+                    ProvinceId = zone.Province.ProvinceId,
+                    Code = zone.Province.Code,
+                    Name = zone.Province.Name
+                }
+            };
+        }
+
+        public async Task<ZoneDto?> UpdateZoneAsync(long id, UpdateZoneDto dto)
+        {
+            var repository = _unitOfWork.Repository<Zone>();
+            var zone = await repository.GetByIdAsync(id);
+            if (zone == null) return null;
+
+            zone.Code = dto.Code;
+            zone.Name = dto.Name;
+            zone.Description = dto.Description;
+            zone.IsActive = dto.IsActive;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ZoneDto
+            {
+                ZoneId = zone.ZoneId,
+                CompanyId = zone.CompanyId,
+                ProvinceId = zone.ProvinceId,
+                Code = zone.Code,
+                Name = zone.Name,
+                Description = zone.Description,
+                IsActive = zone.IsActive,
+                Province = new ProvinceDto
+                {
+                    ProvinceId = zone.Province.ProvinceId,
+                    Code = zone.Province.Code,
+                    Name = zone.Province.Name
+                }
+            };
+        }
+
+        public async Task<bool> DeleteZoneAsync(long id)
+        {
+            var repository = _unitOfWork.Repository<Zone>();
+            var zone = await repository.GetByIdAsync(id);
+            if (zone == null) return false;
+
+            await repository.DeleteAsync(zone);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<PagedResult<ZoneWardDto>> GetZoneWardsPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<ZoneWard>();
+            var query = repository.FindAsync(zw => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(zw => zw.Zone.Name.Contains(request.Search) ||
+                                        zw.Ward.Name.Contains(request.Search));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(zw => new ZoneWardDto
+                {
+                    ZoneId = zw.ZoneId,
+                    WardId = zw.WardId,
+                    Zone = new ZoneDto
+                    {
+                        ZoneId = zw.Zone.ZoneId,
+                        CompanyId = zw.Zone.CompanyId,
+                        ProvinceId = zw.Zone.ProvinceId,
+                        Code = zw.Zone.Code,
+                        Name = zw.Zone.Name,
+                        Description = zw.Zone.Description,
+                        IsActive = zw.Zone.IsActive,
+                        Province = new ProvinceDto
+                        {
+                            ProvinceId = zw.Zone.Province.ProvinceId,
+                            Code = zw.Zone.Province.Code,
+                            Name = zw.Zone.Province.Name
+                        }
+                    },
+                    Ward = new WardDto
+                    {
+                        WardId = zw.Ward.WardId,
+                        ProvinceId = zw.Ward.ProvinceId,
+                        Code = zw.Ward.Code,
+                        Name = zw.Ward.Name,
+                        Province = new ProvinceDto
+                        {
+                            ProvinceId = zw.Ward.Province.ProvinceId,
+                            Code = zw.Ward.Province.Code,
+                            Name = zw.Ward.Province.Name
+                        }
+                    }
+                })
+                .ToList();
+
+            return new PagedResult<ZoneWardDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<bool> AddWardToZoneAsync(long zoneId, long wardId)
+        {
+            // Check if zone and ward exist
+            var zoneRepository = _unitOfWork.Repository<Zone>();
+            var wardRepository = _unitOfWork.Repository<Ward>();
+            
+            var zone = await zoneRepository.GetByIdAsync(zoneId);
+            var ward = await wardRepository.GetByIdAsync(wardId);
+            
+            if (zone == null || ward == null) return false;
+
+            // Check if ward belongs to the same province as zone
+            if (ward.ProvinceId != zone.ProvinceId) return false;
+
+            // Check if relationship already exists
+            var zoneWardRepository = _unitOfWork.Repository<ZoneWard>();
+            var existing = await zoneWardRepository.FindAsync(zw => zw.ZoneId == zoneId && zw.WardId == wardId);
+            if (existing.Any()) return false;
+
+            var zoneWard = new ZoneWard
+            {
+                ZoneId = zoneId,
+                WardId = wardId
+            };
+
+            await zoneWardRepository.AddAsync(zoneWard);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> RemoveWardFromZoneAsync(long zoneId, long wardId)
+        {
+            var repository = _unitOfWork.Repository<ZoneWard>();
+            var zoneWard = await repository.FindAsync(zw => zw.ZoneId == zoneId && zw.WardId == wardId);
+            
+            if (!zoneWard.Any()) return false;
+
+            await repository.DeleteAsync(zoneWard.First());
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<PagedResult<ProvinceDto>> GetProvincesPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<Province>();
+            var query = repository.FindAsync(p => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(p => p.Name.Contains(request.Search) || (p.Code != null && p.Code.Contains(request.Search)));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(p => new ProvinceDto
+                {
+                    ProvinceId = p.ProvinceId,
+                    Code = p.Code,
+                    Name = p.Name
+                })
+                .ToList();
+
+            return new PagedResult<ProvinceDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<PagedResult<WardDto>> GetWardsPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<Ward>();
+            var query = repository.FindAsync(w => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(w => w.Name.Contains(request.Search) || 
+                                        (w.Code != null && w.Code.Contains(request.Search)));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(w => new WardDto
+                {
+                    WardId = w.WardId,
+                    ProvinceId = w.ProvinceId,
+                    Code = w.Code,
+                    Name = w.Name,
+                    Province = new ProvinceDto
+                    {
+                        ProvinceId = w.Province.ProvinceId,
+                        Code = w.Province.Code,
+                        Name = w.Province.Name
+                    }
+                })
+                .ToList();
+
+            return new PagedResult<WardDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<PagedResult<VehicleDto>> GetVehiclesPagedAsync(PageRequest request)
+        {
+            var repository = _unitOfWork.Repository<Vehicle>();
+            var query = repository.FindAsync(v => true).Result.AsQueryable();
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                query = query.Where(v => v.PlateNumber.Contains(request.Search) ||
+                                        v.Vin.Contains(request.Search) ||
+                                        v.Color.Contains(request.Search));
+            }
+
+            var totalCount = await repository.CountAsync();
+            var items = query
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(v => new VehicleDto
+                {
+                    VehicleId = v.VehicleId,
+                    CompanyId = v.CompanyId,
+                    ModelId = v.ModelId,
+                    PlateNumber = v.PlateNumber,
+                    Vin = v.Vin,
+                    Color = v.Color,
+                    YearManufactured = v.YearManufactured,
+                    InServiceFrom = v.InServiceFrom,
+                    OdometerKm = v.OdometerKm,
+                    Status = v.Status,
+                    Model = new VehicleModelDto
+                    {
+                        ModelId = v.Model.ModelId,
+                        CompanyId = v.Model.CompanyId,
+                        SegmentId = v.Model.SegmentId,
+                        Brand = v.Model.Brand,
+                        ModelName = v.Model.ModelName,
+                        FuelType = v.Model.FuelType,
+                        SeatCategory = v.Model.SeatCategory,
+                        ImageUrl = v.Model.ImageUrl,
+                        Description = v.Model.Description,
+                        IsActive = v.Model.IsActive
+                    }
+                })
+                .ToList();
+
+            return new PagedResult<VehicleDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
     }
 }

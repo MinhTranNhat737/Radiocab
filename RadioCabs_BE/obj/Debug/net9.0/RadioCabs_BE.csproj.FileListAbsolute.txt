@@ -8,8 +8,10 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Ra
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\RadioCabs_BE.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\RadioCabs_BE.pdb
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\HealthChecks.NpgSql.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\BCrypt.Net-Next.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\EFCore.NamingConventions.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Humanizer.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.Build.Locator.dll
@@ -33,6 +35,12 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Mi
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Mono.TextTemplating.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Npgsql.dll
@@ -46,6 +54,7 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Sy
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.Composition.Hosting.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.Composition.TypedParts.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
@@ -136,12 +145,3 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\obj\Debug\net9.0\re
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\obj\Debug\net9.0\RadioCabs_BE.pdb
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\obj\Debug\net9.0\RadioCabs_BE.genruntimeconfig.cache
 C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\obj\Debug\net9.0\ref\RadioCabs_BE.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Logging.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\bkdcd\Documents\Project3_Group1\server\RadioCabs_BE\bin\Debug\net9.0\BCrypt.Net-Next.dll

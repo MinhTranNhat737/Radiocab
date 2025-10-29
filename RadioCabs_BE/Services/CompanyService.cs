@@ -3,22 +3,43 @@ using RadioCabs_BE.DTOs;
 using RadioCabs_BE.Models;
 using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace RadioCabs_BE.Services
 {
     public class CompanyService : ICompanyService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILogger<CompanyService> _logger;
 
-        public CompanyService(IUnitOfWork unitOfWork)
+        public CompanyService(IUnitOfWork unitOfWork, ILogger<CompanyService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<CompanyDto?> GetByIdAsync(long id)
         {
-            var company = await _unitOfWork.Repository<Company>().GetByIdAsync(id);
-            return company != null ? MapToCompanyDto(company) : null;
+            try
+            {
+                _logger.LogInformation($"Getting company by ID: {id}");
+                var company = await _unitOfWork.Repository<Company>().GetByIdAsync(id);
+                _logger.LogInformation($"Company found: {company != null}");
+                
+                if (company != null)
+                {
+                    var result = MapToCompanyDto(company);
+                    _logger.LogInformation($"Mapped company: {result.Name}");
+                    return result;
+                }
+                
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting company by ID: {id}");
+                throw;
+            }
         }
 
         public async Task<PagedResult<CompanyDto>> GetPagedAsync(PageRequest request)
@@ -100,6 +121,102 @@ namespace RadioCabs_BE.Services
             return true;
         }
 
+        public async Task<PagedResult<object>> GetMembershipOrdersAsync(long companyId, PageRequest request)
+        {
+            _logger.LogInformation($"Getting membership orders for company ID: {companyId}");
+            
+            try
+            {
+                var totalCount = await _unitOfWork.Repository<MembershipOrder>().CountAsync(mo => mo.CompanyId == companyId);
+                
+                // Get IDs only first to avoid DateOnly parsing
+                var orderIds = await _unitOfWork.Repository<MembershipOrder>().Query()
+                    .Where(mo => mo.CompanyId == companyId)
+                    .OrderByDescending(mo => mo.PaidAt ?? DateTimeOffset.MinValue)
+                    .Skip((request.Page - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(mo => mo.MembershipOrderId)
+                    .ToListAsync();
+
+                // Fetch each order individually with error handling
+                var items = new List<object>();
+                foreach (var orderId in orderIds)
+                {
+                    try
+                    {
+                        var mo = await _unitOfWork.Repository<MembershipOrder>()
+                            .Query()
+                            .Include(mo => mo.Membership)
+                            .Include(mo => mo.Payer)
+                            .FirstOrDefaultAsync(m => m.MembershipOrderId == orderId);
+
+                        if (mo != null)
+                        {
+                            items.Add(new
+                            {
+                                membershipOrderId = mo.MembershipOrderId,
+                                companyId = mo.CompanyId,
+                                payerAccountId = mo.PayerAccountId,
+                                membershipId = mo.MembershipId,
+                                unitPrice = mo.UnitPrice,
+                                unitMonths = mo.UnitMonths,
+                                amount = mo.Amount,
+                                startDate = mo.StartDate,
+                                endDate = mo.EndDate,
+                                paidAt = mo.PaidAt,
+                                paymentMethod = mo.PaymentMethod,
+                                paymentCode = mo.PaymentCode,
+                                note = mo.Note,
+                                status = mo.PaidAt.HasValue ? "PAID" : "PENDING",
+                                payer = mo.Payer != null ? new
+                                {
+                                    accountId = mo.Payer.AccountId,
+                                    username = mo.Payer.Username,
+                                    fullName = mo.Payer.FullName
+                                } : null,
+                                membership = mo.Membership != null ? new
+                                {
+                                    membershipId = mo.Membership.MembershipId,
+                                    name = mo.Membership.Name,
+                                    code = mo.Membership.Code,
+                                    unitPrice = mo.Membership.UnitPrice,
+                                    description = mo.Membership.Description,
+                                    isActive = mo.Membership.IsActive
+                                } : null
+                            });
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, $"Skipping membership order {orderId} due to parsing error: {ex.Message}");
+                        // Skip this record and continue
+                    }
+                }
+
+                _logger.LogInformation($"Found {items.Count} valid membership orders for company {companyId}");
+
+                return new PagedResult<object>
+                {
+                    Items = items,
+                    TotalCount = totalCount,
+                    Page = request.Page,
+                    PageSize = request.PageSize
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error getting membership orders for company ID: {companyId}: {ex.Message}");
+                // Return empty result instead of throwing
+                return new PagedResult<object>
+                {
+                    Items = new List<object>(),
+                    TotalCount = 0,
+                    Page = request.Page,
+                    PageSize = request.PageSize
+                };
+            }
+        }
+
         private CompanyDto MapToCompanyDto(Company company)
         {
             return new CompanyDto
@@ -111,6 +228,7 @@ namespace RadioCabs_BE.Services
                 Address = company.Address,
                 TaxCode = company.TaxCode,
                 Fax = company.Fax,
+                UrlPage = company.UrlPage,
                 Status = company.Status,
                 ContactAccountId = company.ContactAccountId,
                 CreatedAt = company.CreatedAt,

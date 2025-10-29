@@ -36,9 +36,9 @@ namespace RadioCabs_BE.Controllers.Api.v1
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResult<AccountDto>>> GetPaged([FromQuery] PageRequest request)
+        public async Task<ActionResult<PagedResult<AccountDto>>> GetPaged([FromQuery] PageRequest request, [FromQuery] long? companyId = null, [FromQuery] string? role = null)
         {
-            var result = await _accountService.GetPagedAsync(request);
+            var result = await _accountService.GetPagedAsync(request, companyId, role);
             return Ok(result);
         }
 

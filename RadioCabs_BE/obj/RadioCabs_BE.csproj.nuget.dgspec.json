@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\RadioCabs_BE.csproj": {}
+    "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\RadioCabs_BE.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\RadioCabs_BE.csproj": {
+    "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\RadioCabs_BE.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\RadioCabs_BE.csproj",
+        "projectUniqueName": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\RadioCabs_BE.csproj",
         "projectName": "RadioCabs_BE",
-        "projectPath": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\RadioCabs_BE.csproj",
+        "projectPath": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\RadioCabs_BE.csproj",
         "packagesPath": "C:\\Users\\bkdcd\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\obj\\",
+        "outputPath": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\RadioCabs_BE\\NuGet.Config",
+          "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\NuGet.Config",
           "C:\\Users\\bkdcd\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"

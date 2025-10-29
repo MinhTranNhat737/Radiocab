@@ -29,6 +29,7 @@ builder.Services.AddDbContext<RadiocabsDbContext>(opt =>
         npgsqlOpt.MapEnum<OrderStatus>("order_status");
         npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
         npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
+        npgsqlOpt.MapEnum<ShiftStatus>("shift_status");
     });
     opt.UseSnakeCaseNamingConvention();
 });

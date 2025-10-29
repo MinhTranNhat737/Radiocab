@@ -34,19 +34,19 @@ namespace RadioCabs_BE.Services
             return account != null ? MapToAccountDto(account) : null;
         }
 
-        public async Task<PagedResult<AccountDto>> GetPagedAsync(PageRequest request)
+        public Task<PagedResult<AccountDto>> GetPagedAsync(PageRequest request, long? companyId = null, string? role = null)
         {
             var repository = _unitOfWork.Repository<Account>();
             var query = repository.FindAsync(a => true).Result.AsQueryable();
 
             // Filter by company if provided
-            if (request.CompanyId.HasValue)
+            if (companyId.HasValue)
             {
-                query = query.Where(a => a.CompanyId == request.CompanyId.Value);
+                query = query.Where(a => a.CompanyId == companyId.Value);
             }
 
             // Filter by role if provided
-            if (!string.IsNullOrEmpty(request.Role) && Enum.TryParse<RoleType>(request.Role, out var roleValue))
+            if (!string.IsNullOrEmpty(role) && Enum.TryParse<RoleType>(role, out var roleValue))
             {
                 query = query.Where(a => a.Role == roleValue);
             }
@@ -63,14 +63,15 @@ namespace RadioCabs_BE.Services
                 .Select(a => MapToAccountDto(a))
                 .ToList();
 
-            return new PagedResult<AccountDto>
+            return Task.FromResult(new PagedResult<AccountDto>
             {
                 Items = items,
                 TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize
-            };
+            });
         }
+
 
         public async Task<AccountDto> CreateAsync(CreateAccountDto dto)
         {
@@ -143,7 +144,7 @@ namespace RadioCabs_BE.Services
             var session = new AuthRefreshSession
             {
                 SessionId = Guid.NewGuid(),
-                AccountId = account.AccountId,
+                AccountId = account.AccountId ?? 0, // Handle nullable AccountId
                 TokenHash = HashPassword(refreshToken),
                 Jti = Guid.NewGuid(),
                 CreatedAt = DateTimeOffset.UtcNow,
@@ -287,10 +288,10 @@ namespace RadioCabs_BE.Services
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, account.AccountId.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, account.AccountId?.ToString() ?? "0"),
                 new Claim(ClaimTypes.Name, account.Username),
                 new Claim(ClaimTypes.Role, account.Role.ToString()),
-                new Claim("company_id", account.CompanyId?.ToString() ?? ""),
+                new Claim("company_id", account.CompanyId?.ToString() ?? "0"),
                 new Claim("full_name", account.FullName),
                 new Claim("email", account.Email ?? ""),
                 new Claim("phone", account.Phone ?? "")

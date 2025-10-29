@@ -17,31 +17,68 @@ namespace RadioCabs_BE.Services
 
         public async Task<DrivingOrderDto?> GetByIdAsync(long id)
         {
-            var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(id);
+            var order = await _unitOfWork.Repository<DrivingOrder>().Query()
+                .Include(o => o.Customer)
+                .Include(o => o.Driver)
+                .Include(o => o.Vehicle)
+                .Include(o => o.Model)
+                .Include(o => o.FromProvince)
+                .Include(o => o.ToProvince)
+                .Include(o => o.PriceRef)
+                    .ThenInclude(p => p.Province)
+                .Include(o => o.PriceRef)
+                    .ThenInclude(p => p.Model)
+                .Include(o => o.DriverSchedule)
+                    .ThenInclude(s => s.Driver)
+                .Include(o => o.DriverSchedule)
+                    .ThenInclude(s => s.Vehicle)
+                .FirstOrDefaultAsync(o => o.OrderId == id);
+            
             return order != null ? MapToDrivingOrderDto(order) : null;
         }
 
         public async Task<PagedResult<DrivingOrderDto>> GetPagedAsync(PageRequest request)
         {
             var repository = _unitOfWork.Repository<DrivingOrder>();
-            var query = repository.FindAsync(o => true).Result.AsQueryable();
+            IQueryable<DrivingOrder> query = repository.Query()
+                .Include(o => o.Customer)
+                .Include(o => o.Driver)
+                .Include(o => o.Vehicle)
+                .Include(o => o.Model)
+                .Include(o => o.FromProvince)
+                .Include(o => o.ToProvince)
+                .Include(o => o.PriceRef)
+                    .ThenInclude(p => p.Province)
+                .Include(o => o.PriceRef)
+                    .ThenInclude(p => p.Model)
+                .Include(o => o.DriverSchedule)
+                    .ThenInclude(s => s.Driver)
+                .Include(o => o.DriverSchedule)
+                    .ThenInclude(s => s.Vehicle);
 
             if (!string.IsNullOrEmpty(request.Search))
             {
                 query = query.Where(o => o.PickupAddress!.Contains(request.Search) || o.DropoffAddress!.Contains(request.Search));
             }
 
-            var totalCount = await repository.CountAsync();
-            var items = query
+            // Apply company filter if provided
+            if (request.CompanyId.HasValue)
+            {
+                query = query.Where(o => o.CompanyId == request.CompanyId.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+            var items = await query
                 .OrderByDescending(o => o.CreatedAt)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(o => MapToDrivingOrderDto(o))
-                .ToList();
+                .ToListAsync();
+
+            var dtoItems = items.Select(o => MapToDrivingOrderDto(o)).ToList();
 
             return new PagedResult<DrivingOrderDto>
             {
-                Items = items,
+                Items = dtoItems,
                 TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize
@@ -57,20 +94,37 @@ namespace RadioCabs_BE.Services
                 VehicleId = dto.VehicleId,
                 DriverAccountId = dto.DriverAccountId,
                 ModelId = dto.ModelId,
+                PriceRefId = dto.PriceRefId,
+                DriverScheduleId = dto.DriverScheduleId,
                 FromProvinceId = dto.FromProvinceId,
                 ToProvinceId = dto.ToProvinceId,
                 PickupAddress = dto.PickupAddress,
                 DropoffAddress = dto.DropoffAddress,
                 PickupTime = dto.PickupTime,
                 Status = OrderStatus.NEW,
+                TotalKm = dto.TotalKm ?? 0,
+                InnerCityKm = dto.InnerCityKm ?? 0,
+                IntercityKm = dto.IntercityKm ?? 0,
+                TrafficKm = dto.TrafficKm ?? 0,
                 IsRaining = dto.IsRaining,
                 WaitMinutes = dto.WaitMinutes,
+                BaseFare = dto.BaseFare ?? 0,
+                TrafficUnitPrice = dto.TrafficUnitPrice ?? 0,
+                TrafficFee = dto.TrafficFee ?? 0,
+                RainFee = dto.RainFee ?? 0,
+                IntercityUnitPrice = dto.IntercityUnitPrice ?? 0,
+                IntercityFee = dto.IntercityFee ?? 0,
+                OtherFee = dto.OtherFee ?? 0,
+                TotalAmount = dto.TotalAmount ?? 0,
                 PaymentMethod = dto.PaymentMethod,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
-            // Calculate base fare (simplified calculation)
-            order.BaseFare = await CalculateBaseFare(dto.ModelId, dto.FromProvinceId);
+            // If price not provided, calculate it
+            if (order.BaseFare == 0 && order.PriceRefId == null)
+            {
+                order.BaseFare = await CalculateBaseFare(dto.ModelId, dto.FromProvinceId);
+            }
 
             await _unitOfWork.Repository<DrivingOrder>().AddAsync(order);
             await _unitOfWork.SaveChangesAsync();
@@ -170,13 +224,28 @@ namespace RadioCabs_BE.Services
             };
         }
 
-        public async Task<DrivingOrderDto?> AssignDriverAsync(long orderId, long driverId, long vehicleId)
+        public async Task<DrivingOrderDto?> AssignDriverAsync(long orderId, long driverId, long vehicleId, long? driverScheduleId = null)
         {
             var order = await _unitOfWork.Repository<DrivingOrder>().GetByIdAsync(orderId);
             if (order == null) return null;
 
+            // If driverScheduleId is provided, use it; otherwise find the schedule
+            if (!driverScheduleId.HasValue)
+            {
+                var today = DateOnly.FromDateTime(DateTime.Today);
+                var driverSchedule = await _unitOfWork.Repository<DriverSchedule>()
+                    .SingleOrDefaultAsync(ds => 
+                        ds.DriverAccountId == driverId &&
+                        ds.VehicleId == vehicleId &&
+                        ds.WorkDate == today &&
+                        (ds.Status == RadioCabs_BE.Models.ShiftStatus.ON || ds.Status == RadioCabs_BE.Models.ShiftStatus.PLANNED)
+                    );
+                driverScheduleId = driverSchedule?.ScheduleId;
+            }
+
             order.DriverAccountId = driverId;
             order.VehicleId = vehicleId;
+            order.DriverScheduleId = driverScheduleId;
             order.Status = OrderStatus.ASSIGNED;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
@@ -291,6 +360,7 @@ namespace RadioCabs_BE.Services
                 DriverAccountId = order.DriverAccountId,
                 ModelId = order.ModelId,
                 PriceRefId = order.PriceRefId,
+                DriverScheduleId = order.DriverScheduleId,
                 FromProvinceId = order.FromProvinceId,
                 ToProvinceId = order.ToProvinceId,
                 PickupAddress = order.PickupAddress,
@@ -382,6 +452,84 @@ namespace RadioCabs_BE.Services
                     ProvinceId = order.ToProvince.ProvinceId,
                     Code = order.ToProvince.Code,
                     Name = order.ToProvince.Name
+                } : null,
+                DriverSchedule = order.DriverSchedule != null ? new DriverScheduleDto
+                {
+                    ScheduleId = order.DriverSchedule.ScheduleId,
+                    DriverAccountId = order.DriverSchedule.DriverAccountId,
+                    WorkDate = order.DriverSchedule.WorkDate,
+                    StartTime = order.DriverSchedule.StartTime,
+                    EndTime = order.DriverSchedule.EndTime,
+                    VehicleId = order.DriverSchedule.VehicleId,
+                    Status = order.DriverSchedule.Status,
+                    Note = order.DriverSchedule.Note,
+                    CreatedAt = order.DriverSchedule.CreatedAt,
+                    UpdatedAt = order.DriverSchedule.UpdatedAt,
+                    Driver = order.DriverSchedule.Driver != null ? new AccountDto
+                    {
+                        AccountId = order.DriverSchedule.Driver.AccountId,
+                        CompanyId = order.DriverSchedule.Driver.CompanyId,
+                        Username = order.DriverSchedule.Driver.Username,
+                        FullName = order.DriverSchedule.Driver.FullName,
+                        Phone = order.DriverSchedule.Driver.Phone,
+                        Email = order.DriverSchedule.Driver.Email,
+                        Role = order.DriverSchedule.Driver.Role,
+                        Status = order.DriverSchedule.Driver.Status,
+                        CreatedAt = order.DriverSchedule.Driver.CreatedAt,
+                        UpdatedAt = order.DriverSchedule.Driver.UpdatedAt,
+                        EmailVerifiedAt = order.DriverSchedule.Driver.EmailVerifiedAt
+                    } : null,
+                    Vehicle = order.DriverSchedule.Vehicle != null ? new VehicleDto
+                    {
+                        VehicleId = order.DriverSchedule.Vehicle.VehicleId,
+                        CompanyId = order.DriverSchedule.Vehicle.CompanyId,
+                        ModelId = order.DriverSchedule.Vehicle.ModelId,
+                        PlateNumber = order.DriverSchedule.Vehicle.PlateNumber,
+                        Vin = order.DriverSchedule.Vehicle.Vin,
+                        Color = order.DriverSchedule.Vehicle.Color,
+                        YearManufactured = order.DriverSchedule.Vehicle.YearManufactured,
+                        InServiceFrom = order.DriverSchedule.Vehicle.InServiceFrom,
+                        OdometerKm = order.DriverSchedule.Vehicle.OdometerKm,
+                        Status = order.DriverSchedule.Vehicle.Status
+                    } : null
+                } : null,
+                PriceRef = order.PriceRef != null ? new ModelPriceProvinceDto
+                {
+                    ModelPriceId = order.PriceRef.ModelPriceId,
+                    CompanyId = order.PriceRef.CompanyId,
+                    ProvinceId = order.PriceRef.ProvinceId,
+                    ModelId = order.PriceRef.ModelId,
+                    OpeningFare = order.PriceRef.OpeningFare,
+                    RateFirst20Km = order.PriceRef.RateFirst20Km,
+                    RateOver20Km = order.PriceRef.RateOver20Km,
+                    TrafficAddPerKm = order.PriceRef.TrafficAddPerKm,
+                    RainAddPerTrip = order.PriceRef.RainAddPerTrip,
+                    IntercityRatePerKm = order.PriceRef.IntercityRatePerKm,
+                    TimeStart = order.PriceRef.TimeStart,
+                    TimeEnd = order.PriceRef.TimeEnd,
+                    DateStart = order.PriceRef.DateStart,
+                    DateEnd = order.PriceRef.DateEnd,
+                    IsActive = order.PriceRef.IsActive,
+                    Note = order.PriceRef.Note,
+                    Province = order.PriceRef.Province != null ? new ProvinceDto
+                    {
+                        ProvinceId = order.PriceRef.Province.ProvinceId,
+                        Code = order.PriceRef.Province.Code,
+                        Name = order.PriceRef.Province.Name
+                    } : null,
+                    Model = order.PriceRef.Model != null ? new VehicleModelDto
+                    {
+                        ModelId = order.PriceRef.Model.ModelId,
+                        CompanyId = order.PriceRef.Model.CompanyId,
+                        SegmentId = order.PriceRef.Model.SegmentId,
+                        Brand = order.PriceRef.Model.Brand,
+                        ModelName = order.PriceRef.Model.ModelName,
+                        FuelType = order.PriceRef.Model.FuelType,
+                        SeatCategory = order.PriceRef.Model.SeatCategory,
+                        ImageUrl = order.PriceRef.Model.ImageUrl,
+                        Description = order.PriceRef.Model.Description,
+                        IsActive = order.PriceRef.Model.IsActive
+                    } : null
                 } : null
             };
         }

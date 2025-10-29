@@ -38,7 +38,7 @@ namespace RadioCabs_BE.DTOs
 
     public class AccountDto
     {
-        public long AccountId { get; set; }
+        public long? AccountId { get; set; }
         public long? CompanyId { get; set; }
         public string Username { get; set; } = null!;
         public string FullName { get; set; } = null!;

@@ -12,6 +12,7 @@ namespace RadioCabs_BE.Models
         public long? DriverAccountId { get; set; }
         public long ModelId { get; set; }
         public long? PriceRefId { get; set; }
+        public long? DriverScheduleId { get; set; }
         public long FromProvinceId { get; set; }
         public long ToProvinceId { get; set; }
 
@@ -54,6 +55,7 @@ namespace RadioCabs_BE.Models
         public Vehicle? Vehicle { get; set; }
         public VehicleModel Model { get; set; } = null!;
         public ModelPriceProvince? PriceRef { get; set; }
+        public DriverSchedule? DriverSchedule { get; set; }
         public Province FromProvince { get; set; } = null!;
         public Province ToProvince { get; set; } = null!;
     }

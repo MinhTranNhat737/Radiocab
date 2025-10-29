@@ -13,6 +13,7 @@ namespace RadioCabs_BE.Models
         public DateTimeOffset CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public string Fax { get; set; } = string.Empty;
+        public string? UrlPage { get; set; }
 
         // Navigation properties
         public Account? ContactAccount { get; set; }
@@ -23,6 +24,7 @@ namespace RadioCabs_BE.Models
         public ICollection<Zone> Zones { get; set; } = new List<Zone>();
         public ICollection<ModelPriceProvince> ModelPriceProvinces { get; set; } = new List<ModelPriceProvince>();
         public ICollection<MembershipOrder> MembershipOrders { get; set; } = new List<MembershipOrder>();
+        public ICollection<Membership> Memberships { get; set; } = new List<Membership>();
         public ICollection<DrivingOrder> DrivingOrders { get; set; } = new List<DrivingOrder>();
     }
 }

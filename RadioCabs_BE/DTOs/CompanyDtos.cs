@@ -10,6 +10,7 @@ namespace RadioCabs_BE.DTOs
         public string Address { get; set; } = null!;
         public string TaxCode { get; set; } = null!;
         public string Fax { get; set; } = string.Empty;
+        public string? UrlPage { get; set; }
         public long? ContactAccountId { get; set; }
     }
 
@@ -21,6 +22,7 @@ namespace RadioCabs_BE.DTOs
         public string? Address { get; set; }
         public string? TaxCode { get; set; }
         public string? Fax { get; set; }
+        public string? UrlPage { get; set; }
         public long? ContactAccountId { get; set; }
         public ActiveFlag? Status { get; set; }
     }
@@ -34,6 +36,7 @@ namespace RadioCabs_BE.DTOs
         public string Address { get; set; } = null!;
         public string TaxCode { get; set; } = null!;
         public string Fax { get; set; } = string.Empty;
+        public string? UrlPage { get; set; }
         public ActiveFlag Status { get; set; }
         public long? ContactAccountId { get; set; }
         public DateTimeOffset CreatedAt { get; set; }

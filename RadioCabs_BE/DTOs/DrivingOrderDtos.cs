@@ -10,13 +10,27 @@ namespace RadioCabs_BE.DTOs
         public long? VehicleId { get; set; }
         public long? DriverAccountId { get; set; }
         [Required] public long ModelId { get; set; }
+        public long? PriceRefId { get; set; }
+        public long? DriverScheduleId { get; set; }
         [Required] public long FromProvinceId { get; set; }
         [Required] public long ToProvinceId { get; set; }
         public string? PickupAddress { get; set; }
         public string? DropoffAddress { get; set; }
         public DateTimeOffset? PickupTime { get; set; }
+        public decimal? TotalKm { get; set; }
+        public decimal? InnerCityKm { get; set; }
+        public decimal? IntercityKm { get; set; }
+        public decimal? TrafficKm { get; set; }
         public bool IsRaining { get; set; } = false;
         public int WaitMinutes { get; set; } = 0;
+        public decimal? BaseFare { get; set; }
+        public decimal? TrafficUnitPrice { get; set; }
+        public decimal? TrafficFee { get; set; }
+        public decimal? RainFee { get; set; }
+        public decimal? IntercityUnitPrice { get; set; }
+        public decimal? IntercityFee { get; set; }
+        public decimal? OtherFee { get; set; }
+        public decimal? TotalAmount { get; set; }
         public PaymentMethod? PaymentMethod { get; set; }
     }
 
@@ -57,6 +71,7 @@ namespace RadioCabs_BE.DTOs
         public long? DriverAccountId { get; set; }
         public long ModelId { get; set; }
         public long? PriceRefId { get; set; }
+        public long? DriverScheduleId { get; set; }
         public long FromProvinceId { get; set; }
         public long ToProvinceId { get; set; }
         public string? PickupAddress { get; set; }
@@ -89,6 +104,8 @@ namespace RadioCabs_BE.DTOs
         public VehicleModelDto? Model { get; set; }
         public ProvinceDto? FromProvince { get; set; }
         public ProvinceDto? ToProvince { get; set; }
+        public DriverScheduleDto? DriverSchedule { get; set; }
+        public ModelPriceProvinceDto? PriceRef { get; set; }
     }
 
     public class ProvinceDto
@@ -97,6 +114,26 @@ namespace RadioCabs_BE.DTOs
         public string? Code { get; set; }
         public string Name { get; set; } = null!;
     }
+
+    public class DriverScheduleDto
+    {
+        public long ScheduleId { get; set; }
+        public long DriverAccountId { get; set; }
+        public DateOnly WorkDate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public long? VehicleId { get; set; }
+        public ShiftStatus Status { get; set; }
+        public string? Note { get; set; }
+        public DateTimeOffset CreatedAt { get; set; }
+        public DateTimeOffset? UpdatedAt { get; set; }
+        
+        // Driver info
+        public AccountDto? Driver { get; set; }
+        // Vehicle info
+        public VehicleDto? Vehicle { get; set; }
+    }
+
 }
 
 

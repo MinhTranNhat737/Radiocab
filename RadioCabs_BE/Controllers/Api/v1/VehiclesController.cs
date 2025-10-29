@@ -277,6 +277,26 @@ namespace RadioCabs_BE.Controllers.Api.v1
             return Ok(result);
         }
 
+        [HttpPost("vehicles/{vehicleId}/zones/{zoneId}")]
+        public async Task<ActionResult> AddVehicleToZone(long vehicleId, long zoneId, [FromQuery] short priority = 100)
+        {
+            var success = await _vehicleService.AddVehicleToZoneAsync(vehicleId, zoneId, priority);
+            if (!success)
+                return BadRequest("Không thể thêm xe vào zone");
+
+            return Ok();
+        }
+
+        [HttpDelete("vehicles/{vehicleId}/zones/{zoneId}")]
+        public async Task<ActionResult> RemoveVehicleFromZone(long vehicleId, long zoneId)
+        {
+            var success = await _vehicleService.RemoveVehicleFromZoneAsync(vehicleId, zoneId);
+            if (!success)
+                return BadRequest("Không thể loại xe khỏi zone");
+
+            return NoContent();
+        }
+
         // Vehicle Segment endpoints
         [HttpGet("vehicle-segments")]
         public async Task<ActionResult<PagedResult<VehicleSegmentDto>>> GetVehicleSegments([FromQuery] PageRequest request, [FromQuery] long? companyId = null)
@@ -485,6 +505,118 @@ namespace RadioCabs_BE.Controllers.Api.v1
             try
             {
                 var success = await _vehicleService.DeleteDriverVehicleAssignmentAsync(id);
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // Driver Schedule endpoints
+        [HttpGet("schedules")]
+        public async Task<ActionResult<PagedResult<DriverScheduleDto>>> GetDriverSchedules([FromQuery] PageRequest request, [FromQuery] long? companyId = null)
+        {
+            var result = await _vehicleService.GetDriverSchedulesAsync(request, companyId);
+            return Ok(result);
+        }
+
+        [HttpGet("schedule-templates")]
+        public async Task<ActionResult<PagedResult<DriverScheduleTemplateDto>>> GetDriverScheduleTemplates([FromQuery] PageRequest request, [FromQuery] long? companyId = null)
+        {
+            var result = await _vehicleService.GetDriverScheduleTemplatesAsync(request, companyId);
+            return Ok(result);
+        }
+
+        [HttpPost("schedule-templates")]
+        public async Task<ActionResult<DriverScheduleTemplateDto>> CreateDriverScheduleTemplate([FromBody] CreateDriverScheduleTemplateDto dto)
+        {
+            try
+            {
+                var template = await _vehicleService.CreateDriverScheduleTemplateAsync(dto);
+                return CreatedAtAction(nameof(GetDriverScheduleTemplates), new { id = template.TemplateId }, template);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("schedule-templates/{id}")]
+        public async Task<ActionResult<DriverScheduleTemplateDto>> UpdateDriverScheduleTemplate(long id, [FromBody] CreateDriverScheduleTemplateDto dto)
+        {
+            try
+            {
+                var template = await _vehicleService.UpdateDriverScheduleTemplateAsync(id, dto);
+                if (template == null)
+                    return NotFound();
+
+                return Ok(template);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("schedule-templates/{id}")]
+        public async Task<ActionResult> DeleteDriverScheduleTemplate(long id)
+        {
+            try
+            {
+                var success = await _vehicleService.DeleteDriverScheduleTemplateAsync(id);
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // Driver Schedule CRUD endpoints
+        [HttpPost("schedules")]
+        public async Task<ActionResult<DriverScheduleDto>> CreateDriverSchedule([FromBody] CreateDriverScheduleDto dto)
+        {
+            try
+            {
+                var schedule = await _vehicleService.CreateDriverScheduleAsync(dto);
+                return CreatedAtAction(nameof(GetDriverSchedules), new { id = schedule.ScheduleId }, schedule);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("schedules/{id}")]
+        public async Task<ActionResult<DriverScheduleDto>> UpdateDriverSchedule(long id, [FromBody] CreateDriverScheduleDto dto)
+        {
+            try
+            {
+                var schedule = await _vehicleService.UpdateDriverScheduleAsync(id, dto);
+                if (schedule == null)
+                    return NotFound();
+
+                return Ok(schedule);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("schedules/{id}")]
+        public async Task<ActionResult> DeleteDriverSchedule(long id)
+        {
+            try
+            {
+                var success = await _vehicleService.DeleteDriverScheduleAsync(id);
                 if (!success)
                     return NotFound();
 

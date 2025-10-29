@@ -5,6 +5,7 @@ using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
 using RadioCabs_BE.Data;
 using Npgsql;
+using DriverScheduleDto = RadioCabs_BE.DTOs.DriverScheduleDto;
 
 namespace RadioCabs_BE.Services
 {
@@ -12,11 +13,13 @@ namespace RadioCabs_BE.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly RadiocabsDbContext _context;
+        private readonly ILogger<VehicleService> _logger;
 
-        public VehicleService(IUnitOfWork unitOfWork, RadiocabsDbContext context)
+        public VehicleService(IUnitOfWork unitOfWork, RadiocabsDbContext context, ILogger<VehicleService> logger)
         {
             _unitOfWork = unitOfWork;
             _context = context;
+            _logger = logger;
         }
 
         // Vehicle methods
@@ -45,10 +48,15 @@ namespace RadioCabs_BE.Services
             // Include the Model navigation property with Segment
             query = query.Include(v => v.Model).ThenInclude(m => m.Segment);
             
+            // Include VehicleZonePreferences for zone filtering and display
+            query = query.Include(v => v.VehicleZonePreferences)
+                .ThenInclude(vzp => vzp.Zone);
+            
             // Include DriverScheduleTemplates, DriverSchedules, and DriverVehicleAssignments for filtering
             query = query.Include(v => v.DriverScheduleTemplates);
             query = query.Include(v => v.DriverSchedules);
-            query = query.Include(v => v.DriverVehicleAssignments);
+            query = query.Include(v => v.DriverVehicleAssignments)
+                .ThenInclude(dva => dva.Driver);
 
             // Filter by company if provided
             if (companyId.HasValue)
@@ -371,6 +379,12 @@ namespace RadioCabs_BE.Services
                 OdometerKm = vehicle.OdometerKm,
                 Status = vehicle.Status,
                 Model = vehicle.Model != null ? MapToVehicleModelDto(vehicle.Model) : null,
+                VehicleZonePreferences = vehicle.VehicleZonePreferences?.Select(vzp => new VehicleZonePreferenceDto
+                {
+                    VehicleId = vzp.VehicleId,
+                    ZoneId = vzp.ZoneId,
+                    Priority = vzp.Priority
+                }).ToList() ?? new List<VehicleZonePreferenceDto>(),
                 DriverVehicleAssignments = vehicle.DriverVehicleAssignments?.Select(dva => new DriverVehicleAssignmentDto
                 {
                     AssignmentId = dva.AssignmentId,
@@ -530,28 +544,38 @@ namespace RadioCabs_BE.Services
             await repository.AddAsync(zone);
             await _unitOfWork.SaveChangesAsync();
 
+            // Reload zone with Province relation
+            var createdZone = await _context.Zones
+                .Include(z => z.Province)
+                .FirstOrDefaultAsync(z => z.ZoneId == zone.ZoneId);
+
+            if (createdZone == null)
+                throw new Exception("Failed to retrieve created zone");
+
             return new ZoneDto
             {
-                ZoneId = zone.ZoneId,
-                CompanyId = zone.CompanyId,
-                ProvinceId = zone.ProvinceId,
-                Code = zone.Code,
-                Name = zone.Name,
-                Description = zone.Description,
-                IsActive = zone.IsActive,
-                Province = new ProvinceDto
+                ZoneId = createdZone.ZoneId,
+                CompanyId = createdZone.CompanyId,
+                ProvinceId = createdZone.ProvinceId,
+                Code = createdZone.Code,
+                Name = createdZone.Name,
+                Description = createdZone.Description,
+                IsActive = createdZone.IsActive,
+                Province = createdZone.Province != null ? new ProvinceDto
                 {
-                    ProvinceId = zone.Province.ProvinceId,
-                    Code = zone.Province.Code,
-                    Name = zone.Province.Name
-                }
+                    ProvinceId = createdZone.Province.ProvinceId,
+                    Code = createdZone.Province.Code ?? string.Empty,
+                    Name = createdZone.Province.Name
+                } : null
             };
         }
 
         public async Task<ZoneDto?> UpdateZoneAsync(long id, UpdateZoneDto dto)
         {
-            var repository = _unitOfWork.Repository<Zone>();
-            var zone = await repository.GetByIdAsync(id);
+            var zone = await _context.Zones
+                .Include(z => z.Province)
+                .FirstOrDefaultAsync(z => z.ZoneId == id);
+            
             if (zone == null) return null;
 
             zone.Code = dto.Code;
@@ -559,7 +583,7 @@ namespace RadioCabs_BE.Services
             zone.Description = dto.Description;
             zone.IsActive = dto.IsActive;
 
-            await _unitOfWork.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return new ZoneDto
             {
@@ -570,12 +594,12 @@ namespace RadioCabs_BE.Services
                 Name = zone.Name,
                 Description = zone.Description,
                 IsActive = zone.IsActive,
-                Province = new ProvinceDto
+                Province = zone.Province != null ? new ProvinceDto
                 {
                     ProvinceId = zone.Province.ProvinceId,
-                    Code = zone.Province.Code,
+                    Code = zone.Province.Code ?? string.Empty,
                     Name = zone.Province.Name
-                }
+                } : null
             };
         }
 
@@ -769,33 +793,86 @@ namespace RadioCabs_BE.Services
         public async Task<PagedResult<ModelPriceProvinceDto>> GetModelPriceProvincesPagedAsync(PageRequest request)
         {
             var repository = _unitOfWork.Repository<ModelPriceProvince>();
-            var query = repository.FindAsync(mpp => true).Result.AsQueryable();
-
+            
             var totalCount = await repository.CountAsync();
-            var items = query
+            
+            var rawItems = await repository.Query()
+                .Include(mpp => mpp.Model)
+                    .ThenInclude(m => m.Company)
+                .Include(mpp => mpp.Model)
+                    .ThenInclude(m => m.Segment)
+                .Include(mpp => mpp.Province)
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(mpp => new ModelPriceProvinceDto
+                .ToListAsync();
+
+            _logger.LogInformation($"GetModelPriceProvincesPagedAsync: Found {rawItems.Count} items");
+            if (rawItems.Any())
+            {
+                var firstItem = rawItems.First();
+                _logger.LogInformation($"First item ModelId: {firstItem.ModelId}, Model: {firstItem.Model?.ModelId}, Company: {firstItem.Model?.Company?.CompanyId} - {firstItem.Model?.Company?.Name}");
+            }
+
+            var items = rawItems.Select(mpp => new ModelPriceProvinceDto
+            {
+                ModelPriceId = mpp.ModelPriceId,
+                CompanyId = mpp.CompanyId,
+                ModelId = mpp.ModelId,
+                ProvinceId = mpp.ProvinceId,
+                OpeningFare = mpp.OpeningFare,
+                RateFirst20Km = mpp.RateFirst20Km,
+                RateOver20Km = mpp.RateOver20Km,
+                TrafficAddPerKm = mpp.TrafficAddPerKm,
+                RainAddPerTrip = mpp.RainAddPerTrip,
+                IntercityRatePerKm = mpp.IntercityRatePerKm,
+                TimeStart = mpp.TimeStart,
+                TimeEnd = mpp.TimeEnd,
+                ParentId = mpp.ParentId,
+                DateStart = mpp.DateStart,
+                DateEnd = mpp.DateEnd,
+                IsActive = mpp.IsActive,
+                Note = mpp.Note,
+                Model = mpp.Model != null ? new VehicleModelDto
                 {
-                    ModelPriceId = mpp.ModelPriceId,
-                    CompanyId = mpp.CompanyId,
-                    ModelId = mpp.ModelId,
-                    ProvinceId = mpp.ProvinceId,
-                    OpeningFare = mpp.OpeningFare,
-                    RateFirst20Km = mpp.RateFirst20Km,
-                    RateOver20Km = mpp.RateOver20Km,
-                    TrafficAddPerKm = mpp.TrafficAddPerKm,
-                    RainAddPerTrip = mpp.RainAddPerTrip,
-                    IntercityRatePerKm = mpp.IntercityRatePerKm,
-                    TimeStart = mpp.TimeStart,
-                    TimeEnd = mpp.TimeEnd,
-                    ParentId = mpp.ParentId,
-                    DateStart = mpp.DateStart,
-                    DateEnd = mpp.DateEnd,
-                    IsActive = mpp.IsActive,
-                    Note = mpp.Note
-                })
-                .ToList();
+                    ModelId = mpp.Model.ModelId,
+                    CompanyId = mpp.Model.CompanyId,
+                    SegmentId = mpp.Model.SegmentId,
+                    Brand = mpp.Model.Brand,
+                    ModelName = mpp.Model.ModelName,
+                    FuelType = mpp.Model.FuelType,
+                    SeatCategory = mpp.Model.SeatCategory,
+                    ImageUrl = mpp.Model.ImageUrl,
+                    Description = mpp.Model.Description,
+                    IsActive = mpp.Model.IsActive,
+                    Company = mpp.Model.Company != null ? new CompanyDto
+                    {
+                        CompanyId = mpp.Model.Company.CompanyId,
+                        Name = mpp.Model.Company.Name,
+                        Hotline = mpp.Model.Company.Hotline,
+                        Email = mpp.Model.Company.Email,
+                        Address = mpp.Model.Company.Address,
+                        TaxCode = mpp.Model.Company.TaxCode,
+                        Fax = mpp.Model.Company.Fax,
+                        UrlPage = mpp.Model.Company.UrlPage,
+                        Status = mpp.Model.Company.Status
+                    } : null,
+                    Segment = mpp.Model.Segment != null ? new VehicleSegmentDto
+                    {
+                        SegmentId = mpp.Model.Segment.SegmentId,
+                        CompanyId = mpp.Model.Segment.CompanyId,
+                        Code = mpp.Model.Segment.Code,
+                        Name = mpp.Model.Segment.Name,
+                        Description = mpp.Model.Segment.Description,
+                        IsActive = mpp.Model.Segment.IsActive
+                    } : null
+                } : null,
+                Province = mpp.Province != null ? new ProvinceDto
+                {
+                    ProvinceId = mpp.Province.ProvinceId,
+                    Name = mpp.Province.Name,
+                    Code = mpp.Province.Code
+                } : null
+            }).ToList();
 
             return new PagedResult<ModelPriceProvinceDto>
             {
@@ -1061,6 +1138,387 @@ namespace RadioCabs_BE.Services
             {
                 return false;
             }
+        }
+
+
+        public async Task<bool> AddVehicleToZoneAsync(long vehicleId, long zoneId, short priority = 100)
+        {
+            try
+            {
+                // Check if relationship already exists
+                var existing = await _context.VehicleZonePreferences
+                    .FirstOrDefaultAsync(vzp => vzp.VehicleId == vehicleId && vzp.ZoneId == zoneId);
+
+                if (existing != null)
+                {
+                    // Update priority if already exists
+                    existing.Priority = priority;
+                }
+                else
+                {
+                    // Create new relationship
+                    var vehicleZonePreference = new VehicleZonePreference
+                    {
+                        VehicleId = vehicleId,
+                        ZoneId = zoneId,
+                        Priority = priority
+                    };
+                    await _context.VehicleZonePreferences.AddAsync(vehicleZonePreference);
+                }
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> RemoveVehicleFromZoneAsync(long vehicleId, long zoneId)
+        {
+            try
+            {
+                var vehicleZonePreference = await _context.VehicleZonePreferences
+                    .FirstOrDefaultAsync(vzp => vzp.VehicleId == vehicleId && vzp.ZoneId == zoneId);
+
+                if (vehicleZonePreference == null)
+                    return false;
+
+                _context.VehicleZonePreferences.Remove(vehicleZonePreference);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        // ==================== DRIVER SCHEDULE METHODS ====================
+
+        public async Task<PagedResult<DriverScheduleDto>> GetDriverSchedulesAsync(PageRequest request, long? companyId = null)
+        {
+            var query = _context.DriverSchedules
+                .Include(ds => ds.Driver)
+                .Include(ds => ds.Vehicle)
+                .AsQueryable();
+
+            if (companyId.HasValue)
+            {
+                query = query.Where(ds => ds.Driver.CompanyId == companyId.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(ds => ds.WorkDate)
+                .ThenBy(ds => ds.StartTime)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(ds => new DriverScheduleDto
+                {
+                    ScheduleId = ds.ScheduleId,
+                    DriverAccountId = ds.DriverAccountId,
+                    WorkDate = ds.WorkDate,
+                    StartTime = ds.StartTime,
+                    EndTime = ds.EndTime,
+                    VehicleId = ds.VehicleId,
+                    Status = ds.Status,
+                    Note = ds.Note,
+                    CreatedAt = ds.CreatedAt,
+                    UpdatedAt = ds.UpdatedAt,
+                    Driver = new AccountDto
+                    {
+                        AccountId = ds.Driver.AccountId,
+                        FullName = ds.Driver.FullName,
+                        Username = ds.Driver.Username,
+                        Email = ds.Driver.Email,
+                        Phone = ds.Driver.Phone,
+                        Role = ds.Driver.Role,
+                        Status = ds.Driver.Status,
+                        CompanyId = ds.Driver.CompanyId
+                    },
+                    Vehicle = ds.Vehicle != null ? new VehicleDto
+                    {
+                        VehicleId = ds.Vehicle.VehicleId,
+                        CompanyId = ds.Vehicle.CompanyId,
+                        ModelId = ds.Vehicle.ModelId,
+                        PlateNumber = ds.Vehicle.PlateNumber,
+                        Color = ds.Vehicle.Color,
+                        YearManufactured = ds.Vehicle.YearManufactured,
+                        Status = ds.Vehicle.Status
+                    } : null
+                })
+                .ToListAsync();
+
+            return new PagedResult<DriverScheduleDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<DriverScheduleDto> CreateDriverScheduleAsync(CreateDriverScheduleDto dto)
+        {
+            var schedule = new DriverSchedule
+            {
+                DriverAccountId = dto.DriverAccountId,
+                WorkDate = dto.WorkDate,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                VehicleId = dto.VehicleId,
+                Status = dto.Status,
+                Note = dto.Note,
+                CreatedAt = DateTimeOffset.UtcNow
+            };
+
+            await _context.DriverSchedules.AddAsync(schedule);
+            await _context.SaveChangesAsync();
+
+            return await GetDriverScheduleByIdAsync(schedule.ScheduleId) ?? throw new InvalidOperationException("Failed to create schedule");
+        }
+
+        public async Task<DriverScheduleDto?> UpdateDriverScheduleAsync(long id, CreateDriverScheduleDto dto)
+        {
+            var schedule = await _context.DriverSchedules.FindAsync(id);
+            if (schedule == null) return null;
+
+            schedule.DriverAccountId = dto.DriverAccountId;
+            schedule.WorkDate = dto.WorkDate;
+            schedule.StartTime = dto.StartTime;
+            schedule.EndTime = dto.EndTime;
+            schedule.VehicleId = dto.VehicleId;
+            schedule.Status = dto.Status;
+            schedule.Note = dto.Note;
+            schedule.UpdatedAt = DateTimeOffset.UtcNow;
+
+            await _context.SaveChangesAsync();
+            return await GetDriverScheduleByIdAsync(id);
+        }
+
+        public async Task<bool> DeleteDriverScheduleAsync(long id)
+        {
+            try
+            {
+                var schedule = await _context.DriverSchedules.FindAsync(id);
+                if (schedule == null) return false;
+
+                _context.DriverSchedules.Remove(schedule);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async Task<DriverScheduleDto?> GetDriverScheduleByIdAsync(long id)
+        {
+            var schedule = await _context.DriverSchedules
+                .Include(ds => ds.Driver)
+                .Include(ds => ds.Vehicle)
+                .FirstOrDefaultAsync(ds => ds.ScheduleId == id);
+
+            if (schedule == null) return null;
+
+            return new DriverScheduleDto
+            {
+                ScheduleId = schedule.ScheduleId,
+                DriverAccountId = schedule.DriverAccountId,
+                WorkDate = schedule.WorkDate,
+                StartTime = schedule.StartTime,
+                EndTime = schedule.EndTime,
+                VehicleId = schedule.VehicleId,
+                Status = schedule.Status,
+                Note = schedule.Note,
+                CreatedAt = schedule.CreatedAt,
+                UpdatedAt = schedule.UpdatedAt,
+                Driver = new AccountDto
+                {
+                    AccountId = schedule.Driver.AccountId,
+                    FullName = schedule.Driver.FullName,
+                    Username = schedule.Driver.Username,
+                    Email = schedule.Driver.Email,
+                    Phone = schedule.Driver.Phone,
+                    Role = schedule.Driver.Role,
+                    Status = schedule.Driver.Status,
+                    CompanyId = schedule.Driver.CompanyId
+                },
+                Vehicle = schedule.Vehicle != null ? new VehicleDto
+                {
+                    VehicleId = schedule.Vehicle.VehicleId,
+                    PlateNumber = schedule.Vehicle.PlateNumber,
+                    Color = schedule.Vehicle.Color,
+                    YearManufactured = schedule.Vehicle.YearManufactured,
+                    Status = schedule.Vehicle.Status
+                } : null
+            };
+        }
+
+        // ==================== DRIVER SCHEDULE TEMPLATE METHODS ====================
+
+        public async Task<PagedResult<DriverScheduleTemplateDto>> GetDriverScheduleTemplatesAsync(PageRequest request, long? companyId = null)
+        {
+            var query = _context.DriverScheduleTemplates
+                .Include(dst => dst.Driver)
+                .Include(dst => dst.Vehicle)
+                .AsQueryable();
+
+            if (companyId.HasValue)
+            {
+                query = query.Where(dst => dst.Driver.CompanyId == companyId.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+            var items = await query
+                .OrderByDescending(dst => dst.StartDate)
+                .ThenBy(dst => dst.Weekday)
+                .Skip((request.Page - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(dst => new DriverScheduleTemplateDto
+                {
+                    TemplateId = dst.TemplateId,
+                    DriverAccountId = dst.DriverAccountId,
+                    StartDate = dst.StartDate,
+                    EndDate = dst.EndDate,
+                    Weekday = dst.Weekday,
+                    StartTime = dst.StartTime,
+                    EndTime = dst.EndTime,
+                    VehicleId = dst.VehicleId,
+                    Note = dst.Note,
+                    IsActive = dst.IsActive,
+                    Driver = new AccountDto
+                    {
+                        AccountId = dst.Driver.AccountId,
+                        FullName = dst.Driver.FullName,
+                        Username = dst.Driver.Username,
+                        Email = dst.Driver.Email,
+                        Phone = dst.Driver.Phone,
+                        Role = dst.Driver.Role,
+                        Status = dst.Driver.Status,
+                        CompanyId = dst.Driver.CompanyId
+                    },
+                    Vehicle = dst.Vehicle != null ? new VehicleDto
+                    {
+                        VehicleId = dst.Vehicle.VehicleId,
+                        PlateNumber = dst.Vehicle.PlateNumber,
+                        Color = dst.Vehicle.Color,
+                        YearManufactured = dst.Vehicle.YearManufactured,
+                        Status = dst.Vehicle.Status
+                    } : null
+                })
+                .ToListAsync();
+
+            return new PagedResult<DriverScheduleTemplateDto>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = request.Page,
+                PageSize = request.PageSize
+            };
+        }
+
+        public async Task<DriverScheduleTemplateDto> CreateDriverScheduleTemplateAsync(CreateDriverScheduleTemplateDto dto)
+        {
+            var template = new DriverScheduleTemplate
+            {
+                DriverAccountId = dto.DriverAccountId,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                Weekday = dto.Weekday,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime,
+                VehicleId = dto.VehicleId,
+                Note = dto.Note,
+                IsActive = dto.IsActive
+            };
+
+            await _context.DriverScheduleTemplates.AddAsync(template);
+            await _context.SaveChangesAsync();
+
+            return await GetDriverScheduleTemplateByIdAsync(template.TemplateId) ?? throw new InvalidOperationException("Failed to create schedule template");
+        }
+
+        public async Task<DriverScheduleTemplateDto?> UpdateDriverScheduleTemplateAsync(long id, CreateDriverScheduleTemplateDto dto)
+        {
+            var template = await _context.DriverScheduleTemplates.FindAsync(id);
+            if (template == null) return null;
+
+            template.DriverAccountId = dto.DriverAccountId;
+            template.StartDate = dto.StartDate;
+            template.EndDate = dto.EndDate;
+            template.Weekday = dto.Weekday;
+            template.StartTime = dto.StartTime;
+            template.EndTime = dto.EndTime;
+            template.VehicleId = dto.VehicleId;
+            template.Note = dto.Note;
+            template.IsActive = dto.IsActive;
+
+            await _context.SaveChangesAsync();
+            return await GetDriverScheduleTemplateByIdAsync(id);
+        }
+
+        public async Task<bool> DeleteDriverScheduleTemplateAsync(long id)
+        {
+            try
+            {
+                var template = await _context.DriverScheduleTemplates.FindAsync(id);
+                if (template == null) return false;
+
+                _context.DriverScheduleTemplates.Remove(template);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private async Task<DriverScheduleTemplateDto?> GetDriverScheduleTemplateByIdAsync(long id)
+        {
+            var template = await _context.DriverScheduleTemplates
+                .Include(dst => dst.Driver)
+                .Include(dst => dst.Vehicle)
+                .FirstOrDefaultAsync(dst => dst.TemplateId == id);
+
+            if (template == null) return null;
+
+            return new DriverScheduleTemplateDto
+            {
+                TemplateId = template.TemplateId,
+                DriverAccountId = template.DriverAccountId,
+                StartDate = template.StartDate,
+                EndDate = template.EndDate,
+                Weekday = template.Weekday,
+                StartTime = template.StartTime,
+                EndTime = template.EndTime,
+                VehicleId = template.VehicleId,
+                Note = template.Note,
+                IsActive = template.IsActive,
+                Driver = new AccountDto
+                {
+                    AccountId = template.Driver.AccountId,
+                    FullName = template.Driver.FullName,
+                    Username = template.Driver.Username,
+                    Email = template.Driver.Email,
+                    Phone = template.Driver.Phone,
+                    Role = template.Driver.Role,
+                    Status = template.Driver.Status,
+                    CompanyId = template.Driver.CompanyId
+                },
+                Vehicle = template.Vehicle != null ? new VehicleDto
+                {
+                    VehicleId = template.Vehicle.VehicleId,
+                    PlateNumber = template.Vehicle.PlateNumber,
+                    Color = template.Vehicle.Color,
+                    YearManufactured = template.Vehicle.YearManufactured,
+                    Status = template.Vehicle.Status
+                } : null
+            };
         }
     }
 }

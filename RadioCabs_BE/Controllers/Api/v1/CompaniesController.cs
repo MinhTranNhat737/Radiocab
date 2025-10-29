@@ -15,6 +15,26 @@ namespace RadioCabs_BE.Controllers.Api.v1
             _companyService = companyService;
         }
 
+        [HttpGet("test")]
+        public ActionResult Test()
+        {
+            return Ok(new { message = "Company API is working", timestamp = DateTime.Now });
+        }
+
+        [HttpGet("{id}/membership-orders")]
+        public async Task<ActionResult<PagedResult<object>>> GetMembershipOrders(long id, [FromQuery] PageRequest request)
+        {
+            try
+            {
+                var orders = await _companyService.GetMembershipOrdersAsync(id, request);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyDto>> GetById(long id)
         {

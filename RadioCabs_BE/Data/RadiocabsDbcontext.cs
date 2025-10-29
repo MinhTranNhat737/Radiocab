@@ -18,6 +18,7 @@ namespace RadioCabs_BE.Data
         public DbSet<DriverVehicleAssignment> DriverVehicleAssignments => Set<DriverVehicleAssignment>();
         public DbSet<DrivingOrder> DrivingOrders => Set<DrivingOrder>();
         public DbSet<MembershipOrder> MembershipOrders => Set<MembershipOrder>();
+        public DbSet<Membership> Memberships => Set<Membership>();
         public DbSet<ModelPriceProvince> ModelPriceProvinces => Set<ModelPriceProvince>();
         public DbSet<Province> Provinces => Set<Province>();
         public DbSet<Ward> Wards => Set<Ward>();
@@ -52,6 +53,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("account");
                 entity.HasKey(e => e.AccountId).HasName("account_pkey");
+                entity.Property(e => e.AccountId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => e.Username).IsUnique().HasDatabaseName("account_username_key");
                 entity.HasIndex(e => new { e.CompanyId, e.Role }).HasDatabaseName("ix_account_company_role");
                 entity.Property(e => e.Role).HasColumnType("role_type");
@@ -70,6 +72,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("company");
                 entity.HasKey(e => e.CompanyId).HasName("company_pkey");
+                entity.Property(e => e.CompanyId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => e.Status).HasDatabaseName("ix_company_status");
                 entity.Property(e => e.Status).HasColumnType("active_flag");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
@@ -86,6 +89,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("province");
                 entity.HasKey(e => e.ProvinceId).HasName("province_pkey");
+                entity.Property(e => e.ProvinceId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => e.Code).IsUnique().HasDatabaseName("province_code_key");
             });
 
@@ -94,6 +98,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("ward");
                 entity.HasKey(e => e.WardId).HasName("ward_pkey");
+                entity.Property(e => e.WardId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.ProvinceId, e.Name }).IsUnique().HasDatabaseName("ward_province_id_name_key");
                 
                 entity.HasOne(e => e.Province)
@@ -108,6 +113,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("zone");
                 entity.HasKey(e => e.ZoneId).HasName("zone_pkey");
+                entity.Property(e => e.ZoneId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.ProvinceId, e.Code }).IsUnique().HasDatabaseName("zone_company_id_province_id_code_key");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 
@@ -148,6 +154,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("vehicle_segment");
                 entity.HasKey(e => e.SegmentId).HasName("vehicle_segment_pkey");
+                entity.Property(e => e.SegmentId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.Code }).IsUnique().HasDatabaseName("vehicle_segment_company_id_code_key");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 
@@ -163,6 +170,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("vehicle_model");
                 entity.HasKey(e => e.ModelId).HasName("vehicle_model_pkey");
+                entity.Property(e => e.ModelId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.Brand, e.ModelName }).IsUnique().HasDatabaseName("vehicle_model_company_id_brand_model_name_key");
                 entity.Property(e => e.FuelType).HasColumnType("fuel_type_enum");
                 entity.Property(e => e.SeatCategory).HasColumnType("vehicle_category_enum");
@@ -186,6 +194,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("vehicle");
                 entity.HasKey(e => e.VehicleId).HasName("vehicle_pkey");
+                entity.Property(e => e.VehicleId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => e.PlateNumber).IsUnique().HasDatabaseName("vehicle_plate_number_key");
                 entity.Property(e => e.Status).HasColumnType("active_flag");
                 entity.Property(e => e.OdometerKm).HasDefaultValue(0);
@@ -248,6 +257,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("model_price_province");
                 entity.HasKey(e => e.ModelPriceId).HasName("model_price_province_pkey");
+                entity.Property(e => e.ModelPriceId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.ProvinceId, e.ModelId, e.IsActive, e.DateStart }).HasDatabaseName("ix_mpp_lookup");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
                 
@@ -292,6 +302,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("driver_vehicle_assignment");
                 entity.HasKey(e => e.AssignmentId).HasName("driver_vehicle_assignment_pkey");
+                entity.Property(e => e.AssignmentId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.DriverAccountId, e.StartAt }).HasDatabaseName("ix_dva_driver_time");
                 entity.HasIndex(e => new { e.VehicleId, e.StartAt }).HasDatabaseName("ix_dva_vehicle_time");
                 entity.HasIndex(e => e.VehicleId).IsUnique().HasDatabaseName("uq_dva_vehicle_open").HasFilter("\"end_at\" IS NULL");
@@ -314,6 +325,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("driver_schedule_template");
                 entity.HasKey(e => e.TemplateId).HasName("driver_schedule_template_pkey");
+                entity.Property(e => e.TemplateId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.DriverAccountId, e.Weekday }).HasDatabaseName("ix_dst_driver_weekday").HasFilter("\"is_active\" = true");
                 entity.Property(e => e.Weekday).HasColumnType("smallint");
                 entity.Property(e => e.IsActive).HasDefaultValue(true);
@@ -336,9 +348,10 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("driver_schedule");
                 entity.HasKey(e => e.ScheduleId).HasName("driver_schedule_pkey");
+                entity.Property(e => e.ScheduleId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.WorkDate, e.Status, e.DriverAccountId }).HasDatabaseName("ix_driver_schedule_lookup");
                 entity.HasIndex(e => new { e.DriverAccountId, e.WorkDate, e.StartTime, e.EndTime }).IsUnique().HasDatabaseName("uq_driver_schedule_uni");
-                entity.Property(e => e.Status).HasColumnType("varchar(20)");
+                entity.Property(e => e.Status).HasColumnType("shift_status");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
                 
                 entity.HasOne(e => e.Driver)
@@ -359,6 +372,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("driving_order");
                 entity.HasKey(e => e.OrderId).HasName("driving_order_pkey");
+                entity.Property(e => e.OrderId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.Status, e.CreatedAt }).HasDatabaseName("ix_order_company_status");
                 entity.HasIndex(e => new { e.DriverAccountId, e.PickupTime }).HasDatabaseName("ix_order_driver_time");
                 entity.HasIndex(e => new { e.FromProvinceId, e.ToProvinceId }).HasDatabaseName("ix_order_route");
@@ -403,6 +417,12 @@ namespace RadioCabs_BE.Data
                     .HasConstraintName("driving_order_price_ref_id_fkey")
                     .OnDelete(DeleteBehavior.SetNull);
                     
+                entity.HasOne(e => e.DriverSchedule)
+                    .WithMany()
+                    .HasForeignKey(e => e.DriverScheduleId)
+                    .HasConstraintName("driving_order_driver_schedule_id_fkey")
+                    .OnDelete(DeleteBehavior.SetNull);
+                    
                 entity.HasOne(e => e.FromProvince)
                     .WithMany(p => p.FromDrivingOrders)
                     .HasForeignKey(e => e.FromProvinceId)
@@ -416,13 +436,33 @@ namespace RadioCabs_BE.Data
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
+            // Membership configuration
+            modelBuilder.Entity<Membership>(entity =>
+            {
+                entity.ToTable("membership");
+                entity.HasKey(e => e.MembershipId).HasName("membership_pkey");
+                entity.Property(e => e.MembershipId).ValueGeneratedOnAdd();
+                entity.HasIndex(e => new { e.CompanyId, e.Code }).HasDatabaseName("membership_company_id_code_key").IsUnique();
+                entity.Property(e => e.UnitPrice).HasPrecision(12, 2);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
+                
+                entity.HasOne(e => e.Company)
+                    .WithMany(c => c.Memberships)
+                    .HasForeignKey(e => e.CompanyId)
+                    .HasConstraintName("membership_company_id_fkey")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
             // MembershipOrder configuration
             modelBuilder.Entity<MembershipOrder>(entity =>
             {
                 entity.ToTable("membership_order");
                 entity.HasKey(e => e.MembershipOrderId).HasName("membership_order_pkey");
+                entity.Property(e => e.MembershipOrderId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.StartDate }).HasDatabaseName("ix_membership_company");
                 entity.Property(e => e.PaymentMethod).HasColumnType("varchar(20)");
+                entity.Property(e => e.PaymentCode).HasColumnType("varchar(50)");
+                entity.Property(e => e.MembershipId).HasColumnName("membership_id");
                 
                 entity.HasOne(e => e.Company)
                     .WithMany(c => c.MembershipOrders)
@@ -435,6 +475,12 @@ namespace RadioCabs_BE.Data
                     .HasForeignKey(e => e.PayerAccountId)
                     .HasConstraintName("membership_order_payer_account_id_fkey")
                     .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Membership)
+                    .WithMany(m => m.MembershipOrders)
+                    .HasForeignKey(e => e.MembershipId)
+                    .HasConstraintName("membership_order_membership_id_fkey")
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // AuthEmailCode configuration
@@ -442,6 +488,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("auth_email_code");
                 entity.HasKey(e => e.CodeId).HasName("auth_email_code_pkey");
+                entity.Property(e => e.CodeId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.Email, e.Purpose }).IsUnique().HasDatabaseName("uq_email_code_active").HasFilter("\"consumed_at\" IS NULL");
                 entity.Property(e => e.Purpose).HasColumnType("varchar(30)");
                 entity.Property(e => e.SentAt).HasDefaultValueSql("now()");
@@ -460,6 +507,7 @@ namespace RadioCabs_BE.Data
             {
                 entity.ToTable("auth_refresh_session");
                 entity.HasKey(e => e.SessionId).HasName("auth_refresh_session_pkey");
+                entity.Property(e => e.SessionId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => e.Jti).IsUnique().HasDatabaseName("auth_refresh_session_jti_key");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("now()");
                 

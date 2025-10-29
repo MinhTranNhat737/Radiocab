@@ -47,6 +47,8 @@ namespace RadioCabs_BE.Services.Interfaces
 
         // Vehicle Zone Preference methods
         Task<PagedResult<VehicleZonePreferenceDto>> GetVehicleZonePreferencesPagedAsync(PageRequest request);
+        Task<bool> AddVehicleToZoneAsync(long vehicleId, long zoneId, short priority = 100);
+        Task<bool> RemoveVehicleFromZoneAsync(long vehicleId, long zoneId);
 
         // Model Price Province methods
         Task<PagedResult<ModelPriceProvinceDto>> GetModelPriceProvincesPagedAsync(PageRequest request);
@@ -58,5 +60,17 @@ namespace RadioCabs_BE.Services.Interfaces
         Task<DriverVehicleAssignmentDto> CreateDriverVehicleAssignmentAsync(CreateDriverVehicleAssignmentDto dto);
         Task<DriverVehicleAssignmentDto?> UpdateDriverVehicleAssignmentAsync(long id, UpdateDriverVehicleAssignmentDto dto);
         Task<bool> DeleteDriverVehicleAssignmentAsync(long id);
+
+        // Driver Schedule methods
+        Task<PagedResult<DriverScheduleDto>> GetDriverSchedulesAsync(PageRequest request, long? companyId = null);
+        Task<DriverScheduleDto> CreateDriverScheduleAsync(CreateDriverScheduleDto dto);
+        Task<DriverScheduleDto?> UpdateDriverScheduleAsync(long id, CreateDriverScheduleDto dto);
+        Task<bool> DeleteDriverScheduleAsync(long id);
+
+        // Driver Schedule Template methods
+        Task<PagedResult<DriverScheduleTemplateDto>> GetDriverScheduleTemplatesAsync(PageRequest request, long? companyId = null);
+        Task<DriverScheduleTemplateDto> CreateDriverScheduleTemplateAsync(CreateDriverScheduleTemplateDto dto);
+        Task<DriverScheduleTemplateDto?> UpdateDriverScheduleTemplateAsync(long id, CreateDriverScheduleTemplateDto dto);
+        Task<bool> DeleteDriverScheduleTemplateAsync(long id);
     }
 }

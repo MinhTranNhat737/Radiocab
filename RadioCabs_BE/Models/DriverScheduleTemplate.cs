@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace RadioCabs_BE.Models
 {
     public class DriverScheduleTemplate
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long TemplateId { get; set; }
         public long DriverAccountId { get; set; }
         public DateOnly StartDate { get; set; }

@@ -1,10 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using RadioCabs_BE.Models;
 
 namespace RadioCabs_BE.Models
 {
     public class Account
     {
-        public long AccountId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long? AccountId { get; set; }
         public long? CompanyId { get; set; }
         public string Username { get; set; } = null!;
         public string PasswordHash { get; set; } = null!;

@@ -5,7 +5,7 @@
 -- Dumped from database version 17.2
 -- Dumped by pg_dump version 17.2
 
--- Started on 2025-10-24 20:20:24
+-- Started on 2025-10-27 14:00:12
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -28,7 +28,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
 
 
 --
--- TOC entry 5204 (class 0 OID 0)
+-- TOC entry 5226 (class 0 OID 0)
 -- Dependencies: 2
 -- Name: EXTENSION pgcrypto; Type: COMMENT; Schema: -; Owner: 
 --
@@ -37,7 +37,7 @@ COMMENT ON EXTENSION pgcrypto IS 'cryptographic functions';
 
 
 --
--- TOC entry 921 (class 1247 OID 18708)
+-- TOC entry 923 (class 1247 OID 18708)
 -- Name: active_flag; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -50,7 +50,7 @@ CREATE TYPE public.active_flag AS ENUM (
 ALTER TYPE public.active_flag OWNER TO postgres;
 
 --
--- TOC entry 930 (class 1247 OID 18738)
+-- TOC entry 932 (class 1247 OID 18738)
 -- Name: fuel_type_enum; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -65,7 +65,7 @@ CREATE TYPE public.fuel_type_enum AS ENUM (
 ALTER TYPE public.fuel_type_enum OWNER TO postgres;
 
 --
--- TOC entry 924 (class 1247 OID 18714)
+-- TOC entry 926 (class 1247 OID 18714)
 -- Name: order_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -82,7 +82,7 @@ CREATE TYPE public.order_status AS ENUM (
 ALTER TYPE public.order_status OWNER TO postgres;
 
 --
--- TOC entry 927 (class 1247 OID 18728)
+-- TOC entry 929 (class 1247 OID 18728)
 -- Name: payment_method; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -97,7 +97,7 @@ CREATE TYPE public.payment_method AS ENUM (
 ALTER TYPE public.payment_method OWNER TO postgres;
 
 --
--- TOC entry 987 (class 1247 OID 19140)
+-- TOC entry 989 (class 1247 OID 19140)
 -- Name: revocation_reason; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -114,7 +114,7 @@ CREATE TYPE public.revocation_reason AS ENUM (
 ALTER TYPE public.revocation_reason OWNER TO postgres;
 
 --
--- TOC entry 918 (class 1247 OID 18695)
+-- TOC entry 920 (class 1247 OID 18695)
 -- Name: role_type; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -131,7 +131,7 @@ CREATE TYPE public.role_type AS ENUM (
 ALTER TYPE public.role_type OWNER TO postgres;
 
 --
--- TOC entry 990 (class 1247 OID 19251)
+-- TOC entry 992 (class 1247 OID 19251)
 -- Name: shift_status; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -147,7 +147,7 @@ CREATE TYPE public.shift_status AS ENUM (
 ALTER TYPE public.shift_status OWNER TO postgres;
 
 --
--- TOC entry 933 (class 1247 OID 18748)
+-- TOC entry 935 (class 1247 OID 18748)
 -- Name: vehicle_category_enum; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -163,7 +163,7 @@ CREATE TYPE public.vehicle_category_enum AS ENUM (
 ALTER TYPE public.vehicle_category_enum OWNER TO postgres;
 
 --
--- TOC entry 984 (class 1247 OID 19130)
+-- TOC entry 986 (class 1247 OID 19130)
 -- Name: verification_purpose; Type: TYPE; Schema: public; Owner: postgres
 --
 
@@ -178,7 +178,7 @@ CREATE TYPE public.verification_purpose AS ENUM (
 ALTER TYPE public.verification_purpose OWNER TO postgres;
 
 --
--- TOC entry 289 (class 1255 OID 19305)
+-- TOC entry 291 (class 1255 OID 19305)
 -- Name: seed_driver_schedule_for_month(integer, integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -256,7 +256,7 @@ CREATE SEQUENCE public.account_account_id_seq
 ALTER SEQUENCE public.account_account_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5205 (class 0 OID 0)
+-- TOC entry 5227 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: account_account_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -301,7 +301,7 @@ CREATE SEQUENCE public.auth_email_code_code_id_seq
 ALTER SEQUENCE public.auth_email_code_code_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5206 (class 0 OID 0)
+-- TOC entry 5228 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: auth_email_code_code_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -346,7 +346,8 @@ CREATE TABLE public.company (
     contact_account_id bigint,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone,
-    fax character varying NOT NULL
+    fax character varying NOT NULL,
+    url_page character varying
 );
 
 
@@ -368,7 +369,7 @@ CREATE SEQUENCE public.company_company_id_seq
 ALTER SEQUENCE public.company_company_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5207 (class 0 OID 0)
+-- TOC entry 5229 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: company_company_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -414,7 +415,7 @@ CREATE SEQUENCE public.driver_schedule_schedule_id_seq
 ALTER SEQUENCE public.driver_schedule_schedule_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5208 (class 0 OID 0)
+-- TOC entry 5230 (class 0 OID 0)
 -- Dependencies: 248
 -- Name: driver_schedule_schedule_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -462,7 +463,7 @@ CREATE SEQUENCE public.driver_schedule_template_template_id_seq
 ALTER SEQUENCE public.driver_schedule_template_template_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5209 (class 0 OID 0)
+-- TOC entry 5231 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: driver_schedule_template_template_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -503,7 +504,7 @@ CREATE SEQUENCE public.driver_vehicle_assignment_assignment_id_seq
 ALTER SEQUENCE public.driver_vehicle_assignment_assignment_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5210 (class 0 OID 0)
+-- TOC entry 5232 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: driver_vehicle_assignment_assignment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -523,7 +524,7 @@ CREATE TABLE public.driving_order (
     vehicle_id bigint,
     driver_account_id bigint,
     model_id bigint NOT NULL,
-    price_ref_id bigint,
+    price_ref_id bigint NOT NULL,
     from_province_id bigint NOT NULL,
     to_province_id bigint NOT NULL,
     pickup_address character varying(255),
@@ -549,11 +550,30 @@ CREATE TABLE public.driving_order (
     payment_method public.payment_method,
     paid_at timestamp with time zone,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
-    updated_at timestamp with time zone
+    updated_at timestamp with time zone,
+    driver_schedule_id bigint
 );
 
 
 ALTER TABLE public.driving_order OWNER TO postgres;
+
+--
+-- TOC entry 5233 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: COLUMN driving_order.price_ref_id; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.driving_order.price_ref_id IS 'Tham chiếu đến bảng model_price_province để lấy thông tin giá cước';
+
+
+--
+-- TOC entry 5234 (class 0 OID 0)
+-- Dependencies: 244
+-- Name: COLUMN driving_order.driver_schedule_id; Type: COMMENT; Schema: public; Owner: postgres
+--
+
+COMMENT ON COLUMN public.driving_order.driver_schedule_id IS 'Tham chiếu đến bảng driver_schedule để liên kết đơn hàng với ca làm việc của tài xế';
+
 
 --
 -- TOC entry 243 (class 1259 OID 19022)
@@ -571,12 +591,58 @@ CREATE SEQUENCE public.driving_order_order_id_seq
 ALTER SEQUENCE public.driving_order_order_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5211 (class 0 OID 0)
+-- TOC entry 5235 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: driving_order_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE public.driving_order_order_id_seq OWNED BY public.driving_order.order_id;
+
+
+--
+-- TOC entry 253 (class 1259 OID 19363)
+-- Name: membership; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.membership (
+    membership_id bigint NOT NULL,
+    company_id bigint NOT NULL,
+    name character varying(100) NOT NULL,
+    code character varying(50) NOT NULL,
+    unit_price numeric(12,2) NOT NULL,
+    description character varying(500),
+    is_active boolean DEFAULT true NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone,
+    status boolean DEFAULT true NOT NULL,
+    CONSTRAINT membership_unit_price_check CHECK ((unit_price >= (0)::numeric))
+);
+
+
+ALTER TABLE public.membership OWNER TO postgres;
+
+--
+-- TOC entry 254 (class 1259 OID 19371)
+-- Name: membership_membership_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.membership_membership_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.membership_membership_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 5236 (class 0 OID 0)
+-- Dependencies: 254
+-- Name: membership_membership_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.membership_membership_id_seq OWNED BY public.membership.membership_id;
 
 
 --
@@ -596,6 +662,8 @@ CREATE TABLE public.membership_order (
     paid_at timestamp with time zone,
     payment_method public.payment_method,
     note character varying(300),
+    membership_id bigint,
+    payment_code character varying(50),
     CONSTRAINT membership_order_amount_check CHECK ((amount >= (0)::numeric)),
     CONSTRAINT membership_order_unit_months_check CHECK ((unit_months > 0)),
     CONSTRAINT membership_order_unit_price_check CHECK ((unit_price >= (0)::numeric))
@@ -620,7 +688,7 @@ CREATE SEQUENCE public.membership_order_membership_order_id_seq
 ALTER SEQUENCE public.membership_order_membership_order_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5212 (class 0 OID 0)
+-- TOC entry 5237 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: membership_order_membership_order_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -672,7 +740,7 @@ CREATE SEQUENCE public.model_price_province_model_price_id_seq
 ALTER SEQUENCE public.model_price_province_model_price_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5213 (class 0 OID 0)
+-- TOC entry 5238 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: model_price_province_model_price_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -710,7 +778,7 @@ CREATE SEQUENCE public.province_province_id_seq
 ALTER SEQUENCE public.province_province_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5214 (class 0 OID 0)
+-- TOC entry 5239 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: province_province_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -791,7 +859,7 @@ CREATE SEQUENCE public.vehicle_model_model_id_seq
 ALTER SEQUENCE public.vehicle_model_model_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5215 (class 0 OID 0)
+-- TOC entry 5240 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: vehicle_model_model_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -861,7 +929,7 @@ CREATE SEQUENCE public.vehicle_segment_segment_id_seq
 ALTER SEQUENCE public.vehicle_segment_segment_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5216 (class 0 OID 0)
+-- TOC entry 5241 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: vehicle_segment_segment_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -885,7 +953,7 @@ CREATE SEQUENCE public.vehicle_vehicle_id_seq
 ALTER SEQUENCE public.vehicle_vehicle_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5217 (class 0 OID 0)
+-- TOC entry 5242 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: vehicle_vehicle_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -938,7 +1006,7 @@ CREATE SEQUENCE public.ward_ward_id_seq
 ALTER SEQUENCE public.ward_ward_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5218 (class 0 OID 0)
+-- TOC entry 5243 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: ward_ward_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -993,7 +1061,7 @@ CREATE SEQUENCE public.zone_zone_id_seq
 ALTER SEQUENCE public.zone_zone_id_seq OWNER TO postgres;
 
 --
--- TOC entry 5219 (class 0 OID 0)
+-- TOC entry 5244 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: zone_zone_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
@@ -1002,7 +1070,7 @@ ALTER SEQUENCE public.zone_zone_id_seq OWNED BY public.zone.zone_id;
 
 
 --
--- TOC entry 4855 (class 2604 OID 18798)
+-- TOC entry 4860 (class 2604 OID 18798)
 -- Name: account account_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1010,7 +1078,7 @@ ALTER TABLE ONLY public.account ALTER COLUMN account_id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 4900 (class 2604 OID 19327)
+-- TOC entry 4905 (class 2604 OID 19327)
 -- Name: auth_email_code code_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1018,7 +1086,7 @@ ALTER TABLE ONLY public.auth_email_code ALTER COLUMN code_id SET DEFAULT nextval
 
 
 --
--- TOC entry 4852 (class 2604 OID 18786)
+-- TOC entry 4857 (class 2604 OID 18786)
 -- Name: company company_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1026,7 +1094,7 @@ ALTER TABLE ONLY public.company ALTER COLUMN company_id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 4895 (class 2604 OID 19287)
+-- TOC entry 4900 (class 2604 OID 19287)
 -- Name: driver_schedule schedule_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1034,7 +1102,7 @@ ALTER TABLE ONLY public.driver_schedule ALTER COLUMN schedule_id SET DEFAULT nex
 
 
 --
--- TOC entry 4893 (class 2604 OID 19265)
+-- TOC entry 4898 (class 2604 OID 19265)
 -- Name: driver_schedule_template template_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1042,7 +1110,7 @@ ALTER TABLE ONLY public.driver_schedule_template ALTER COLUMN template_id SET DE
 
 
 --
--- TOC entry 4869 (class 2604 OID 18905)
+-- TOC entry 4874 (class 2604 OID 18905)
 -- Name: driver_vehicle_assignment assignment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1050,7 +1118,7 @@ ALTER TABLE ONLY public.driver_vehicle_assignment ALTER COLUMN assignment_id SET
 
 
 --
--- TOC entry 4879 (class 2604 OID 19026)
+-- TOC entry 4884 (class 2604 OID 19026)
 -- Name: driving_order order_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1058,7 +1126,15 @@ ALTER TABLE ONLY public.driving_order ALTER COLUMN order_id SET DEFAULT nextval(
 
 
 --
--- TOC entry 4859 (class 2604 OID 18823)
+-- TOC entry 4909 (class 2604 OID 19372)
+-- Name: membership membership_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membership ALTER COLUMN membership_id SET DEFAULT nextval('public.membership_membership_id_seq'::regclass);
+
+
+--
+-- TOC entry 4864 (class 2604 OID 18823)
 -- Name: membership_order membership_order_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1066,7 +1142,7 @@ ALTER TABLE ONLY public.membership_order ALTER COLUMN membership_order_id SET DE
 
 
 --
--- TOC entry 4874 (class 2604 OID 18994)
+-- TOC entry 4879 (class 2604 OID 18994)
 -- Name: model_price_province model_price_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1074,7 +1150,7 @@ ALTER TABLE ONLY public.model_price_province ALTER COLUMN model_price_id SET DEF
 
 
 --
--- TOC entry 4850 (class 2604 OID 18763)
+-- TOC entry 4855 (class 2604 OID 18763)
 -- Name: province province_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1082,7 +1158,7 @@ ALTER TABLE ONLY public.province ALTER COLUMN province_id SET DEFAULT nextval('p
 
 
 --
--- TOC entry 4866 (class 2604 OID 18883)
+-- TOC entry 4871 (class 2604 OID 18883)
 -- Name: vehicle vehicle_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1090,7 +1166,7 @@ ALTER TABLE ONLY public.vehicle ALTER COLUMN vehicle_id SET DEFAULT nextval('pub
 
 
 --
--- TOC entry 4862 (class 2604 OID 18859)
+-- TOC entry 4867 (class 2604 OID 18859)
 -- Name: vehicle_model model_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1098,7 +1174,7 @@ ALTER TABLE ONLY public.vehicle_model ALTER COLUMN model_id SET DEFAULT nextval(
 
 
 --
--- TOC entry 4860 (class 2604 OID 18844)
+-- TOC entry 4865 (class 2604 OID 18844)
 -- Name: vehicle_segment segment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1106,7 +1182,7 @@ ALTER TABLE ONLY public.vehicle_segment ALTER COLUMN segment_id SET DEFAULT next
 
 
 --
--- TOC entry 4851 (class 2604 OID 18772)
+-- TOC entry 4856 (class 2604 OID 18772)
 -- Name: ward ward_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1114,7 +1190,7 @@ ALTER TABLE ONLY public.ward ALTER COLUMN ward_id SET DEFAULT nextval('public.wa
 
 
 --
--- TOC entry 4871 (class 2604 OID 18943)
+-- TOC entry 4876 (class 2604 OID 18943)
 -- Name: zone zone_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -1122,7 +1198,7 @@ ALTER TABLE ONLY public.zone ALTER COLUMN zone_id SET DEFAULT nextval('public.zo
 
 
 --
--- TOC entry 5172 (class 0 OID 18795)
+-- TOC entry 5192 (class 0 OID 18795)
 -- Dependencies: 225
 -- Data for Name: account; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1130,7 +1206,6 @@ ALTER TABLE ONLY public.zone ALTER COLUMN zone_id SET DEFAULT nextval('public.zo
 COPY public.account (account_id, company_id, username, password_hash, full_name, phone, email, role, status, created_at, updated_at, email_verified_at) FROM stdin;
 1	1	admin.hn	$2a$10$hash1	Nguyễn Văn Admin HN	0901234567	admin.hn@radiocabs.com	ADMIN	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 2	2	admin.hcm	$2a$10$hash2	Trần Thị Admin HCM	0907654321	admin.hcm@radiocabs.com	ADMIN	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
-3	3	admin.dn	$2a$10$hash3	Lê Văn Admin DN	0909876543	admin.dn@radiocabs.com	ADMIN	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 4	1	manager.hn	$2a$10$hash4	Phạm Thị Manager HN	0901111111	manager.hn@radiocabs.com	MANAGER	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 5	2	manager.hcm	$2a$10$hash5	Hoàng Văn Manager HCM	0902222222	manager.hcm@radiocabs.com	MANAGER	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 6	1	driver001.hn	$2a$10$hash6	Nguyễn Văn Tài Xế 1	0903333333	driver001.hn@radiocabs.com	DRIVER	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
@@ -1148,11 +1223,16 @@ COPY public.account (account_id, company_id, username, password_hash, full_name,
 19	4	4	$2a$11$T6biOX3oT8EzD1cLBG1HeehKTTe.YVTJICoan1yrw7sRT5SJ1rp2W	string	string	string	DISPATCHER	ACTIVE	2025-10-23 22:06:55.479862+07	\N	\N
 20	4	5	$2a$11$rkm0Pwg43p.21ZaX4Og6tOqXqUaSzB2plzeuWinOqpzW9B7ChNZq6	string	string	string	ACCOUNTANT	ACTIVE	2025-10-23 22:07:25.799809+07	\N	\N
 22	3	22	$2a$11$1lnXJFX/LqzoymEol3XQq.koID41l9sMi4FOJx4gDFxrPKbA9e77e	string	string	string	MANAGER	ACTIVE	2025-10-23 22:36:47.523537+07	\N	\N
+23	3	driver006	$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Nguyen Van F	0967890123	driver006@radiocabs-hn.com	DRIVER	ACTIVE	2025-10-24 20:23:59.550485+07	\N	2025-10-24 20:23:59.550485+07
+24	3	driver007	$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Tran Thi G	0978901234	driver007@radiocabs-hn.com	DRIVER	ACTIVE	2025-10-24 20:23:59.550485+07	\N	2025-10-24 20:23:59.550485+07
+25	3	driver008	$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Le Van H	0989012345	driver008@radiocabs-hcm.com	DRIVER	ACTIVE	2025-10-24 20:23:59.550485+07	\N	2025-10-24 20:23:59.550485+07
+3	3	admin.dn	$2a$10$hash3	Lê Văn Admin DN	0909876543	admin.dn@radiocabs.com	DISPATCHER	INACTIVE	2025-10-22 14:03:47.956554+07	2025-10-26 12:45:46.163343+07	2025-10-22 14:03:47.956554+07
+26	3	aa	$2a$11$1n/8HILgrThkSMKXBNHHBOZR6ofea5.2VPjNssM5wpEuYgLoZVw12	aa	090876558	aa@gmail.com	DISPATCHER	INACTIVE	2025-10-26 13:37:38.572908+07	2025-10-26 13:38:08.427254+07	\N
 \.
 
 
 --
--- TOC entry 5198 (class 0 OID 19324)
+-- TOC entry 5218 (class 0 OID 19324)
 -- Dependencies: 252
 -- Data for Name: auth_email_code; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1165,7 +1245,7 @@ COPY public.auth_email_code (code_id, account_id, email, purpose, code_hash, sen
 
 
 --
--- TOC entry 5196 (class 0 OID 19307)
+-- TOC entry 5216 (class 0 OID 19307)
 -- Dependencies: 250
 -- Data for Name: auth_refresh_session; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1203,25 +1283,29 @@ ba372f51-fa9a-42ee-910f-e4c5f870db27	22	$2a$11$kPY6SQMWFOGVTlusZ0PnGOWNerTvbjzY6
 f310190a-d175-49e3-b2a5-e19adf16072c	22	$2a$11$EP2CaSFPaoDTrecc66Fatu.xxL4v3Ha8HRDXTOi6oaa6UkwflMQtC	0c51affd-e7dc-4e10-841b-5d5c677d6e24	2025-10-24 19:51:04.156034+07	2025-10-31 19:51:04.156202+07	\N	\N	\N	\N
 8368295c-c558-4951-849a-a75cfb534062	22	$2a$11$zfq1FW7XWFF5meFwTJypVuixNJoEhGEdrNscZrOclJl3.S42/Bqgu	dfdf0bd2-b838-4b8e-86a6-d85c07158dcf	2025-10-24 20:12:36.342669+07	2025-10-31 20:12:36.34267+07	\N	\N	\N	\N
 ea685677-aeca-481d-98e7-c9f6f8bdd595	22	$2a$11$j39kvkjqLd1nUOUh3I0/z.ZDGktRzA795O5BZgAXw.z.Uov36lu7S	a79353dc-9469-4678-bd8e-dacdf15a2172	2025-10-24 20:12:36.331937+07	2025-10-31 20:12:36.331982+07	\N	\N	\N	\N
+43541267-0a2a-4746-9eda-9224fe58a6c9	22	$2a$11$sqn9fjPlIh20lwiujfKbHu0CqLbpjatAxiSYATxONlIiFmBTaqGDe	b5dfeb56-624c-4d41-a72f-a71f0b3b0c62	2025-10-24 21:02:25.465571+07	2025-10-31 21:02:25.465584+07	\N	\N	\N	\N
+62348dbb-df27-4372-9a3b-1109bfedd8e4	22	$2a$11$J8bct6gUMymZoRWmKGN1AuzphVWqIHfcjyRG64BZPsL/1ltK9Lu3C	87040c14-439d-4f96-a151-8628563847d9	2025-10-25 20:23:07.867931+07	2025-11-01 20:23:07.867943+07	\N	\N	\N	\N
+265bb1ed-2687-4a4f-872a-ec592ef9199c	18	$2a$11$yuqWIdDdUb4tC8ns/tVoZeQlXIyLfXHn87QEY0gRQILY7.gBkfBTC	fd0aa865-d62f-4f76-8741-2e92631d75c9	2025-10-27 13:01:07.812184+07	2025-11-03 13:01:07.812199+07	\N	\N	\N	\N
+2112a936-57a0-4395-b35d-cc6167d6c419	22	$2a$11$h4MjKNEy9UqE4sa6Zrds/.NNIonGplOI53kzyXwGW.3OFbgCjHGXq	2a34b851-f703-400c-a3bd-b99c1655ac55	2025-10-27 13:26:19.794679+07	2025-11-03 13:26:19.794691+07	\N	\N	\N	\N
 \.
 
 
 --
--- TOC entry 5170 (class 0 OID 18783)
+-- TOC entry 5190 (class 0 OID 18783)
 -- Dependencies: 223
 -- Data for Name: company; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.company (company_id, name, hotline, email, address, tax_code, status, contact_account_id, created_at, updated_at, fax) FROM stdin;
-4	RadioCabs TP.HCM	1900-5678	contact@radiocabs-hcm.com	456 Nguyễn Huệ, Quận 1, TP.HCM	0987654321	ACTIVE	\N	2025-10-22 14:03:47.956554+07	\N	028-9876543
-1	RadioCabs Hà Nội	1900-1234	contact@radiocabs-hn.com	123 Lê Lợi, Hoàn Kiếm, Hà Nội	0123456789	ACTIVE	1	2025-10-22 14:03:47.956554+07	\N	024-1234567
-2	Acme Taxi	1900-1234	contact@acme.taxi	123 Main St	0101234567	ACTIVE	2	-infinity	\N	
-3	RadioCabs Đà Nẵng	1900-9999	contact@radiocabs-dn.com	789 Lê Duẩn, Hải Châu, Đà Nẵng	0555666777	ACTIVE	3	2025-10-22 14:03:47.956554+07	\N	0236-123456
+COPY public.company (company_id, name, hotline, email, address, tax_code, status, contact_account_id, created_at, updated_at, fax, url_page) FROM stdin;
+4	RadioCabs TP.HCM	1900-5678	contact@radiocabs-hcm.com	456 Nguyễn Huệ, Quận 1, TP.HCM	0987654321	ACTIVE	\N	2025-10-22 14:03:47.956554+07	\N	028-9876543	\N
+1	RadioCabs Hà Nội	1900-1234	contact@radiocabs-hn.com	123 Lê Lợi, Hoàn Kiếm, Hà Nội	0123456789	ACTIVE	1	2025-10-22 14:03:47.956554+07	\N	024-1234567	\N
+2	Acme Taxi	1900-1234	contact@acme.taxi	123 Main St	0101234567	ACTIVE	2	-infinity	\N		\N
+3	RadioCabs Đà Nẵngd	1900-9999	contact@radiocabs-dn.com	789 Lê Duẩn, Hải Châu, Đà Nẵng	0555666776	ACTIVE	3	2025-10-22 14:03:47.956554+07	2025-10-26 23:16:16.945048+07	0236-123457	\N
 \.
 
 
 --
--- TOC entry 5195 (class 0 OID 19284)
+-- TOC entry 5215 (class 0 OID 19284)
 -- Dependencies: 249
 -- Data for Name: driver_schedule; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1250,11 +1334,56 @@ COPY public.driver_schedule (schedule_id, driver_account_id, work_date, start_ti
 21	10	2024-01-17	06:30:00	18:30:00	10	ON	Ca ngày thứ 4 - Đang làm việc	2025-10-22 14:03:47.956554+07	\N
 22	10	2024-01-18	06:30:00	18:30:00	10	PLANNED	Ca ngày thứ 5	2025-10-22 14:03:47.956554+07	\N
 23	10	2024-01-19	06:30:00	18:30:00	10	PLANNED	Ca ngày thứ 6	2025-10-22 14:03:47.956554+07	\N
+24	23	2024-12-02	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 2	2025-10-24 20:23:59.550485+07	\N
+25	23	2024-12-03	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 3	2025-10-24 20:23:59.550485+07	\N
+26	23	2024-12-04	06:00:00	14:00:00	3	ON	Ca sáng thứ 4 - Đang làm việc	2025-10-24 20:23:59.550485+07	\N
+27	23	2024-12-05	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 5	2025-10-24 20:23:59.550485+07	\N
+28	23	2024-12-06	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 6	2025-10-24 20:23:59.550485+07	\N
+29	24	2024-12-02	14:00:00	22:00:00	4	COMPLETED	Ca chiều thứ 2 - Đã hoàn thành	2025-10-24 20:23:59.550485+07	\N
+30	24	2024-12-03	14:00:00	22:00:00	4	COMPLETED	Ca chiều thứ 3 - Đã hoàn thành	2025-10-24 20:23:59.550485+07	\N
+31	24	2024-12-04	14:00:00	22:00:00	4	ON	Ca chiều thứ 4 - Đang làm việc	2025-10-24 20:23:59.550485+07	\N
+32	24	2024-12-05	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 5	2025-10-24 20:23:59.550485+07	\N
+33	24	2024-12-06	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 6	2025-10-24 20:23:59.550485+07	\N
+34	25	2024-12-02	08:00:00	16:00:00	5	COMPLETED	Ca ngày thứ 2 - Đã hoàn thành	2025-10-24 20:23:59.550485+07	\N
+35	25	2024-12-03	08:00:00	16:00:00	5	COMPLETED	Ca ngày thứ 3 - Đã hoàn thành	2025-10-24 20:23:59.550485+07	\N
+36	25	2024-12-04	08:00:00	16:00:00	5	ON	Ca ngày thứ 4 - Đang làm việc	2025-10-24 20:23:59.550485+07	\N
+37	25	2024-12-05	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 5	2025-10-24 20:23:59.550485+07	\N
+38	25	2024-12-06	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 6	2025-10-24 20:23:59.550485+07	\N
+40	23	2026-01-07	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 3	2025-10-24 20:27:06.283911+07	\N
+41	23	2026-01-08	06:00:00	14:00:00	3	ON	Ca sáng thứ 4 - Đang làm việc	2025-10-24 20:27:06.283911+07	\N
+42	23	2026-01-09	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 5	2025-10-24 20:27:06.283911+07	\N
+43	23	2026-01-10	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 6	2025-10-24 20:27:06.283911+07	\N
+44	24	2026-01-06	14:00:00	22:00:00	4	COMPLETED	Ca chiều thứ 2 - Đã hoàn thành	2025-10-24 20:27:06.283911+07	\N
+45	24	2026-01-07	14:00:00	22:00:00	4	COMPLETED	Ca chiều thứ 3 - Đã hoàn thành	2025-10-24 20:27:06.283911+07	\N
+46	24	2026-01-08	14:00:00	22:00:00	4	ON	Ca chiều thứ 4 - Đang làm việc	2025-10-24 20:27:06.283911+07	\N
+47	24	2026-01-09	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 5	2025-10-24 20:27:06.283911+07	\N
+48	24	2026-01-10	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 6	2025-10-24 20:27:06.283911+07	\N
+50	25	2026-01-07	08:00:00	16:00:00	5	COMPLETED	Ca ngày thứ 3 - Đã hoàn thành	2025-10-24 20:27:06.283911+07	\N
+51	25	2026-01-08	08:00:00	16:00:00	5	ON	Ca ngày thứ 4 - Đang làm việc	2025-10-24 20:27:06.283911+07	\N
+52	25	2026-01-09	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 5	2025-10-24 20:27:06.283911+07	\N
+53	25	2026-01-10	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 6	2025-10-24 20:27:06.283911+07	\N
+54	23	2026-01-13	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 2	2025-10-24 20:27:06.283911+07	\N
+55	23	2026-01-14	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 3	2025-10-24 20:27:06.283911+07	\N
+56	23	2026-01-15	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 4	2025-10-24 20:27:06.283911+07	\N
+57	23	2026-01-16	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 5	2025-10-24 20:27:06.283911+07	\N
+58	23	2026-01-17	06:00:00	14:00:00	3	PLANNED	Ca sáng thứ 6	2025-10-24 20:27:06.283911+07	\N
+59	24	2026-01-13	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 2	2025-10-24 20:27:06.283911+07	\N
+60	24	2026-01-14	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 3	2025-10-24 20:27:06.283911+07	\N
+61	24	2026-01-15	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 4	2025-10-24 20:27:06.283911+07	\N
+62	24	2026-01-16	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 5	2025-10-24 20:27:06.283911+07	\N
+63	24	2026-01-17	14:00:00	22:00:00	4	PLANNED	Ca chiều thứ 6	2025-10-24 20:27:06.283911+07	\N
+64	25	2026-01-13	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 2	2025-10-24 20:27:06.283911+07	\N
+65	25	2026-01-14	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 3	2025-10-24 20:27:06.283911+07	\N
+66	25	2026-01-15	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 4	2025-10-24 20:27:06.283911+07	\N
+67	25	2026-01-16	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 5	2025-10-24 20:27:06.283911+07	\N
+68	25	2026-01-17	08:00:00	16:00:00	5	PLANNED	Ca ngày thứ 6	2025-10-24 20:27:06.283911+07	\N
+49	25	2025-12-19	08:00:00	16:00:00	5	COMPLETED	Ca ngày thứ 2 - Đã hoàn thành	2025-10-24 20:27:06.283911+07	2025-10-26 21:07:05.262505+07
+71	23	2025-10-27	05:47:00	18:47:00	11	PLANNED	\N	2025-10-27 13:48:01.922261+07	2025-10-27 13:51:42.125496+07
 \.
 
 
 --
--- TOC entry 5193 (class 0 OID 19262)
+-- TOC entry 5213 (class 0 OID 19262)
 -- Dependencies: 247
 -- Data for Name: driver_schedule_template; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1279,11 +1408,27 @@ COPY public.driver_schedule_template (template_id, driver_account_id, start_date
 17	10	2024-01-01	2024-12-31	3	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
 18	10	2024-01-01	2024-12-31	4	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
 19	10	2024-01-01	2024-12-31	5	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+20	23	2024-12-01	2024-12-31	1	06:00:00	14:00:00	3	Ca sáng thứ 2	t
+21	23	2024-12-01	2024-12-31	2	06:00:00	14:00:00	3	Ca sáng thứ 3	t
+22	23	2024-12-01	2024-12-31	3	06:00:00	14:00:00	3	Ca sáng thứ 4	t
+23	24	2024-12-01	2024-12-31	1	14:00:00	22:00:00	4	Ca chiều thứ 2	t
+24	24	2024-12-01	2024-12-31	2	14:00:00	22:00:00	4	Ca chiều thứ 3	t
+25	24	2024-12-01	2024-12-31	3	14:00:00	22:00:00	4	Ca chiều thứ 4	t
+26	25	2024-12-01	2024-12-31	1	08:00:00	16:00:00	5	Ca ngày thứ 2	t
+27	25	2024-12-01	2024-12-31	2	08:00:00	16:00:00	5	Ca ngày thứ 3	t
+28	25	2024-12-01	2024-12-31	3	08:00:00	16:00:00	5	Ca ngày thứ 4	t
+29	23	2026-01-01	2026-12-31	4	06:00:00	14:00:00	3	Ca sáng thứ 5	t
+30	23	2026-01-01	2026-12-31	5	06:00:00	14:00:00	3	Ca sáng thứ 6	t
+31	24	2026-01-01	2026-12-31	4	14:00:00	22:00:00	4	Ca chiều thứ 5	t
+32	24	2026-01-01	2026-12-31	5	14:00:00	22:00:00	4	Ca chiều thứ 6	t
+33	25	2026-01-01	2026-12-31	4	08:00:00	16:00:00	5	Ca ngày thứ 5	t
+34	25	2026-01-01	2026-12-31	5	08:00:00	16:00:00	5	Ca ngày thứ 6	t
+36	10	2025-10-02	2025-10-24	6	15:05:00	17:05:00	11	\N	t
 \.
 
 
 --
--- TOC entry 5182 (class 0 OID 18902)
+-- TOC entry 5202 (class 0 OID 18902)
 -- Dependencies: 235
 -- Data for Name: driver_vehicle_assignment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1296,42 +1441,60 @@ COPY public.driver_vehicle_assignment (assignment_id, driver_account_id, vehicle
 5	10	10	2024-01-01 06:00:00+07	\N
 6	6	3	2023-12-01 06:00:00+07	2023-12-31 18:00:00+07
 7	7	4	2023-12-01 06:00:00+07	2023-12-31 18:00:00+07
+8	23	3	2025-10-24 20:23:59.550485+07	\N
+9	24	4	2025-10-24 20:23:59.550485+07	\N
+10	25	5	2025-10-24 20:23:59.550485+07	\N
+12	23	11	2025-10-09 07:00:00+07	2025-10-25 07:00:00+07
 \.
 
 
 --
--- TOC entry 5191 (class 0 OID 19023)
+-- TOC entry 5211 (class 0 OID 19023)
 -- Dependencies: 244
 -- Data for Name: driving_order; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.driving_order (order_id, company_id, customer_account_id, vehicle_id, driver_account_id, model_id, price_ref_id, from_province_id, to_province_id, pickup_address, dropoff_address, pickup_time, dropoff_time, status, total_km, inner_city_km, intercity_km, traffic_km, is_raining, wait_minutes, base_fare, traffic_unit_price, traffic_fee, rain_fee, intercity_unit_price, intercity_fee, other_fee, total_amount, fare_breakdown, payment_method, paid_at, created_at, updated_at) FROM stdin;
-1	1	11	1	6	1	1	1	1	123 Lê Lợi, Hoàn Kiếm, Hà Nội	456 Nguyễn Huệ, Hai Bà Trưng, Hà Nội	2024-01-15 08:00:00+07	2024-01-15 08:30:00+07	DONE	8.50	8.50	0.00	2.00	f	5	15000.00	2000.00	4000.00	0.00	15000.00	0.00	0.00	19000.00	{"base_fare": 15000, "traffic_fee": 4000}	CASH	2024-01-15 08:35:00+07	2024-01-15 07:45:00+07	\N
-2	1	12	2	7	2	3	1	1	789 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội	321 Cầu Giấy, Cầu Giấy, Hà Nội	2024-01-15 14:00:00+07	2024-01-15 14:45:00+07	ONGOING	15.20	15.20	0.00	3.50	t	0	18000.00	2500.00	8750.00	5000.00	16000.00	0.00	0.00	31750.00	{"rain_fee": 5000, "base_fare": 18000, "traffic_fee": 8750}	\N	\N	2024-01-15 13:30:00+07	\N
-3	2	13	6	8	5	6	2	2	111 Nguyễn Huệ, Quận 1, TP.HCM	222 Lê Văn Việt, Quận 9, TP.HCM	2024-01-16 09:00:00+07	\N	ASSIGNED	25.80	25.80	0.00	5.20	f	0	16000.00	2200.00	11440.00	0.00	16000.00	0.00	0.00	27440.00	{"base_fare": 16000, "traffic_fee": 11440}	\N	\N	2024-01-16 08:30:00+07	\N
-4	2	11	7	9	6	8	2	2	333 Điện Biên Phủ, Bình Thạnh, TP.HCM	444 Nguyễn Thị Thập, Quận 7, TP.HCM	2024-01-16 16:00:00+07	2024-01-16 16:50:00+07	DONE	18.70	18.70	0.00	4.10	f	10	19000.00	2700.00	11070.00	0.00	17000.00	0.00	0.00	30070.00	{"base_fare": 19000, "traffic_fee": 11070}	CARD	2024-01-16 17:00:00+07	2024-01-16 15:30:00+07	\N
-5	3	12	10	10	8	10	3	3	555 Lê Duẩn, Hải Châu, Đà Nẵng	666 Ngũ Hành Sơn, Ngũ Hành Sơn, Đà Nẵng	2024-01-17 10:00:00+07	\N	NEW	12.30	12.30	0.00	2.80	f	0	14000.00	1800.00	5040.00	0.00	14000.00	0.00	0.00	19040.00	{"base_fare": 14000, "traffic_fee": 5040}	\N	\N	2024-01-17 09:30:00+07	\N
-6	1	2	\N	\N	5	\N	1	2	updated	456 Đường XYZ, Quận 2, TP.HCM	2024-01-15 15:00:00+07	2025-10-22 19:40:15.666542+07	CANCELLED	12334.00	123132.00	233.00	2323.00	t	23	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	\N	CASH	\N	2025-10-22 19:34:42.642924+07	2025-10-22 19:41:43.771671+07
+COPY public.driving_order (order_id, company_id, customer_account_id, vehicle_id, driver_account_id, model_id, price_ref_id, from_province_id, to_province_id, pickup_address, dropoff_address, pickup_time, dropoff_time, status, total_km, inner_city_km, intercity_km, traffic_km, is_raining, wait_minutes, base_fare, traffic_unit_price, traffic_fee, rain_fee, intercity_unit_price, intercity_fee, other_fee, total_amount, fare_breakdown, payment_method, paid_at, created_at, updated_at, driver_schedule_id) FROM stdin;
+1	3	11	1	6	1	1	1	1	123 Lê Lợi, Hoàn Kiếm, Hà Nội	456 Nguyễn Huệ, Hai Bà Trưng, Hà Nội	2024-01-15 08:00:00+07	2024-01-15 08:30:00+07	DONE	8.50	8.50	0.00	2.00	f	5	15000.00	2000.00	4000.00	0.00	15000.00	0.00	0.00	19000.00	{"base_fare": 15000, "traffic_fee": 4000}	CASH	2024-01-15 08:35:00+07	2024-01-15 07:45:00+07	\N	\N
+2	3	12	2	7	2	3	1	1	789 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội	321 Cầu Giấy, Cầu Giấy, Hà Nội	2024-01-15 14:00:00+07	2024-01-15 14:45:00+07	ONGOING	15.20	15.20	0.00	3.50	t	0	18000.00	2500.00	8750.00	5000.00	16000.00	0.00	0.00	31750.00	{"rain_fee": 5000, "base_fare": 18000, "traffic_fee": 8750}	\N	\N	2024-01-15 13:30:00+07	\N	\N
+3	3	13	6	8	5	6	2	2	111 Nguyễn Huệ, Quận 1, TP.HCM	222 Lê Văn Việt, Quận 9, TP.HCM	2024-01-16 09:00:00+07	\N	ASSIGNED	25.80	25.80	0.00	5.20	f	0	16000.00	2200.00	11440.00	0.00	16000.00	0.00	0.00	27440.00	{"base_fare": 16000, "traffic_fee": 11440}	\N	\N	2024-01-16 08:30:00+07	\N	\N
+4	3	11	7	9	6	8	2	2	333 Điện Biên Phủ, Bình Thạnh, TP.HCM	444 Nguyễn Thị Thập, Quận 7, TP.HCM	2024-01-16 16:00:00+07	2024-01-16 16:50:00+07	DONE	18.70	18.70	0.00	4.10	f	10	19000.00	2700.00	11070.00	0.00	17000.00	0.00	0.00	30070.00	{"base_fare": 19000, "traffic_fee": 11070}	CARD	2024-01-16 17:00:00+07	2024-01-16 15:30:00+07	\N	23
+5	3	12	10	10	8	10	3	3	555 Lê Duẩn, Hải Châu, Đà Nẵng	666 Ngũ Hành Sơn, Ngũ Hành Sơn, Đà Nẵng	2024-01-17 10:00:00+07	\N	NEW	12.30	12.30	0.00	2.80	f	0	14000.00	1800.00	5040.00	0.00	14000.00	0.00	0.00	19040.00	{"base_fare": 14000, "traffic_fee": 5040}	\N	\N	2024-01-17 09:30:00+07	\N	25
+6	3	2	\N	\N	5	9	1	2	updated	456 Đường XYZ, Quận 2, TP.HCM	2024-01-15 15:00:00+07	2025-10-22 19:40:15.666542+07	CANCELLED	12334.00	123132.00	233.00	2323.00	t	23	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	\N	CASH	\N	2025-10-22 19:34:42.642924+07	2025-10-22 19:41:43.771671+07	24
 \.
 
 
 --
--- TOC entry 5174 (class 0 OID 18820)
+-- TOC entry 5219 (class 0 OID 19363)
+-- Dependencies: 253
+-- Data for Name: membership; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.membership (membership_id, company_id, name, code, unit_price, description, is_active, created_at, updated_at, status) FROM stdin;
+1	1	Gói 2022	2022	500000.00	2022	f	2025-10-26 23:53:38.59452+07	\N	t
+2	1	Gói 2023	2023	800000.00	2023	f	2025-10-26 23:53:38.59452+07	\N	t
+3	1	Gói 2024	2024	1200000.00	2024	t	2025-10-26 23:53:38.59452+07	\N	t
+\.
+
+
+--
+-- TOC entry 5194 (class 0 OID 18820)
 -- Dependencies: 227
 -- Data for Name: membership_order; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.membership_order (membership_order_id, company_id, payer_account_id, unit_months, unit_price, amount, start_date, end_date, paid_at, payment_method, note) FROM stdin;
-1	1	11	12	500000.00	6000000.00	2024-01-01	2024-12-31	2024-01-01 10:00:00+07	BANK	Gói thành viên năm 2024
-2	2	12	6	550000.00	3300000.00	2024-01-01	2024-06-30	2024-01-01 11:00:00+07	CARD	Gói thành viên 6 tháng
-3	1	13	3	600000.00	1800000.00	2024-01-01	2024-03-31	2024-01-01 12:00:00+07	WALLET	Gói thành viên 3 tháng
-4	3	11	1	700000.00	700000.00	2024-01-01	2024-01-31	2024-01-01 13:00:00+07	CASH	Gói thành viên tháng
-5	2	12	12	480000.00	5760000.00	2024-01-01	2024-12-31	\N	\N	Gói thành viên năm - chưa thanh toán
+COPY public.membership_order (membership_order_id, company_id, payer_account_id, unit_months, unit_price, amount, start_date, end_date, paid_at, payment_method, note, membership_id, payment_code) FROM stdin;
+1	1	11	12	500000.00	6000000.00	2024-01-01	2024-12-31	2024-01-01 10:00:00+07	BANK	Gói thành viên năm 2024	1	\N
+2	3	12	6	550000.00	3300000.00	2024-01-01	2024-06-30	2024-01-01 11:00:00+07	CARD	Gói thành viên 6 tháng	2	\N
+3	3	13	3	600000.00	1800000.00	2024-01-01	2024-03-31	2024-01-01 12:00:00+07	WALLET	Gói thành viên 3 tháng	3	\N
+12	3	1	12	800000.00	9600000.00	2024-01-01	20255-12-31	2025-01-01 07:00:00+07	BANK	Nâng cấp lên gói cao cấp	2	TXN202401010003
+13	3	5	6	600000.00	3600000.00	2024-02-01	20255-07-31	2025-02-02 07:00:00+07	CARD	Đăng ký gói tiêu chuẩn	2	CC202402010001
+14	3	8	6	450000.00	2700000.00	2024-03-01	2024-08-31	2025-02-03 07:00:00+07	CARD	Chờ thanh toán gói cơ bản	2	CC2099402010001
 \.
 
 
 --
--- TOC entry 5189 (class 0 OID 18991)
+-- TOC entry 5209 (class 0 OID 18991)
 -- Dependencies: 242
 -- Data for Name: model_price_province; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1347,13 +1510,13 @@ COPY public.model_price_province (model_price_id, company_id, province_id, model
 8	2	2	6	19000.00	15000.00	12000.00	2700.00	6000.00	17000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	t	Giá Honda City
 9	2	2	7	26000.00	19000.00	16000.00	3200.00	9000.00	21000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	t	Giá Camry
 10	3	3	8	14000.00	11000.00	9000.00	1800.00	4000.00	14000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	t	Giá ban ngày
-11	3	3	8	19000.00	14000.00	11000.00	2800.00	4000.00	17000.00	22:00:00	06:00:00	10	2024-01-01	2024-12-31	t	Giá ban đêm
-12	3	3	9	17000.00	13000.00	10000.00	2300.00	4000.00	15000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	t	Giá Honda City
+12	3	3	9	170000.00	130000.00	10000.00	23000.00	40000.00	150000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	f	Giá Honda City
+11	3	3	8	19000.00	14000.00	11000.00	2800.00	4000.00	17000.00	22:00:00	06:00:00	10	2024-01-01	2024-12-31	f	Giá ban đêm
 \.
 
 
 --
--- TOC entry 5166 (class 0 OID 18760)
+-- TOC entry 5186 (class 0 OID 18760)
 -- Dependencies: 219
 -- Data for Name: province; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1368,7 +1531,7 @@ COPY public.province (province_id, code, name) FROM stdin;
 
 
 --
--- TOC entry 5180 (class 0 OID 18880)
+-- TOC entry 5200 (class 0 OID 18880)
 -- Dependencies: 233
 -- Data for Name: vehicle; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1383,14 +1546,15 @@ COPY public.vehicle (vehicle_id, company_id, model_id, plate_number, vin, color,
 7	2	5	51A-56790	VIN5678901235	Đỏ	2023	2023-01-15	16000	ACTIVE
 8	2	6	51A-56791	VIN5678901236	Bạc	2023	2023-02-01	14000	ACTIVE
 9	2	7	51A-56792	VIN5678901237	Trắng	2023	2023-02-15	11000	ACTIVE
-11	3	9	43A-99998	VIN9999999998	Đen	2023	2023-01-15	7500	ACTIVE
 12	1	5	51A-67890	1HGBH41JXMN109186	Đen	2024	2024-01-01	1000	INACTIVE
-10	3	8	43A-99999	VIN9999999999	Trắng	2023	2023-01-01	6969	ACTIVE
+10	3	8	43A-99999	VIN9999999999	Trắng	2022	-infinity	696922	ACTIVE
+11	3	9	34A-99998	dIN9999999998	Đen	2023	-infinity	7500	ACTIVE
+16	3	8	29K2-03701	1HCADSLSL1HCAD	Đen	2222	-infinity	2	ACTIVE
 \.
 
 
 --
--- TOC entry 5183 (class 0 OID 18923)
+-- TOC entry 5203 (class 0 OID 18923)
 -- Dependencies: 236
 -- Data for Name: vehicle_in_province; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1411,7 +1575,7 @@ COPY public.vehicle_in_province (vehicle_id, province_id, allowed, since_date) F
 
 
 --
--- TOC entry 5178 (class 0 OID 18856)
+-- TOC entry 5198 (class 0 OID 18856)
 -- Dependencies: 231
 -- Data for Name: vehicle_model; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1425,12 +1589,12 @@ COPY public.vehicle_model (model_id, company_id, segment_id, brand, model_name, 
 6	2	4	Honda	City	GASOLINE	SEDAN_5	https://example.com/city.jpg	Xe sedan 4 chỗ, động cơ 1.5L	t
 7	2	5	Toyota	Camry	GASOLINE	SEDAN_5	https://example.com/camry.jpg	Xe sedan cao cấp, động cơ 2.0L	t
 8	3	6	Toyota	Vios	GASOLINE	SEDAN_5	https://example.com/vios.jpg	Xe sedan 4 chỗ, tiết kiệm nhiên liệu	t
-9	3	6	Honda	City	GASOLINE	SEDAN_5	https://example.com/city.jpg	Xe sedan 4 chỗ, động cơ 1.5L	t
+9	3	6	Honda	City	GASOLINE	HATCHBACK_5	https://example.com/city.jpg	Xe sedan 4 chỗ, động cơ 1.5L	t
 \.
 
 
 --
--- TOC entry 5176 (class 0 OID 18841)
+-- TOC entry 5196 (class 0 OID 18841)
 -- Dependencies: 229
 -- Data for Name: vehicle_segment; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1442,11 +1606,12 @@ COPY public.vehicle_segment (segment_id, company_id, code, name, description, is
 4	2	ECONOMY	Hạng Phổ Thông	Xe 4-5 chỗ, tiết kiệm nhiên liệu	t
 5	2	COMFORT	Hạng Tiện Nghi	Xe 4-5 chỗ, tiện nghi cao	t
 6	3	ECONOMY	Hạng Phổ Thông	Xe 4-5 chỗ, tiết kiệm nhiên liệu	t
+20	3	ssAAA	AA	ssAA	t
 \.
 
 
 --
--- TOC entry 5187 (class 0 OID 18974)
+-- TOC entry 5207 (class 0 OID 18974)
 -- Dependencies: 240
 -- Data for Name: vehicle_zone_preference; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1478,7 +1643,7 @@ COPY public.vehicle_zone_preference (vehicle_id, zone_id, priority) FROM stdin;
 
 
 --
--- TOC entry 5168 (class 0 OID 18769)
+-- TOC entry 5188 (class 0 OID 18769)
 -- Dependencies: 221
 -- Data for Name: ward; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1503,7 +1668,7 @@ COPY public.ward (ward_id, province_id, code, name) FROM stdin;
 
 
 --
--- TOC entry 5185 (class 0 OID 18940)
+-- TOC entry 5205 (class 0 OID 18940)
 -- Dependencies: 238
 -- Data for Name: zone; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1515,13 +1680,14 @@ COPY public.zone (zone_id, company_id, province_id, code, name, description, is_
 4	2	2	HCM_CENTER	Trung Tâm TP.HCM	Khu vực trung tâm thành phố	t
 5	2	2	HCM_AIRPORT	Sân Bay Tân Sơn Nhất	Khu vực sân bay Tân Sơn Nhất	t
 6	2	2	HCM_EAST	Đông TP.HCM	Khu vực phía Đông thành phố	t
-7	3	3	DN_CENTER	Trung Tâm Đà Nẵng	Khu vực trung tâm thành phố	t
 8	3	3	DN_AIRPORT	Sân Bay Đà Nẵng	Khu vực sân bay Đà Nẵng	t
+7	3	3	DN_CENTER	Trung Tâm Đà Nẵng	Khu vực trung tâm thành phố dn	t
+13	3	3	sdg	sdfg	dsg	t
 \.
 
 
 --
--- TOC entry 5186 (class 0 OID 18959)
+-- TOC entry 5206 (class 0 OID 18959)
 -- Dependencies: 239
 -- Data for Name: zone_ward; Type: TABLE DATA; Schema: public; Owner: postgres
 --
@@ -1541,25 +1707,25 @@ COPY public.zone_ward (zone_id, ward_id) FROM stdin;
 5	10
 6	6
 6	8
-7	11
 7	12
 7	13
 8	14
 8	15
+7	11
 \.
 
 
 --
--- TOC entry 5220 (class 0 OID 0)
+-- TOC entry 5245 (class 0 OID 0)
 -- Dependencies: 224
 -- Name: account_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.account_account_id_seq', 22, true);
+SELECT pg_catalog.setval('public.account_account_id_seq', 26, true);
 
 
 --
--- TOC entry 5221 (class 0 OID 0)
+-- TOC entry 5246 (class 0 OID 0)
 -- Dependencies: 251
 -- Name: auth_email_code_code_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1568,7 +1734,7 @@ SELECT pg_catalog.setval('public.auth_email_code_code_id_seq', 3, true);
 
 
 --
--- TOC entry 5222 (class 0 OID 0)
+-- TOC entry 5247 (class 0 OID 0)
 -- Dependencies: 222
 -- Name: company_company_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1577,61 +1743,70 @@ SELECT pg_catalog.setval('public.company_company_id_seq', 5, true);
 
 
 --
--- TOC entry 5223 (class 0 OID 0)
+-- TOC entry 5248 (class 0 OID 0)
 -- Dependencies: 248
 -- Name: driver_schedule_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_schedule_schedule_id_seq', 23, true);
+SELECT pg_catalog.setval('public.driver_schedule_schedule_id_seq', 71, true);
 
 
 --
--- TOC entry 5224 (class 0 OID 0)
+-- TOC entry 5249 (class 0 OID 0)
 -- Dependencies: 246
 -- Name: driver_schedule_template_template_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_schedule_template_template_id_seq', 19, true);
+SELECT pg_catalog.setval('public.driver_schedule_template_template_id_seq', 36, true);
 
 
 --
--- TOC entry 5225 (class 0 OID 0)
+-- TOC entry 5250 (class 0 OID 0)
 -- Dependencies: 234
 -- Name: driver_vehicle_assignment_assignment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_vehicle_assignment_assignment_id_seq', 7, true);
+SELECT pg_catalog.setval('public.driver_vehicle_assignment_assignment_id_seq', 12, true);
 
 
 --
--- TOC entry 5226 (class 0 OID 0)
+-- TOC entry 5251 (class 0 OID 0)
 -- Dependencies: 243
 -- Name: driving_order_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driving_order_order_id_seq', 7, true);
+SELECT pg_catalog.setval('public.driving_order_order_id_seq', 8, true);
 
 
 --
--- TOC entry 5227 (class 0 OID 0)
+-- TOC entry 5252 (class 0 OID 0)
+-- Dependencies: 254
+-- Name: membership_membership_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.membership_membership_id_seq', 1, false);
+
+
+--
+-- TOC entry 5253 (class 0 OID 0)
 -- Dependencies: 226
 -- Name: membership_order_membership_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.membership_order_membership_order_id_seq', 5, true);
+SELECT pg_catalog.setval('public.membership_order_membership_order_id_seq', 14, true);
 
 
 --
--- TOC entry 5228 (class 0 OID 0)
+-- TOC entry 5254 (class 0 OID 0)
 -- Dependencies: 241
 -- Name: model_price_province_model_price_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.model_price_province_model_price_id_seq', 12, true);
+SELECT pg_catalog.setval('public.model_price_province_model_price_id_seq', 14, true);
 
 
 --
--- TOC entry 5229 (class 0 OID 0)
+-- TOC entry 5255 (class 0 OID 0)
 -- Dependencies: 218
 -- Name: province_province_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1640,34 +1815,34 @@ SELECT pg_catalog.setval('public.province_province_id_seq', 5, true);
 
 
 --
--- TOC entry 5230 (class 0 OID 0)
+-- TOC entry 5256 (class 0 OID 0)
 -- Dependencies: 230
 -- Name: vehicle_model_model_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_model_model_id_seq', 13, true);
+SELECT pg_catalog.setval('public.vehicle_model_model_id_seq', 14, true);
 
 
 --
--- TOC entry 5231 (class 0 OID 0)
+-- TOC entry 5257 (class 0 OID 0)
 -- Dependencies: 228
 -- Name: vehicle_segment_segment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_segment_segment_id_seq', 11, true);
+SELECT pg_catalog.setval('public.vehicle_segment_segment_id_seq', 20, true);
 
 
 --
--- TOC entry 5232 (class 0 OID 0)
+-- TOC entry 5258 (class 0 OID 0)
 -- Dependencies: 232
 -- Name: vehicle_vehicle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_vehicle_id_seq', 14, true);
+SELECT pg_catalog.setval('public.vehicle_vehicle_id_seq', 16, true);
 
 
 --
--- TOC entry 5233 (class 0 OID 0)
+-- TOC entry 5259 (class 0 OID 0)
 -- Dependencies: 220
 -- Name: ward_ward_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
@@ -1676,16 +1851,16 @@ SELECT pg_catalog.setval('public.ward_ward_id_seq', 15, true);
 
 
 --
--- TOC entry 5234 (class 0 OID 0)
+-- TOC entry 5260 (class 0 OID 0)
 -- Dependencies: 237
 -- Name: zone_zone_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_zone_id_seq', 8, true);
+SELECT pg_catalog.setval('public.zone_zone_id_seq', 13, true);
 
 
 --
--- TOC entry 4924 (class 2606 OID 18805)
+-- TOC entry 4934 (class 2606 OID 18805)
 -- Name: account account_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1694,7 +1869,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 4926 (class 2606 OID 18807)
+-- TOC entry 4936 (class 2606 OID 18807)
 -- Name: account account_username_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1703,7 +1878,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 4979 (class 2606 OID 19332)
+-- TOC entry 4991 (class 2606 OID 19332)
 -- Name: auth_email_code auth_email_code_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1712,7 +1887,7 @@ ALTER TABLE ONLY public.auth_email_code
 
 
 --
--- TOC entry 4975 (class 2606 OID 19317)
+-- TOC entry 4987 (class 2606 OID 19317)
 -- Name: auth_refresh_session auth_refresh_session_jti_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1721,7 +1896,7 @@ ALTER TABLE ONLY public.auth_refresh_session
 
 
 --
--- TOC entry 4977 (class 2606 OID 19315)
+-- TOC entry 4989 (class 2606 OID 19315)
 -- Name: auth_refresh_session auth_refresh_session_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1730,7 +1905,7 @@ ALTER TABLE ONLY public.auth_refresh_session
 
 
 --
--- TOC entry 4921 (class 2606 OID 18792)
+-- TOC entry 4931 (class 2606 OID 18792)
 -- Name: company company_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1739,7 +1914,7 @@ ALTER TABLE ONLY public.company
 
 
 --
--- TOC entry 4971 (class 2606 OID 19292)
+-- TOC entry 4983 (class 2606 OID 19292)
 -- Name: driver_schedule driver_schedule_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1748,7 +1923,7 @@ ALTER TABLE ONLY public.driver_schedule
 
 
 --
--- TOC entry 4968 (class 2606 OID 19271)
+-- TOC entry 4980 (class 2606 OID 19271)
 -- Name: driver_schedule_template driver_schedule_template_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1757,7 +1932,7 @@ ALTER TABLE ONLY public.driver_schedule_template
 
 
 --
--- TOC entry 4945 (class 2606 OID 18909)
+-- TOC entry 4955 (class 2606 OID 18909)
 -- Name: driver_vehicle_assignment driver_vehicle_assignment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1766,7 +1941,7 @@ ALTER TABLE ONLY public.driver_vehicle_assignment
 
 
 --
--- TOC entry 4963 (class 2606 OID 19043)
+-- TOC entry 4973 (class 2606 OID 19043)
 -- Name: driving_order driving_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1775,7 +1950,16 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 4930 (class 2606 OID 18828)
+-- TOC entry 4995 (class 2606 OID 19376)
+-- Name: membership membership_company_id_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membership
+    ADD CONSTRAINT membership_company_id_code_key UNIQUE (company_id, code);
+
+
+--
+-- TOC entry 4940 (class 2606 OID 18828)
 -- Name: membership_order membership_order_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1784,7 +1968,16 @@ ALTER TABLE ONLY public.membership_order
 
 
 --
--- TOC entry 4961 (class 2606 OID 19000)
+-- TOC entry 4997 (class 2606 OID 19374)
+-- Name: membership membership_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membership
+    ADD CONSTRAINT membership_pkey PRIMARY KEY (membership_id);
+
+
+--
+-- TOC entry 4971 (class 2606 OID 19000)
 -- Name: model_price_province model_price_province_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1793,7 +1986,7 @@ ALTER TABLE ONLY public.model_price_province
 
 
 --
--- TOC entry 4913 (class 2606 OID 18767)
+-- TOC entry 4923 (class 2606 OID 18767)
 -- Name: province province_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1802,7 +1995,7 @@ ALTER TABLE ONLY public.province
 
 
 --
--- TOC entry 4915 (class 2606 OID 18765)
+-- TOC entry 4925 (class 2606 OID 18765)
 -- Name: province province_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1811,7 +2004,7 @@ ALTER TABLE ONLY public.province
 
 
 --
--- TOC entry 4950 (class 2606 OID 18928)
+-- TOC entry 4960 (class 2606 OID 18928)
 -- Name: vehicle_in_province vehicle_in_province_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1820,7 +2013,7 @@ ALTER TABLE ONLY public.vehicle_in_province
 
 
 --
--- TOC entry 4936 (class 2606 OID 18868)
+-- TOC entry 4946 (class 2606 OID 18868)
 -- Name: vehicle_model vehicle_model_company_id_brand_model_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1829,7 +2022,7 @@ ALTER TABLE ONLY public.vehicle_model
 
 
 --
--- TOC entry 4938 (class 2606 OID 18866)
+-- TOC entry 4948 (class 2606 OID 18866)
 -- Name: vehicle_model vehicle_model_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1838,7 +2031,7 @@ ALTER TABLE ONLY public.vehicle_model
 
 
 --
--- TOC entry 4941 (class 2606 OID 18887)
+-- TOC entry 4951 (class 2606 OID 18887)
 -- Name: vehicle vehicle_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1847,7 +2040,7 @@ ALTER TABLE ONLY public.vehicle
 
 
 --
--- TOC entry 4943 (class 2606 OID 18889)
+-- TOC entry 4953 (class 2606 OID 18889)
 -- Name: vehicle vehicle_plate_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1856,7 +2049,7 @@ ALTER TABLE ONLY public.vehicle
 
 
 --
--- TOC entry 4932 (class 2606 OID 18849)
+-- TOC entry 4942 (class 2606 OID 18849)
 -- Name: vehicle_segment vehicle_segment_company_id_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1865,7 +2058,7 @@ ALTER TABLE ONLY public.vehicle_segment
 
 
 --
--- TOC entry 4934 (class 2606 OID 18847)
+-- TOC entry 4944 (class 2606 OID 18847)
 -- Name: vehicle_segment vehicle_segment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1874,7 +2067,7 @@ ALTER TABLE ONLY public.vehicle_segment
 
 
 --
--- TOC entry 4958 (class 2606 OID 18979)
+-- TOC entry 4968 (class 2606 OID 18979)
 -- Name: vehicle_zone_preference vehicle_zone_preference_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1883,7 +2076,7 @@ ALTER TABLE ONLY public.vehicle_zone_preference
 
 
 --
--- TOC entry 4917 (class 2606 OID 18774)
+-- TOC entry 4927 (class 2606 OID 18774)
 -- Name: ward ward_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1892,7 +2085,7 @@ ALTER TABLE ONLY public.ward
 
 
 --
--- TOC entry 4919 (class 2606 OID 18776)
+-- TOC entry 4929 (class 2606 OID 18776)
 -- Name: ward ward_province_id_name_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1901,7 +2094,7 @@ ALTER TABLE ONLY public.ward
 
 
 --
--- TOC entry 4952 (class 2606 OID 18948)
+-- TOC entry 4962 (class 2606 OID 18948)
 -- Name: zone zone_company_id_province_id_code_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1910,7 +2103,7 @@ ALTER TABLE ONLY public.zone
 
 
 --
--- TOC entry 4954 (class 2606 OID 18946)
+-- TOC entry 4964 (class 2606 OID 18946)
 -- Name: zone zone_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1919,7 +2112,7 @@ ALTER TABLE ONLY public.zone
 
 
 --
--- TOC entry 4956 (class 2606 OID 18963)
+-- TOC entry 4966 (class 2606 OID 18963)
 -- Name: zone_ward zone_ward_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -1928,7 +2121,23 @@ ALTER TABLE ONLY public.zone_ward
 
 
 --
--- TOC entry 4927 (class 1259 OID 18813)
+-- TOC entry 4974 (class 1259 OID 19395)
+-- Name: idx_driving_order_driver_schedule_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_driving_order_driver_schedule_id ON public.driving_order USING btree (driver_schedule_id);
+
+
+--
+-- TOC entry 4975 (class 1259 OID 19389)
+-- Name: idx_driving_order_price_ref_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_driving_order_price_ref_id ON public.driving_order USING btree (price_ref_id);
+
+
+--
+-- TOC entry 4937 (class 1259 OID 18813)
 -- Name: ix_account_company_role; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1936,7 +2145,7 @@ CREATE INDEX ix_account_company_role ON public.account USING btree (company_id, 
 
 
 --
--- TOC entry 4922 (class 1259 OID 18793)
+-- TOC entry 4932 (class 1259 OID 18793)
 -- Name: ix_company_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1944,7 +2153,7 @@ CREATE INDEX ix_company_status ON public.company USING btree (status);
 
 
 --
--- TOC entry 4972 (class 1259 OID 19304)
+-- TOC entry 4984 (class 1259 OID 19304)
 -- Name: ix_driver_schedule_lookup; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1952,7 +2161,7 @@ CREATE INDEX ix_driver_schedule_lookup ON public.driver_schedule USING btree (wo
 
 
 --
--- TOC entry 4969 (class 1259 OID 19282)
+-- TOC entry 4981 (class 1259 OID 19282)
 -- Name: ix_dst_driver_weekday; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1960,7 +2169,7 @@ CREATE INDEX ix_dst_driver_weekday ON public.driver_schedule_template USING btre
 
 
 --
--- TOC entry 4946 (class 1259 OID 18920)
+-- TOC entry 4956 (class 1259 OID 18920)
 -- Name: ix_dva_driver_time; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1968,7 +2177,7 @@ CREATE INDEX ix_dva_driver_time ON public.driver_vehicle_assignment USING btree 
 
 
 --
--- TOC entry 4947 (class 1259 OID 18921)
+-- TOC entry 4957 (class 1259 OID 18921)
 -- Name: ix_dva_vehicle_time; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1976,7 +2185,15 @@ CREATE INDEX ix_dva_vehicle_time ON public.driver_vehicle_assignment USING btree
 
 
 --
--- TOC entry 4928 (class 1259 OID 18839)
+-- TOC entry 4993 (class 1259 OID 19387)
+-- Name: ix_membership_active; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX ix_membership_active ON public.membership USING btree (is_active);
+
+
+--
+-- TOC entry 4938 (class 1259 OID 18839)
 -- Name: ix_membership_company; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1984,7 +2201,7 @@ CREATE INDEX ix_membership_company ON public.membership_order USING btree (compa
 
 
 --
--- TOC entry 4959 (class 1259 OID 19021)
+-- TOC entry 4969 (class 1259 OID 19021)
 -- Name: ix_mpp_lookup; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -1992,7 +2209,7 @@ CREATE INDEX ix_mpp_lookup ON public.model_price_province USING btree (company_i
 
 
 --
--- TOC entry 4964 (class 1259 OID 19084)
+-- TOC entry 4976 (class 1259 OID 19084)
 -- Name: ix_order_company_status; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2000,7 +2217,7 @@ CREATE INDEX ix_order_company_status ON public.driving_order USING btree (compan
 
 
 --
--- TOC entry 4965 (class 1259 OID 19085)
+-- TOC entry 4977 (class 1259 OID 19085)
 -- Name: ix_order_driver_time; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2008,7 +2225,7 @@ CREATE INDEX ix_order_driver_time ON public.driving_order USING btree (driver_ac
 
 
 --
--- TOC entry 4966 (class 1259 OID 19086)
+-- TOC entry 4978 (class 1259 OID 19086)
 -- Name: ix_order_route; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2016,7 +2233,7 @@ CREATE INDEX ix_order_route ON public.driving_order USING btree (from_province_i
 
 
 --
--- TOC entry 4939 (class 1259 OID 18900)
+-- TOC entry 4949 (class 1259 OID 18900)
 -- Name: ix_vehicle_company; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2024,7 +2241,7 @@ CREATE INDEX ix_vehicle_company ON public.vehicle USING btree (company_id);
 
 
 --
--- TOC entry 4973 (class 1259 OID 19303)
+-- TOC entry 4985 (class 1259 OID 19303)
 -- Name: uq_driver_schedule_uni; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2032,7 +2249,7 @@ CREATE UNIQUE INDEX uq_driver_schedule_uni ON public.driver_schedule USING btree
 
 
 --
--- TOC entry 4948 (class 1259 OID 18922)
+-- TOC entry 4958 (class 1259 OID 18922)
 -- Name: uq_dva_vehicle_open; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2040,7 +2257,7 @@ CREATE UNIQUE INDEX uq_dva_vehicle_open ON public.driver_vehicle_assignment USIN
 
 
 --
--- TOC entry 4980 (class 1259 OID 19338)
+-- TOC entry 4992 (class 1259 OID 19338)
 -- Name: uq_email_code_active; Type: INDEX; Schema: public; Owner: postgres
 --
 
@@ -2048,7 +2265,7 @@ CREATE UNIQUE INDEX uq_email_code_active ON public.auth_email_code USING btree (
 
 
 --
--- TOC entry 4983 (class 2606 OID 18808)
+-- TOC entry 5000 (class 2606 OID 18808)
 -- Name: account account_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2057,7 +2274,7 @@ ALTER TABLE ONLY public.account
 
 
 --
--- TOC entry 5018 (class 2606 OID 19333)
+-- TOC entry 5037 (class 2606 OID 19333)
 -- Name: auth_email_code auth_email_code_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2066,7 +2283,7 @@ ALTER TABLE ONLY public.auth_email_code
 
 
 --
--- TOC entry 5017 (class 2606 OID 19318)
+-- TOC entry 5036 (class 2606 OID 19318)
 -- Name: auth_refresh_session auth_refresh_session_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2075,7 +2292,7 @@ ALTER TABLE ONLY public.auth_refresh_session
 
 
 --
--- TOC entry 5015 (class 2606 OID 19293)
+-- TOC entry 5034 (class 2606 OID 19293)
 -- Name: driver_schedule driver_schedule_driver_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2084,7 +2301,7 @@ ALTER TABLE ONLY public.driver_schedule
 
 
 --
--- TOC entry 5013 (class 2606 OID 19272)
+-- TOC entry 5032 (class 2606 OID 19272)
 -- Name: driver_schedule_template driver_schedule_template_driver_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2093,7 +2310,7 @@ ALTER TABLE ONLY public.driver_schedule_template
 
 
 --
--- TOC entry 5014 (class 2606 OID 19277)
+-- TOC entry 5033 (class 2606 OID 19277)
 -- Name: driver_schedule_template driver_schedule_template_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2102,7 +2319,7 @@ ALTER TABLE ONLY public.driver_schedule_template
 
 
 --
--- TOC entry 5016 (class 2606 OID 19298)
+-- TOC entry 5035 (class 2606 OID 19298)
 -- Name: driver_schedule driver_schedule_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2111,7 +2328,7 @@ ALTER TABLE ONLY public.driver_schedule
 
 
 --
--- TOC entry 4991 (class 2606 OID 18910)
+-- TOC entry 5009 (class 2606 OID 18910)
 -- Name: driver_vehicle_assignment driver_vehicle_assignment_driver_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2120,7 +2337,7 @@ ALTER TABLE ONLY public.driver_vehicle_assignment
 
 
 --
--- TOC entry 4992 (class 2606 OID 18915)
+-- TOC entry 5010 (class 2606 OID 18915)
 -- Name: driver_vehicle_assignment driver_vehicle_assignment_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2129,7 +2346,7 @@ ALTER TABLE ONLY public.driver_vehicle_assignment
 
 
 --
--- TOC entry 5005 (class 2606 OID 19044)
+-- TOC entry 5023 (class 2606 OID 19044)
 -- Name: driving_order driving_order_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2138,7 +2355,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5006 (class 2606 OID 19049)
+-- TOC entry 5024 (class 2606 OID 19049)
 -- Name: driving_order driving_order_customer_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2147,7 +2364,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5007 (class 2606 OID 19059)
+-- TOC entry 5025 (class 2606 OID 19059)
 -- Name: driving_order driving_order_driver_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2156,7 +2373,16 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5008 (class 2606 OID 19074)
+-- TOC entry 5026 (class 2606 OID 19390)
+-- Name: driving_order driving_order_driver_schedule_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.driving_order
+    ADD CONSTRAINT driving_order_driver_schedule_id_fkey FOREIGN KEY (driver_schedule_id) REFERENCES public.driver_schedule(schedule_id) ON DELETE SET NULL;
+
+
+--
+-- TOC entry 5027 (class 2606 OID 19074)
 -- Name: driving_order driving_order_from_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2165,7 +2391,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5009 (class 2606 OID 19064)
+-- TOC entry 5028 (class 2606 OID 19064)
 -- Name: driving_order driving_order_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2174,7 +2400,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5010 (class 2606 OID 19069)
+-- TOC entry 5029 (class 2606 OID 19069)
 -- Name: driving_order driving_order_price_ref_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2183,7 +2409,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5011 (class 2606 OID 19079)
+-- TOC entry 5030 (class 2606 OID 19079)
 -- Name: driving_order driving_order_to_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2192,7 +2418,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 5012 (class 2606 OID 19054)
+-- TOC entry 5031 (class 2606 OID 19054)
 -- Name: driving_order driving_order_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2201,7 +2427,7 @@ ALTER TABLE ONLY public.driving_order
 
 
 --
--- TOC entry 4982 (class 2606 OID 18814)
+-- TOC entry 4999 (class 2606 OID 18814)
 -- Name: company fk_company_contact_account; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2210,7 +2436,16 @@ ALTER TABLE ONLY public.company
 
 
 --
--- TOC entry 4984 (class 2606 OID 18829)
+-- TOC entry 5038 (class 2606 OID 19377)
+-- Name: membership membership_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membership
+    ADD CONSTRAINT membership_company_id_fkey FOREIGN KEY (company_id) REFERENCES public.company(company_id) ON DELETE CASCADE;
+
+
+--
+-- TOC entry 5001 (class 2606 OID 18829)
 -- Name: membership_order membership_order_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2219,7 +2454,16 @@ ALTER TABLE ONLY public.membership_order
 
 
 --
--- TOC entry 4985 (class 2606 OID 18834)
+-- TOC entry 5002 (class 2606 OID 19382)
+-- Name: membership_order membership_order_membership_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.membership_order
+    ADD CONSTRAINT membership_order_membership_id_fkey FOREIGN KEY (membership_id) REFERENCES public.membership(membership_id) ON DELETE RESTRICT;
+
+
+--
+-- TOC entry 5003 (class 2606 OID 18834)
 -- Name: membership_order membership_order_payer_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2228,7 +2472,7 @@ ALTER TABLE ONLY public.membership_order
 
 
 --
--- TOC entry 5001 (class 2606 OID 19001)
+-- TOC entry 5019 (class 2606 OID 19001)
 -- Name: model_price_province model_price_province_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2237,7 +2481,7 @@ ALTER TABLE ONLY public.model_price_province
 
 
 --
--- TOC entry 5002 (class 2606 OID 19011)
+-- TOC entry 5020 (class 2606 OID 19011)
 -- Name: model_price_province model_price_province_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2246,7 +2490,7 @@ ALTER TABLE ONLY public.model_price_province
 
 
 --
--- TOC entry 5003 (class 2606 OID 19016)
+-- TOC entry 5021 (class 2606 OID 19016)
 -- Name: model_price_province model_price_province_parent_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2255,7 +2499,7 @@ ALTER TABLE ONLY public.model_price_province
 
 
 --
--- TOC entry 5004 (class 2606 OID 19006)
+-- TOC entry 5022 (class 2606 OID 19006)
 -- Name: model_price_province model_price_province_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2264,7 +2508,7 @@ ALTER TABLE ONLY public.model_price_province
 
 
 --
--- TOC entry 4989 (class 2606 OID 18890)
+-- TOC entry 5007 (class 2606 OID 18890)
 -- Name: vehicle vehicle_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2273,7 +2517,7 @@ ALTER TABLE ONLY public.vehicle
 
 
 --
--- TOC entry 4993 (class 2606 OID 18934)
+-- TOC entry 5011 (class 2606 OID 18934)
 -- Name: vehicle_in_province vehicle_in_province_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2282,7 +2526,7 @@ ALTER TABLE ONLY public.vehicle_in_province
 
 
 --
--- TOC entry 4994 (class 2606 OID 18929)
+-- TOC entry 5012 (class 2606 OID 18929)
 -- Name: vehicle_in_province vehicle_in_province_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2291,7 +2535,7 @@ ALTER TABLE ONLY public.vehicle_in_province
 
 
 --
--- TOC entry 4987 (class 2606 OID 18869)
+-- TOC entry 5005 (class 2606 OID 18869)
 -- Name: vehicle_model vehicle_model_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2300,7 +2544,7 @@ ALTER TABLE ONLY public.vehicle_model
 
 
 --
--- TOC entry 4990 (class 2606 OID 18895)
+-- TOC entry 5008 (class 2606 OID 18895)
 -- Name: vehicle vehicle_model_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2309,7 +2553,7 @@ ALTER TABLE ONLY public.vehicle
 
 
 --
--- TOC entry 4988 (class 2606 OID 18874)
+-- TOC entry 5006 (class 2606 OID 18874)
 -- Name: vehicle_model vehicle_model_segment_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2318,7 +2562,7 @@ ALTER TABLE ONLY public.vehicle_model
 
 
 --
--- TOC entry 4986 (class 2606 OID 18850)
+-- TOC entry 5004 (class 2606 OID 18850)
 -- Name: vehicle_segment vehicle_segment_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2327,7 +2571,7 @@ ALTER TABLE ONLY public.vehicle_segment
 
 
 --
--- TOC entry 4999 (class 2606 OID 18980)
+-- TOC entry 5017 (class 2606 OID 18980)
 -- Name: vehicle_zone_preference vehicle_zone_preference_vehicle_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2336,7 +2580,7 @@ ALTER TABLE ONLY public.vehicle_zone_preference
 
 
 --
--- TOC entry 5000 (class 2606 OID 18985)
+-- TOC entry 5018 (class 2606 OID 18985)
 -- Name: vehicle_zone_preference vehicle_zone_preference_zone_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2345,7 +2589,7 @@ ALTER TABLE ONLY public.vehicle_zone_preference
 
 
 --
--- TOC entry 4981 (class 2606 OID 18777)
+-- TOC entry 4998 (class 2606 OID 18777)
 -- Name: ward ward_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2354,7 +2598,7 @@ ALTER TABLE ONLY public.ward
 
 
 --
--- TOC entry 4995 (class 2606 OID 18949)
+-- TOC entry 5013 (class 2606 OID 18949)
 -- Name: zone zone_company_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2363,7 +2607,7 @@ ALTER TABLE ONLY public.zone
 
 
 --
--- TOC entry 4996 (class 2606 OID 18954)
+-- TOC entry 5014 (class 2606 OID 18954)
 -- Name: zone zone_province_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2372,7 +2616,7 @@ ALTER TABLE ONLY public.zone
 
 
 --
--- TOC entry 4997 (class 2606 OID 18969)
+-- TOC entry 5015 (class 2606 OID 18969)
 -- Name: zone_ward zone_ward_ward_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2381,7 +2625,7 @@ ALTER TABLE ONLY public.zone_ward
 
 
 --
--- TOC entry 4998 (class 2606 OID 18964)
+-- TOC entry 5016 (class 2606 OID 18964)
 -- Name: zone_ward zone_ward_zone_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -2389,7 +2633,7 @@ ALTER TABLE ONLY public.zone_ward
     ADD CONSTRAINT zone_ward_zone_id_fkey FOREIGN KEY (zone_id) REFERENCES public.zone(zone_id) ON DELETE CASCADE;
 
 
--- Completed on 2025-10-24 20:20:24
+-- Completed on 2025-10-27 14:00:12
 
 --
 -- PostgreSQL database dump complete

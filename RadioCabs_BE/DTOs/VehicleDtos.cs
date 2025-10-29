@@ -383,24 +383,6 @@ namespace RadioCabs_BE.DTOs
 
     // ==================== DRIVER SCHEDULE DTOs ====================
     
-    public class DriverScheduleDto
-    {
-        public long ScheduleId { get; set; }
-        public long DriverAccountId { get; set; }
-        public DateOnly WorkDate { get; set; }
-        public TimeOnly StartTime { get; set; }
-        public TimeOnly EndTime { get; set; }
-        public long? VehicleId { get; set; }
-        public string Status { get; set; } = "PLANNED";
-        public string? Note { get; set; }
-        public DateTimeOffset CreatedAt { get; set; }
-        public DateTimeOffset? UpdatedAt { get; set; }
-        
-        // Navigation properties
-        public AccountDto Driver { get; set; } = null!;
-        public VehicleDto? Vehicle { get; set; }
-    }
-
     public class CreateDriverScheduleDto
     {
         public long DriverAccountId { get; set; }
@@ -408,8 +390,52 @@ namespace RadioCabs_BE.DTOs
         public TimeOnly StartTime { get; set; }
         public TimeOnly EndTime { get; set; }
         public long? VehicleId { get; set; }
-        public string Status { get; set; } = "PLANNED";
+        public ShiftStatus Status { get; set; } = ShiftStatus.PLANNED;
         public string? Note { get; set; }
+    }
+
+    public class UpdateDriverScheduleDto
+    {
+        public long DriverAccountId { get; set; }
+        public DateOnly WorkDate { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public long? VehicleId { get; set; }
+        public ShiftStatus Status { get; set; } = ShiftStatus.PLANNED;
+        public string? Note { get; set; }
+    }
+
+    // ==================== DRIVER SCHEDULE TEMPLATE DTOs ====================
+    
+    public class DriverScheduleTemplateDto
+    {
+        public long TemplateId { get; set; }
+        public long DriverAccountId { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public short Weekday { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public long? VehicleId { get; set; }
+        public string? Note { get; set; }
+        public bool IsActive { get; set; } = true;
+        
+        // Navigation properties
+        public AccountDto Driver { get; set; } = null!;
+        public VehicleDto? Vehicle { get; set; }
+    }
+
+    public class CreateDriverScheduleTemplateDto
+    {
+        public long DriverAccountId { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
+        public short Weekday { get; set; }
+        public TimeOnly StartTime { get; set; }
+        public TimeOnly EndTime { get; set; }
+        public long? VehicleId { get; set; }
+        public string? Note { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 
     // Note: CompanyDto and AccountDto are defined in their respective files:

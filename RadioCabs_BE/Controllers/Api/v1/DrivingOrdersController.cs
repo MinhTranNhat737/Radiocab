@@ -93,7 +93,7 @@ namespace RadioCabs_BE.Controllers.Api.v1
         {
             try
             {
-                var order = await _drivingOrderService.AssignDriverAsync(id, dto.DriverId, dto.VehicleId);
+                var order = await _drivingOrderService.AssignDriverAsync(id, dto.DriverId, dto.VehicleId, dto.DriverScheduleId);
                 if (order == null)
                     return NotFound();
 
@@ -161,6 +161,7 @@ namespace RadioCabs_BE.Controllers.Api.v1
     {
         public long DriverId { get; set; }
         public long VehicleId { get; set; }
+        public long? DriverScheduleId { get; set; }
     }
 
     public class UpdateStatusDto

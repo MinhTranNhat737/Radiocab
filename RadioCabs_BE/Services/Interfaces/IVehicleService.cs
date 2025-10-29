@@ -51,9 +51,12 @@ namespace RadioCabs_BE.Services.Interfaces
         // Model Price Province methods
         Task<PagedResult<ModelPriceProvinceDto>> GetModelPriceProvincesPagedAsync(PageRequest request);
         Task<ModelPriceProvinceDto> CreateModelPriceProvinceAsync(CreateModelPriceProvinceDto dto);
+        Task<ModelPriceProvinceDto?> UpdateModelPriceProvinceAsync(long id, UpdateModelPriceProvinceDto dto);
         Task<bool> DeleteModelPriceProvinceAsync(long id);
 
         // Driver Vehicle Assignment methods
         Task<DriverVehicleAssignmentDto> CreateDriverVehicleAssignmentAsync(CreateDriverVehicleAssignmentDto dto);
+        Task<DriverVehicleAssignmentDto?> UpdateDriverVehicleAssignmentAsync(long id, UpdateDriverVehicleAssignmentDto dto);
+        Task<bool> DeleteDriverVehicleAssignmentAsync(long id);
     }
 }

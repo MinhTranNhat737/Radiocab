@@ -331,6 +331,24 @@ namespace RadioCabs_BE.DTOs
         public string? Note { get; set; }
     }
 
+    public class UpdateModelPriceProvinceDto
+    {
+        public long ProvinceId { get; set; }
+        public decimal OpeningFare { get; set; }
+        public decimal RateFirst20Km { get; set; }
+        public decimal RateOver20Km { get; set; }
+        public decimal TrafficAddPerKm { get; set; } = 0;
+        public decimal RainAddPerTrip { get; set; } = 0;
+        public decimal IntercityRatePerKm { get; set; } = 0;
+        public TimeOnly? TimeStart { get; set; }
+        public TimeOnly? TimeEnd { get; set; }
+        public long? ParentId { get; set; }
+        public DateOnly DateStart { get; set; }
+        public DateOnly DateEnd { get; set; }
+        public bool IsActive { get; set; }
+        public string? Note { get; set; }
+    }
+
     // ==================== DRIVER VEHICLE ASSIGNMENT DTOs ====================
     
     public class DriverVehicleAssignmentDto
@@ -349,6 +367,14 @@ namespace RadioCabs_BE.DTOs
     public class CreateDriverVehicleAssignmentDto
     {
         public long VehicleId { get; set; }
+        public long DriverId { get; set; }
+        public DateOnly AssignedFrom { get; set; }
+        public DateOnly? AssignedTo { get; set; }
+        public bool IsActive { get; set; } = true;
+    }
+
+    public class UpdateDriverVehicleAssignmentDto
+    {
         public long DriverId { get; set; }
         public DateOnly AssignedFrom { get; set; }
         public DateOnly? AssignedTo { get; set; }

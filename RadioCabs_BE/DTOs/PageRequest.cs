@@ -7,6 +7,16 @@ namespace RadioCabs_BE.DTOs
         public string? Search { get; set; }
         public string? SortBy { get; set; }
         public bool SortDescending { get; set; } = false;
+        public long? CompanyId { get; set; } // Added
+        public string? Role { get; set; } // Added
+        
+        // Vehicle instance filters
+        public long? ProvinceId { get; set; }
+        public long? ZoneId { get; set; }
+        public long? WardId { get; set; }
+        public long? DriverId { get; set; }
+        public int? Weekday { get; set; } // 0-6 (Sunday to Saturday)
+        public DateTime? WorkDate { get; set; } // For driver schedule date filter
     }
 
     public class PagedResult<T>

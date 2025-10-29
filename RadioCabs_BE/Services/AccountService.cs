@@ -39,12 +39,24 @@ namespace RadioCabs_BE.Services
             var repository = _unitOfWork.Repository<Account>();
             var query = repository.FindAsync(a => true).Result.AsQueryable();
 
+            // Filter by company if provided
+            if (request.CompanyId.HasValue)
+            {
+                query = query.Where(a => a.CompanyId == request.CompanyId.Value);
+            }
+
+            // Filter by role if provided
+            if (!string.IsNullOrEmpty(request.Role) && Enum.TryParse<RoleType>(request.Role, out var roleValue))
+            {
+                query = query.Where(a => a.Role == roleValue);
+            }
+
             if (!string.IsNullOrEmpty(request.Search))
             {
                 query = query.Where(a => a.FullName.Contains(request.Search) || a.Username.Contains(request.Search) || a.Email!.Contains(request.Search));
             }
 
-            var totalCount = await repository.CountAsync();
+            var totalCount = query.Count(); // Changed to query.Count()
             var items = query
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)

@@ -413,6 +413,40 @@ namespace RadioCabs_BE.Controllers.Api.v1
             }
         }
 
+        [HttpPut("model-price-provinces/{id}")]
+        public async Task<ActionResult<ModelPriceProvinceDto>> UpdateModelPriceProvince(long id, [FromBody] UpdateModelPriceProvinceDto dto)
+        {
+            try
+            {
+                var modelPriceProvince = await _vehicleService.UpdateModelPriceProvinceAsync(id, dto);
+                if (modelPriceProvince == null)
+                    return NotFound();
+
+                return Ok(modelPriceProvince);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("model-price-provinces/{id}")]
+        public async Task<ActionResult> DeleteModelPriceProvince(long id)
+        {
+            try
+            {
+                var success = await _vehicleService.DeleteModelPriceProvinceAsync(id);
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // Driver Vehicle Assignment endpoints
         [HttpPost("driver-vehicle-assignments")]
         public async Task<ActionResult<DriverVehicleAssignmentDto>> CreateDriverVehicleAssignment([FromBody] CreateDriverVehicleAssignmentDto dto)
@@ -421,6 +455,40 @@ namespace RadioCabs_BE.Controllers.Api.v1
             {
                 var assignment = await _vehicleService.CreateDriverVehicleAssignmentAsync(dto);
                 return CreatedAtAction(nameof(GetVehicles), new { id = assignment.AssignmentId }, assignment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("driver-vehicle-assignments/{id}")]
+        public async Task<ActionResult<DriverVehicleAssignmentDto>> UpdateDriverVehicleAssignment(long id, [FromBody] UpdateDriverVehicleAssignmentDto dto)
+        {
+            try
+            {
+                var assignment = await _vehicleService.UpdateDriverVehicleAssignmentAsync(id, dto);
+                if (assignment == null)
+                    return NotFound();
+
+                return Ok(assignment);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("driver-vehicle-assignments/{id}")]
+        public async Task<ActionResult> DeleteDriverVehicleAssignment(long id)
+        {
+            try
+            {
+                var success = await _vehicleService.DeleteDriverVehicleAssignmentAsync(id);
+                if (!success)
+                    return NotFound();
+
+                return NoContent();
             }
             catch (Exception ex)
             {

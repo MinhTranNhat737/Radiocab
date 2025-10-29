@@ -4,6 +4,7 @@ using RadioCabs_BE.Models;
 using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services.Interfaces;
 using RadioCabs_BE.Data;
+using Npgsql;
 
 namespace RadioCabs_BE.Services
 {
@@ -39,8 +40,15 @@ namespace RadioCabs_BE.Services
 
         public async Task<PagedResult<VehicleDto>> GetVehiclesPagedAsync(PageRequest request, long? companyId = null)
         {
-            var repository = _unitOfWork.Repository<Vehicle>();
-            var query = repository.FindAsync(v => true).Result.AsQueryable();
+            var query = _context.Vehicles.AsQueryable();
+
+            // Include the Model navigation property with Segment
+            query = query.Include(v => v.Model).ThenInclude(m => m.Segment);
+            
+            // Include DriverScheduleTemplates, DriverSchedules, and DriverVehicleAssignments for filtering
+            query = query.Include(v => v.DriverScheduleTemplates);
+            query = query.Include(v => v.DriverSchedules);
+            query = query.Include(v => v.DriverVehicleAssignments);
 
             // Filter by company if provided
             if (companyId.HasValue)
@@ -53,12 +61,62 @@ namespace RadioCabs_BE.Services
                 query = query.Where(v => v.PlateNumber.Contains(request.Search) || v.Vin!.Contains(request.Search));
             }
 
-            var totalCount = await repository.CountAsync();
-            var items = query
+            // Filter by province
+            if (request.ProvinceId.HasValue)
+            {
+                query = query.Where(v => v.VehicleInProvinces.Any(vip => vip.ProvinceId == request.ProvinceId.Value));
+            }
+
+            // Filter by zone
+            if (request.ZoneId.HasValue)
+            {
+                query = query.Where(v => v.VehicleZonePreferences.Any(vzp => vzp.ZoneId == request.ZoneId.Value));
+            }
+
+            // Filter by ward (via zone-ward relationship)
+            if (request.WardId.HasValue)
+            {
+                var zonesWithWard = _context.ZoneWards
+                    .Where(zw => zw.WardId == request.WardId.Value)
+                    .Select(zw => zw.ZoneId)
+                    .ToList();
+
+                query = query.Where(v => v.VehicleZonePreferences.Any(vzp => zonesWithWard.Contains(vzp.ZoneId)));
+            }
+
+            // Filter by driver (via driver vehicle assignment)
+            if (request.DriverId.HasValue)
+            {
+                query = query.Where(v => v.DriverVehicleAssignments.Any(dva => 
+                    dva.DriverAccountId == request.DriverId.Value && 
+                    (dva.EndAt == null || dva.EndAt > DateTime.UtcNow)
+                ));
+            }
+
+            // Filter by weekday (via driver schedule template)
+            if (request.Weekday.HasValue)
+            {
+                query = query.Where(v => v.DriverScheduleTemplates
+                    .Any(dst => dst.Weekday == request.Weekday.Value && dst.IsActive));
+            }
+
+            // Filter by work date (via driver schedule)
+            if (request.WorkDate.HasValue)
+            {
+                var dateOnly = DateOnly.FromDateTime(request.WorkDate.Value);
+                query = query.Where(v => v.DriverSchedules.Any(ds => ds.WorkDate == dateOnly));
+            }
+
+            var totalCount = await query.CountAsync();
+            
+            // Materialize the query first
+            var vehicles = await query
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(v => MapToVehicleDto(v))
-                .ToList();
+                .ToListAsync();
+
+            // Then map to DTOs
+            var items = vehicles.Select(v => MapToVehicleDto(v)).ToList();
 
             return new PagedResult<VehicleDto>
             {
@@ -130,8 +188,10 @@ namespace RadioCabs_BE.Services
 
         public async Task<PagedResult<VehicleModelDto>> GetModelsPagedAsync(PageRequest request, long? companyId = null)
         {
-            var repository = _unitOfWork.Repository<VehicleModel>();
-            var query = repository.FindAsync(m => true).Result.AsQueryable();
+            var query = _context.VehicleModels.AsQueryable();
+
+            // Include the Segment navigation property
+            query = query.Include(m => m.Segment);
 
             // Filter by company if provided
             if (companyId.HasValue)
@@ -144,16 +204,17 @@ namespace RadioCabs_BE.Services
                 query = query.Where(m => m.Brand.Contains(request.Search) || m.ModelName.Contains(request.Search));
             }
 
-            var totalCount = await repository.CountAsync();
-            var items = query
+            var totalCount = await query.CountAsync();
+            var items = await query
                 .Skip((request.Page - 1) * request.PageSize)
                 .Take(request.PageSize)
-                .Select(m => MapToVehicleModelDto(m))
-                .ToList();
+                .ToListAsync();
+
+            var dtos = items.Select(m => MapToVehicleModelDto(m)).ToList();
 
             return new PagedResult<VehicleModelDto>
             {
-                Items = items,
+                Items = dtos,
                 TotalCount = totalCount,
                 Page = request.Page,
                 PageSize = request.PageSize
@@ -793,6 +854,52 @@ namespace RadioCabs_BE.Services
             };
         }
 
+        public async Task<ModelPriceProvinceDto?> UpdateModelPriceProvinceAsync(long id, UpdateModelPriceProvinceDto dto)
+        {
+            var repository = _unitOfWork.Repository<ModelPriceProvince>();
+            var modelPriceProvince = await repository.GetByIdAsync(id);
+            if (modelPriceProvince == null) return null;
+
+            modelPriceProvince.ProvinceId = dto.ProvinceId;
+            modelPriceProvince.OpeningFare = dto.OpeningFare;
+            modelPriceProvince.RateFirst20Km = dto.RateFirst20Km;
+            modelPriceProvince.RateOver20Km = dto.RateOver20Km;
+            modelPriceProvince.TrafficAddPerKm = dto.TrafficAddPerKm;
+            modelPriceProvince.RainAddPerTrip = dto.RainAddPerTrip;
+            modelPriceProvince.IntercityRatePerKm = dto.IntercityRatePerKm;
+            modelPriceProvince.TimeStart = dto.TimeStart;
+            modelPriceProvince.TimeEnd = dto.TimeEnd;
+            modelPriceProvince.ParentId = dto.ParentId;
+            modelPriceProvince.DateStart = dto.DateStart;
+            modelPriceProvince.DateEnd = dto.DateEnd;
+            modelPriceProvince.IsActive = dto.IsActive;
+            if (dto.Note != null) modelPriceProvince.Note = dto.Note;
+
+            repository.Update(modelPriceProvince);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new ModelPriceProvinceDto
+            {
+                ModelPriceId = modelPriceProvince.ModelPriceId,
+                CompanyId = modelPriceProvince.CompanyId,
+                ModelId = modelPriceProvince.ModelId,
+                ProvinceId = modelPriceProvince.ProvinceId,
+                OpeningFare = modelPriceProvince.OpeningFare,
+                RateFirst20Km = modelPriceProvince.RateFirst20Km,
+                RateOver20Km = modelPriceProvince.RateOver20Km,
+                TrafficAddPerKm = modelPriceProvince.TrafficAddPerKm,
+                RainAddPerTrip = modelPriceProvince.RainAddPerTrip,
+                IntercityRatePerKm = modelPriceProvince.IntercityRatePerKm,
+                TimeStart = modelPriceProvince.TimeStart,
+                TimeEnd = modelPriceProvince.TimeEnd,
+                ParentId = modelPriceProvince.ParentId,
+                DateStart = modelPriceProvince.DateStart,
+                DateEnd = modelPriceProvince.DateEnd,
+                IsActive = modelPriceProvince.IsActive,
+                Note = modelPriceProvince.Note
+            };
+        }
+
         public async Task<bool> DeleteModelPriceProvinceAsync(long id)
         {
             try
@@ -872,11 +979,61 @@ namespace RadioCabs_BE.Services
             {
                 DriverAccountId = dto.DriverId,
                 VehicleId = dto.VehicleId,
-                StartAt = dto.AssignedFrom.ToDateTime(TimeOnly.MinValue),
-                EndAt = dto.AssignedTo?.ToDateTime(TimeOnly.MinValue)
+                StartAt = DateTime.SpecifyKind(dto.AssignedFrom.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc),
+                EndAt = dto.AssignedTo?.ToDateTime(TimeOnly.MinValue) != null ? DateTime.SpecifyKind(dto.AssignedTo.Value.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc) : null
             };
 
             _context.DriverVehicleAssignments.Add(assignment);
+            
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is PostgresException pgEx && pgEx.SqlState == "23505")
+            {
+                // Duplicate key error - might be a sequence issue
+                // Try to reset the sequence
+                await _context.Database.ExecuteSqlRawAsync(
+                    "SELECT setval('driver_vehicle_assignment_assignment_id_seq', (SELECT MAX(assignment_id) FROM driver_vehicle_assignment));");
+                
+                // Try to save again
+                await _context.SaveChangesAsync();
+            }
+
+            // Reload with navigation properties
+            var createdAssignment = await _context.DriverVehicleAssignments
+                .Include(a => a.Driver)
+                .Include(a => a.Vehicle)
+                .FirstOrDefaultAsync(a => a.AssignmentId == assignment.AssignmentId);
+
+            return new DriverVehicleAssignmentDto
+            {
+                AssignmentId = createdAssignment!.AssignmentId,
+                DriverAccountId = createdAssignment.DriverAccountId,
+                VehicleId = createdAssignment.VehicleId,
+                StartAt = createdAssignment.StartAt,
+                EndAt = createdAssignment.EndAt,
+                Driver = new AccountDto
+                {
+                    AccountId = createdAssignment.Driver.AccountId,
+                    FullName = createdAssignment.Driver.FullName,
+                    Phone = createdAssignment.Driver.Phone,
+                    Email = createdAssignment.Driver.Email,
+                    Username = createdAssignment.Driver.Username
+                },
+                Vehicle = MapToVehicleDto(createdAssignment.Vehicle)
+            };
+        }
+
+        public async Task<DriverVehicleAssignmentDto?> UpdateDriverVehicleAssignmentAsync(long id, UpdateDriverVehicleAssignmentDto dto)
+        {
+            var assignment = await _context.DriverVehicleAssignments.FindAsync(id);
+            if (assignment == null) return null;
+
+            assignment.DriverAccountId = dto.DriverId;
+            assignment.StartAt = DateTime.SpecifyKind(dto.AssignedFrom.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc);
+            assignment.EndAt = dto.AssignedTo?.ToDateTime(TimeOnly.MinValue) != null ? DateTime.SpecifyKind(dto.AssignedTo.Value.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc) : null;
+
             await _context.SaveChangesAsync();
 
             return new DriverVehicleAssignmentDto
@@ -887,6 +1044,23 @@ namespace RadioCabs_BE.Services
                 StartAt = assignment.StartAt,
                 EndAt = assignment.EndAt
             };
+        }
+
+        public async Task<bool> DeleteDriverVehicleAssignmentAsync(long id)
+        {
+            try
+            {
+                var assignment = await _context.DriverVehicleAssignments.FindAsync(id);
+                if (assignment == null) return false;
+
+                _context.DriverVehicleAssignments.Remove(assignment);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

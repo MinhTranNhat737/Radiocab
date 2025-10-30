@@ -261,6 +261,22 @@ namespace RadioCabs_BE.Services
             if (order == null) return null;
 
             order.Status = status;
+            // If driver starts the trip, stamp pickup time when transitioning to ONGOING
+            if (status == OrderStatus.ONGOING && !order.PickupTime.HasValue)
+            {
+                order.PickupTime = DateTimeOffset.UtcNow;
+            }
+
+            // When driver accepts an order, mark the driver schedule as WORKING
+            if (status == OrderStatus.ACCEPTED && order.DriverScheduleId.HasValue)
+            {
+                var schedule = await _unitOfWork.Repository<DriverSchedule>().GetByIdAsync(order.DriverScheduleId.Value);
+                if (schedule != null)
+                {
+                    schedule.Status = ShiftStatus.WORKING;
+                    _unitOfWork.Repository<DriverSchedule>().Update(schedule);
+                }
+            }
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<DrivingOrder>().Update(order);
@@ -287,6 +303,17 @@ namespace RadioCabs_BE.Services
             // Calculate total amount
             order.TotalAmount = await CalculateTotalAmount(order);
 
+            // When completing, free the driver schedule back to ON
+            if (order.DriverScheduleId.HasValue)
+            {
+                var schedule = await _unitOfWork.Repository<DriverSchedule>().GetByIdAsync(order.DriverScheduleId.Value);
+                if (schedule != null)
+                {
+                    schedule.Status = ShiftStatus.ON;
+                    _unitOfWork.Repository<DriverSchedule>().Update(schedule);
+                }
+            }
+
             _unitOfWork.Repository<DrivingOrder>().Update(order);
             await _unitOfWork.SaveChangesAsync();
 
@@ -299,7 +326,20 @@ namespace RadioCabs_BE.Services
             if (order == null) return null;
 
             order.Status = OrderStatus.CANCELLED;
+            // Business rule: canceled orders should have zero total amount
+            order.TotalAmount = 0;
             order.UpdatedAt = DateTimeOffset.UtcNow;
+
+            // When canceling, free the driver schedule back to ON
+            if (order.DriverScheduleId.HasValue)
+            {
+                var schedule = await _unitOfWork.Repository<DriverSchedule>().GetByIdAsync(order.DriverScheduleId.Value);
+                if (schedule != null)
+                {
+                    schedule.Status = ShiftStatus.ON;
+                    _unitOfWork.Repository<DriverSchedule>().Update(schedule);
+                }
+            }
 
             _unitOfWork.Repository<DrivingOrder>().Update(order);
             await _unitOfWork.SaveChangesAsync();
@@ -318,10 +358,27 @@ namespace RadioCabs_BE.Services
 
         private async Task<decimal> CalculateTotalAmount(DrivingOrder order)
         {
-            var price = await _unitOfWork.Repository<ModelPriceProvince>()
-                .SingleOrDefaultAsync(p => p.ModelId == order.ModelId && p.ProvinceId == order.FromProvinceId && p.IsActive);
+            ModelPriceProvince? price = null;
 
-            if (price == null) return 0;
+            // 1) Prefer explicitly selected price reference if available
+            if (order.PriceRefId.HasValue)
+            {
+                price = await _unitOfWork.Repository<ModelPriceProvince>()
+                    .GetByIdAsync(order.PriceRefId.Value);
+            }
+
+            // 2) Fallback to current active price by model/province
+            if (price == null)
+            {
+                price = await _unitOfWork.Repository<ModelPriceProvince>()
+                    .SingleOrDefaultAsync(p => p.ModelId == order.ModelId && p.ProvinceId == order.FromProvinceId && p.IsActive);
+            }
+
+            // 3) If still missing, fallback to order.BaseFare only
+            if (price == null)
+            {
+                return order.BaseFare;
+            }
 
             var totalAmount = price.OpeningFare;
             

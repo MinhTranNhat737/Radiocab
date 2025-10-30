@@ -22,6 +22,7 @@ namespace RadioCabs_BE.Models
     {
         [PgName("NEW")] NEW,
         [PgName("ASSIGNED")] ASSIGNED,
+        [PgName("ACCEPTED")] ACCEPTED,
         [PgName("ONGOING")] ONGOING,
         [PgName("DONE")] DONE,
         [PgName("CANCELLED")] CANCELLED,
@@ -59,7 +60,8 @@ namespace RadioCabs_BE.Models
         [PgName("ON")] ON,
         [PgName("OFF")] OFF,
         [PgName("CANCELLED")] CANCELLED,
-        [PgName("COMPLETED")] COMPLETED
+        [PgName("COMPLETED")] COMPLETED,
+        [PgName("WORKING")] WORKING
     }
 
     public enum RevocationReason

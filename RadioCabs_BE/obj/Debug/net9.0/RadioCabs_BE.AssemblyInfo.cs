@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RadioCabs_BE")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e2f8982a5080265b7fe70d6a5f76984fd32a64ac")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+26efbdf3827c50f98033bda50093d18e4b1772fa")]
 [assembly: System.Reflection.AssemblyProductAttribute("RadioCabs_BE")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RadioCabs_BE")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

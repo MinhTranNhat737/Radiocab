@@ -1,12 +1,125 @@
 {
   "Version": 1,
-  "Hash": "1jfejG++7XiVP9dervaZiqcN5LOqh0BYCBO5Y70DBPM=",
+  "Hash": "LCMEugmHKTm438NVW0PTNxvr4unYFTXimiNrmCeQ3Qk=",
   "Source": "RadioCabs_BE",
   "BasePath": "_content/RadioCabs_BE",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
-  "Assets": [],
-  "Endpoints": []
+  "DiscoveryPatterns": [
+    {
+      "Name": "RadioCabs_BE\\wwwroot",
+      "Source": "RadioCabs_BE",
+      "ContentRoot": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\wwwroot\\",
+      "BasePath": "_content/RadioCabs_BE",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\wwwroot\\uploads\\models\\model_9_638975143219576303.png",
+      "SourceId": "RadioCabs_BE",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\wwwroot\\",
+      "BasePath": "_content/RadioCabs_BE",
+      "RelativePath": "uploads/models/model_9_638975143219576303#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "0p0gasecyz",
+      "Integrity": "fH5uvltQlwqsRSQE9XOX1p39YfWHjpklHLslfPZEurk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\models\\model_9_638975143219576303.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "uploads/models/model_9_638975143219576303.0p0gasecyz.png",
+      "AssetFile": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\wwwroot\\uploads\\models\\model_9_638975143219576303.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2200870"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fH5uvltQlwqsRSQE9XOX1p39YfWHjpklHLslfPZEurk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 31 Oct 2025 13:32:01 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "0p0gasecyz"
+        },
+        {
+          "Name": "label",
+          "Value": "uploads/models/model_9_638975143219576303.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-fH5uvltQlwqsRSQE9XOX1p39YfWHjpklHLslfPZEurk="
+        }
+      ]
+    },
+    {
+      "Route": "uploads/models/model_9_638975143219576303.png",
+      "AssetFile": "C:\\Users\\bkdcd\\Documents\\Project3_Group1\\server\\Radiocabs_BE\\wwwroot\\uploads\\models\\model_9_638975143219576303.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "2200870"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"fH5uvltQlwqsRSQE9XOX1p39YfWHjpklHLslfPZEurk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 31 Oct 2025 13:32:01 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-fH5uvltQlwqsRSQE9XOX1p39YfWHjpklHLslfPZEurk="
+        }
+      ]
+    }
+  ]
 }

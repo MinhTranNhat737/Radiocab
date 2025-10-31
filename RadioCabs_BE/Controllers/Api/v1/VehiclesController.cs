@@ -410,6 +410,21 @@ namespace RadioCabs_BE.Controllers.Api.v1
             }
         }
 
+        [HttpPost("vehicle-models/{id}/image")]
+        public async Task<ActionResult<VehicleModelDto>> UploadVehicleModelImage(long id, IFormFile file)
+        {
+            try
+            {
+                var model = await _vehicleService.UpdateModelImageAsync(id, file);
+                if (model == null) return NotFound();
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
 
         // Model Price Province endpoints
         [HttpGet("model-price-provinces")]

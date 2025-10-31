@@ -55,6 +55,11 @@ namespace RadioCabs_BE.Repositories
             }
         }
 
+        public async Task<int> ExecuteSqlAsync(string sql)
+        {
+            return await _context.Database.ExecuteSqlRawAsync(sql);
+        }
+
         public void Dispose()
         {
             _transaction?.Dispose();

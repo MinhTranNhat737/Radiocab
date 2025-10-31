@@ -7,5 +7,6 @@ namespace RadioCabs_BE.Repositories
         Task BeginTransactionAsync();
         Task CommitTransactionAsync();
         Task RollbackTransactionAsync();
+        Task<int> ExecuteSqlAsync(string sql);
     }
 }

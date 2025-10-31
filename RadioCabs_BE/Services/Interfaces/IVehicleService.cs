@@ -17,6 +17,7 @@ namespace RadioCabs_BE.Services.Interfaces
         Task<VehicleModelDto> CreateModelAsync(CreateVehicleModelDto dto);
         Task<VehicleModelDto?> UpdateModelAsync(long id, UpdateVehicleModelDto dto);
         Task<bool> DeleteModelAsync(long id);
+        Task<VehicleModelDto?> UpdateModelImageAsync(long id, IFormFile file);
 
         // VehicleSegment methods
         Task<VehicleSegmentDto?> GetSegmentByIdAsync(long id);

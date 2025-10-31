@@ -76,6 +76,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IDrivingOrderService, DrivingOrderService>();
+builder.Services.AddScoped<IMembershipService, MembershipService>();
 
 // ===== MVC / Swagger =====
 builder.Services.AddControllers()
@@ -97,6 +98,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors();
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -281,6 +281,34 @@ namespace RadioCabs_BE.Services
             return true;
         }
 
+        public async Task<VehicleModelDto?> UpdateModelImageAsync(long id, IFormFile file)
+        {
+            var model = await _unitOfWork.Repository<VehicleModel>().GetByIdAsync(id);
+            if (model == null) return null;
+
+            if (file == null || file.Length == 0)
+                throw new ArgumentException("File is empty");
+
+            var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "models");
+            if (!Directory.Exists(uploadsRoot)) Directory.CreateDirectory(uploadsRoot);
+
+            var safeName = Path.GetFileNameWithoutExtension(file.FileName);
+            var ext = Path.GetExtension(file.FileName);
+            var fileName = $"model_{id}_{DateTime.UtcNow.Ticks}{ext}";
+            var filePath = Path.Combine(uploadsRoot, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            model.ImageUrl = fileName; // store only filename
+            _unitOfWork.Repository<VehicleModel>().Update(model);
+            await _unitOfWork.SaveChangesAsync();
+
+            return MapToVehicleModelDto(model);
+        }
+
         // VehicleSegment methods
         public async Task<VehicleSegmentDto?> GetSegmentByIdAsync(long id)
         {

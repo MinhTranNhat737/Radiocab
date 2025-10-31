@@ -101,10 +101,33 @@ namespace RadioCabs_BE.Services
             if (dto.TaxCode != null) company.TaxCode = dto.TaxCode;
             if (dto.Fax != null) company.Fax = dto.Fax;
             if (dto.ContactAccountId.HasValue) company.ContactAccountId = dto.ContactAccountId.Value;
+            var willBeActive = dto.Status.HasValue && dto.Status.Value == ActiveFlag.ACTIVE;
             if (dto.Status.HasValue) company.Status = dto.Status.Value;
             company.UpdatedAt = DateTimeOffset.UtcNow;
 
             _unitOfWork.Repository<Company>().Update(company);
+
+            // If approving company, promote contact account to MANAGER and attach company
+            if (willBeActive && company.ContactAccountId.HasValue)
+            {
+                try
+                {
+                    var accRepo = _unitOfWork.Repository<Account>();
+                    var contact = await accRepo.GetByIdAsync(company.ContactAccountId.Value);
+                    if (contact != null)
+                    {
+                        contact.Role = RoleType.MANAGER;
+                        contact.CompanyId = company.CompanyId;
+                        contact.UpdatedAt = DateTimeOffset.UtcNow;
+                        accRepo.Update(contact);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, $"Failed to update contact account {company.ContactAccountId} when approving company {company.CompanyId}");
+                }
+            }
+
             await _unitOfWork.SaveChangesAsync();
 
             return MapToCompanyDto(company);

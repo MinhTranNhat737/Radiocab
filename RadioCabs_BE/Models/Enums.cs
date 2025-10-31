@@ -5,6 +5,7 @@ namespace RadioCabs_BE.Models
     public enum ActiveFlag
     {
         [PgName("NEW")] NEW,
+        [PgName("APPROVE")] APPROVE,
         [PgName("REFUSED")] REFUSED,
         [PgName("ACTIVE")] ACTIVE,
         [PgName("INACTIVE")] INACTIVE

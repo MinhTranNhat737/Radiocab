@@ -15,5 +15,7 @@ namespace RadioCabs_BE.Services.Interfaces
         Task<bool> ChangePasswordAsync(long accountId, string currentPassword, string newPassword);
         Task<bool> VerifyEmailAsync(string email, string code);
         Task<bool> SendEmailVerificationAsync(string email);
+        Task<bool> SendPasswordResetAsync(string email);
+        Task<bool> ResetPasswordAsync(string email, string code, string newPassword);
     }
 }

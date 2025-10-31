@@ -35,6 +35,20 @@ namespace RadioCabs_BE.Controllers.Api.v1
             }
         }
 
+        [HttpPost("{id}/membership-orders")]
+        public async Task<ActionResult<MembershipOrderDto>> CreateMembershipOrder(long id, [FromBody] CreateMembershipOrderDto dto)
+        {
+            try
+            {
+                var created = await _companyService.CreateMembershipOrderAsync(id, dto);
+                return CreatedAtAction(nameof(GetMembershipOrders), new { id = id, page = 1, pageSize = 1 }, created);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CompanyDto>> GetById(long id)
         {

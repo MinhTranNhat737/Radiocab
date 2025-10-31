@@ -210,21 +210,150 @@ namespace RadioCabs_BE.Services
             var code = GenerateRandomCode();
             var codeHash = HashPassword(code);
 
-            var emailCode = new AuthEmailCode
+            var codeRepo = _unitOfWork.Repository<AuthEmailCode>();
+            var existing = await codeRepo.SingleOrDefaultAsync(ec => ec.Email == email && ec.Purpose == "SIGNUP" && ec.ConsumedAt == null);
+            if (existing != null)
             {
-                Email = email,
-                Purpose = "SIGNUP",
-                CodeHash = codeHash,
-                SentAt = DateTimeOffset.UtcNow,
-                ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15),
-                AttemptCount = 0,
-                MaxAttempts = 5
-            };
+                existing.CodeHash = codeHash;
+                existing.SentAt = DateTimeOffset.UtcNow;
+                existing.ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15);
+                existing.AttemptCount = 0;
+                codeRepo.Update(existing);
+            }
+            else
+            {
+                var emailCode = new AuthEmailCode
+                {
+                    Email = email,
+                    Purpose = "SIGNUP",
+                    CodeHash = codeHash,
+                    SentAt = DateTimeOffset.UtcNow,
+                    ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15),
+                    AttemptCount = 0,
+                    MaxAttempts = 5
+                };
+                await codeRepo.AddAsync(emailCode);
+            }
 
-            await _unitOfWork.Repository<AuthEmailCode>().AddAsync(emailCode);
             await _unitOfWork.SaveChangesAsync();
 
-            // In real implementation, send email here
+            // Send email via SMTP
+            try
+            {
+                var host = _configuration["Smtp:Host"] ?? "";
+                var portStr = _configuration["Smtp:Port"] ?? "587";
+                var username = _configuration["Smtp:Username"] ?? "";
+                var password = _configuration["Smtp:Password"] ?? "";
+                var from = _configuration["Smtp:From"] ?? username;
+
+                if (!string.IsNullOrWhiteSpace(host) && !string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+                {
+                    using var smtp = new System.Net.Mail.SmtpClient(host, int.TryParse(portStr, out var p) ? p : 587)
+                    {
+                        EnableSsl = true,
+                        DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network,
+                        Credentials = new System.Net.NetworkCredential(username, password),
+                        UseDefaultCredentials = false
+                    };
+
+                    var subject = "Mã xác thực đăng ký RadioCabs";
+                    var body = $"Xin chào,\n\nMã xác thực đăng ký của bạn là: {code}\nMã có hiệu lực trong 15 phút.\n\nTrân trọng.";
+
+                    using var message = new System.Net.Mail.MailMessage(from, email, subject, body);
+                    await smtp.SendMailAsync(message);
+                }
+            }
+            catch (Exception)
+            {
+                // Ignore email delivery errors; code is stored and can be re-sent
+            }
+
+            return true;
+        }
+
+        public async Task<bool> SendPasswordResetAsync(string email)
+        {
+            var code = GenerateRandomCode();
+            var codeHash = HashPassword(code);
+
+            var codeRepo = _unitOfWork.Repository<AuthEmailCode>();
+            var existing = await codeRepo.SingleOrDefaultAsync(ec => ec.Email == email && ec.Purpose == "PASSWORD_RESET" && ec.ConsumedAt == null);
+            if (existing != null)
+            {
+                existing.CodeHash = codeHash;
+                existing.SentAt = DateTimeOffset.UtcNow;
+                existing.ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15);
+                existing.AttemptCount = 0;
+                codeRepo.Update(existing);
+            }
+            else
+            {
+                var emailCode = new AuthEmailCode
+                {
+                    Email = email,
+                    Purpose = "PASSWORD_RESET",
+                    CodeHash = codeHash,
+                    SentAt = DateTimeOffset.UtcNow,
+                    ExpiresAt = DateTimeOffset.UtcNow.AddMinutes(15),
+                    AttemptCount = 0,
+                    MaxAttempts = 5
+                };
+                await codeRepo.AddAsync(emailCode);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
+
+            try
+            {
+                var host = _configuration["Smtp:Host"] ?? "";
+                var portStr = _configuration["Smtp:Port"] ?? "587";
+                var username = _configuration["Smtp:Username"] ?? "";
+                var password = _configuration["Smtp:Password"] ?? "";
+                var from = _configuration["Smtp:From"] ?? username;
+
+                if (!string.IsNullOrWhiteSpace(host) && !string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
+                {
+                    using var smtp = new System.Net.Mail.SmtpClient(host, int.TryParse(portStr, out var p) ? p : 587)
+                    {
+                        EnableSsl = true,
+                        DeliveryMethod = System.Net.Mail.SmtpDeliveryMethod.Network,
+                        Credentials = new System.Net.NetworkCredential(username, password),
+                        UseDefaultCredentials = false
+                    };
+
+                    var subject = "Mã đặt lại mật khẩu RadioCabs";
+                    var body = $"Xin chào,\n\nMã đặt lại mật khẩu của bạn là: {code}\nMã có hiệu lực trong 15 phút.\n\nTrân trọng.";
+                    using var message = new System.Net.Mail.MailMessage(from, email, subject, body);
+                    await smtp.SendMailAsync(message);
+                }
+            }
+            catch (Exception)
+            {
+            }
+
+            return true;
+        }
+
+        public async Task<bool> ResetPasswordAsync(string email, string code, string newPassword)
+        {
+            var codeRepo = _unitOfWork.Repository<AuthEmailCode>();
+            var emailCode = await codeRepo.SingleOrDefaultAsync(ec => ec.Email == email && ec.Purpose == "PASSWORD_RESET" && ec.ConsumedAt == null);
+            if (emailCode == null) return false;
+            if (emailCode.ExpiresAt < DateTimeOffset.UtcNow) return false;
+            if (!VerifyPassword(code, emailCode.CodeHash)) return false;
+
+            emailCode.ConsumedAt = DateTimeOffset.UtcNow;
+            codeRepo.Update(emailCode);
+
+            // Update account password by email
+            var accountRepo = _unitOfWork.Repository<Account>();
+            var account = await accountRepo.SingleOrDefaultAsync(a => a.Email == email);
+            if (account == null) return false;
+            account.PasswordHash = HashPassword(newPassword);
+            account.UpdatedAt = DateTimeOffset.UtcNow;
+            accountRepo.Update(account);
+
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
 

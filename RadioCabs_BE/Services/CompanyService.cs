@@ -79,12 +79,35 @@ namespace RadioCabs_BE.Services
                 TaxCode = dto.TaxCode,
                 Fax = dto.Fax,
                 ContactAccountId = dto.ContactAccountId,
-                Status = ActiveFlag.ACTIVE,
+                Status = ActiveFlag.NEW,
                 CreatedAt = DateTimeOffset.UtcNow
             };
 
             await _unitOfWork.Repository<Company>().AddAsync(company);
             await _unitOfWork.SaveChangesAsync();
+
+            // Attach and promote contact account if provided
+            if (company.ContactAccountId.HasValue)
+            {
+                try
+                {
+                    var accRepo = _unitOfWork.Repository<Account>();
+                    var contact = await accRepo.GetByIdAsync(company.ContactAccountId.Value);
+                    if (contact != null)
+                    {
+                        contact.Role = RoleType.MANAGER;
+                        contact.CompanyId = company.CompanyId;
+                        contact.Status = ActiveFlag.ACTIVE;
+                        contact.UpdatedAt = DateTimeOffset.UtcNow;
+                        accRepo.Update(contact);
+                        await _unitOfWork.SaveChangesAsync();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, $"Failed to update contact account {company.ContactAccountId} when creating company {company.CompanyId}");
+                }
+            }
 
             return MapToCompanyDto(company);
         }
@@ -187,7 +210,7 @@ namespace RadioCabs_BE.Services
                                 startDate = mo.StartDate,
                                 endDate = mo.EndDate,
                                 paidAt = mo.PaidAt,
-                                paymentMethod = mo.PaymentMethod,
+                                paymentMethod = mo.PaymentMethod != null ? mo.PaymentMethod.ToString() : null,
                                 paymentCode = mo.PaymentCode,
                                 note = mo.Note,
                                 status = mo.PaidAt.HasValue ? "PAID" : "PENDING",
@@ -256,6 +279,58 @@ namespace RadioCabs_BE.Services
                 ContactAccountId = company.ContactAccountId,
                 CreatedAt = company.CreatedAt,
                 UpdatedAt = company.UpdatedAt
+            };
+        }
+
+        public async Task<MembershipOrderDto> CreateMembershipOrderAsync(long companyId, CreateMembershipOrderDto dto)
+        {
+            // Compute dates based on current UTC date and latest paid membership
+            var today = DateOnly.FromDateTime(DateTime.UtcNow.Date);
+            var latestPaidOrder = await _unitOfWork.Repository<MembershipOrder>().Query()
+                .Where(o => o.CompanyId == companyId && o.PaidAt != null)
+                .OrderByDescending(o => o.EndDate)
+                .FirstOrDefaultAsync();
+
+            var startDate = (latestPaidOrder != null && latestPaidOrder.EndDate >= today)
+                ? latestPaidOrder.EndDate.AddDays(1)
+                : today;
+
+            var endDate = startDate.AddMonths(dto.UnitMonths);
+
+            var entity = new MembershipOrder
+            {
+                CompanyId = companyId,
+                PayerAccountId = dto.PayerAccountId,
+                MembershipId = dto.MembershipId,
+                UnitPrice = dto.UnitPrice,
+                UnitMonths = dto.UnitMonths,
+                Amount = dto.Amount,
+                StartDate = startDate,
+                EndDate = endDate,
+                PaidAt = DateTimeOffset.UtcNow,
+                PaymentMethod = Models.PaymentMethod.BANK,
+                PaymentCode = dto.PaymentCode,
+                Note = dto.Note
+            };
+
+            await _unitOfWork.Repository<MembershipOrder>().AddAsync(entity);
+            await _unitOfWork.SaveChangesAsync();
+
+            return new MembershipOrderDto
+            {
+                MembershipOrderId = entity.MembershipOrderId,
+                CompanyId = entity.CompanyId,
+                PayerAccountId = entity.PayerAccountId,
+                MembershipId = entity.MembershipId,
+                UnitPrice = entity.UnitPrice,
+                UnitMonths = entity.UnitMonths,
+                Amount = entity.Amount,
+                StartDate = entity.StartDate,
+                EndDate = entity.EndDate,
+                PaidAt = entity.PaidAt,
+                PaymentMethod = entity.PaymentMethod,
+                PaymentCode = entity.PaymentCode,
+                Note = entity.Note
             };
         }
     }

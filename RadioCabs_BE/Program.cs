@@ -12,6 +12,7 @@ using System.Text;
 using RadioCabs_BE.Repositories;
 using RadioCabs_BE.Services;
 using RadioCabs_BE.Services.Interfaces;
+using RadioCabs_BE.Services.Background;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +78,10 @@ builder.Services.AddScoped<ICompanyService, CompanyService>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 builder.Services.AddScoped<IDrivingOrderService, DrivingOrderService>();
 builder.Services.AddScoped<IMembershipService, MembershipService>();
+
+// Background services
+builder.Services.AddHostedService<MembershipStatusUpdater>();
+builder.Services.AddHostedService<DriverScheduleStatusUpdater>();
 
 // ===== MVC / Swagger =====
 builder.Services.AddControllers()

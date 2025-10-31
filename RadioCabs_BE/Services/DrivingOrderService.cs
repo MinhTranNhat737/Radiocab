@@ -238,7 +238,7 @@ namespace RadioCabs_BE.Services
                         ds.DriverAccountId == driverId &&
                         ds.VehicleId == vehicleId &&
                         ds.WorkDate == today &&
-                        (ds.Status == RadioCabs_BE.Models.ShiftStatus.ON || ds.Status == RadioCabs_BE.Models.ShiftStatus.PLANNED)
+                        ds.Status == RadioCabs_BE.Models.ShiftStatus.ON
                     );
                 driverScheduleId = driverSchedule?.ScheduleId;
             }
@@ -303,13 +303,21 @@ namespace RadioCabs_BE.Services
             // Calculate total amount
             order.TotalAmount = await CalculateTotalAmount(order);
 
-            // When completing, free the driver schedule back to ON
+            // When completing, set schedule to ON if still within shift; COMPLETED if after shift
             if (order.DriverScheduleId.HasValue)
             {
                 var schedule = await _unitOfWork.Repository<DriverSchedule>().GetByIdAsync(order.DriverScheduleId.Value);
                 if (schedule != null)
                 {
-                    schedule.Status = ShiftStatus.ON;
+                    var now = DateTime.Now; // local time
+                    var scheduleDate = new DateTime(schedule.WorkDate.Year, schedule.WorkDate.Month, schedule.WorkDate.Day,
+                        0, 0, 0, DateTimeKind.Local);
+                    var startDt = scheduleDate.AddHours(schedule.StartTime.Hour).AddMinutes(schedule.StartTime.Minute).AddSeconds(schedule.StartTime.Second);
+                    var endDt = scheduleDate.AddHours(schedule.EndTime.Hour).AddMinutes(schedule.EndTime.Minute).AddSeconds(schedule.EndTime.Second);
+
+                    if (now < startDt) schedule.Status = ShiftStatus.PLANNED;
+                    else if (now >= startDt && now < endDt) schedule.Status = ShiftStatus.ON;
+                    else schedule.Status = ShiftStatus.COMPLETED;
                     _unitOfWork.Repository<DriverSchedule>().Update(schedule);
                 }
             }
@@ -330,13 +338,21 @@ namespace RadioCabs_BE.Services
             order.TotalAmount = 0;
             order.UpdatedAt = DateTimeOffset.UtcNow;
 
-            // When canceling, free the driver schedule back to ON
+            // When canceling, set schedule based on current time vs shift
             if (order.DriverScheduleId.HasValue)
             {
                 var schedule = await _unitOfWork.Repository<DriverSchedule>().GetByIdAsync(order.DriverScheduleId.Value);
                 if (schedule != null)
                 {
-                    schedule.Status = ShiftStatus.ON;
+                    var now = DateTime.Now; // local time
+                    var scheduleDate = new DateTime(schedule.WorkDate.Year, schedule.WorkDate.Month, schedule.WorkDate.Day,
+                        0, 0, 0, DateTimeKind.Local);
+                    var startDt = scheduleDate.AddHours(schedule.StartTime.Hour).AddMinutes(schedule.StartTime.Minute).AddSeconds(schedule.StartTime.Second);
+                    var endDt = scheduleDate.AddHours(schedule.EndTime.Hour).AddMinutes(schedule.EndTime.Minute).AddSeconds(schedule.EndTime.Second);
+
+                    if (now < startDt) schedule.Status = ShiftStatus.PLANNED;
+                    else if (now >= startDt && now < endDt) schedule.Status = ShiftStatus.ON;
+                    else schedule.Status = ShiftStatus.COMPLETED;
                     _unitOfWork.Repository<DriverSchedule>().Update(schedule);
                 }
             }

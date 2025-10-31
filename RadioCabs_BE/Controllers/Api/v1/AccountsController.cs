@@ -151,6 +151,39 @@ namespace RadioCabs_BE.Controllers.Api.v1
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("send-password-reset")]
+        public async Task<ActionResult> SendPasswordReset([FromBody] SendEmailVerificationDto dto)
+        {
+            try
+            {
+                var success = await _accountService.SendPasswordResetAsync(dto.Email);
+                if (!success)
+                    return BadRequest("Failed to send password reset email");
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
+        {
+            try
+            {
+                var success = await _accountService.ResetPasswordAsync(dto.Email, dto.Code, dto.NewPassword);
+                if (!success)
+                    return BadRequest("Invalid code or email");
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
     public class ChangePasswordDto
@@ -169,5 +202,12 @@ namespace RadioCabs_BE.Controllers.Api.v1
     public class SendEmailVerificationDto
     {
         public string Email { get; set; } = null!;
+    }
+
+    public class ResetPasswordDto
+    {
+        public string Email { get; set; } = null!;
+        public string Code { get; set; } = null!;
+        public string NewPassword { get; set; } = null!;
     }
 }

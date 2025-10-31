@@ -460,7 +460,7 @@ namespace RadioCabs_BE.Data
                 entity.HasKey(e => e.MembershipOrderId).HasName("membership_order_pkey");
                 entity.Property(e => e.MembershipOrderId).ValueGeneratedOnAdd();
                 entity.HasIndex(e => new { e.CompanyId, e.StartDate }).HasDatabaseName("ix_membership_company");
-                entity.Property(e => e.PaymentMethod).HasColumnType("varchar(20)");
+                entity.Property(e => e.PaymentMethod).HasColumnType("payment_method");
                 entity.Property(e => e.PaymentCode).HasColumnType("varchar(50)");
                 entity.Property(e => e.MembershipId).HasColumnName("membership_id");
                 

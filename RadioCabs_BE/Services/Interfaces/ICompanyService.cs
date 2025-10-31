@@ -10,5 +10,6 @@ namespace RadioCabs_BE.Services.Interfaces
         Task<CompanyDto?> UpdateAsync(long id, UpdateCompanyDto dto);
         Task<bool> DeleteAsync(long id);
         Task<PagedResult<object>> GetMembershipOrdersAsync(long companyId, PageRequest request);
+        Task<MembershipOrderDto> CreateMembershipOrderAsync(long companyId, CreateMembershipOrderDto dto);
     }
 }

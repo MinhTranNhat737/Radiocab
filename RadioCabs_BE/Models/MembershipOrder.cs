@@ -17,7 +17,7 @@ namespace RadioCabs_BE.Models
         public DateOnly EndDate { get; set; }
 
         public DateTimeOffset? PaidAt { get; set; }
-        public string? PaymentMethod { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
         public string? PaymentCode { get; set; }
         public string? Note { get; set; }
 

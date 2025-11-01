@@ -1,5 +1,29 @@
 ﻿<Project>
   <ItemGroup>
+    <StaticWebAssetEndpoint Include="_content/RadioCabs_BE/uploads/models/model_17_638975461503341403.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\models\model_17_638975461503341403.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-weImp41usSuqFo161g/5\u002Bb6U/GWH71YGc9QQjF11MMs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"122109"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022weImp41usSuqFo161g/5\u002Bb6U/GWH71YGc9QQjF11MMs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 31 Oct 2025 22:22:30 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/RadioCabs_BE/uploads/models/model_17_638975461503341403.znirylz2vd.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\models\model_17_638975461503341403.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"znirylz2vd"},{"Name":"integrity","Value":"sha256-weImp41usSuqFo161g/5\u002Bb6U/GWH71YGc9QQjF11MMs="},{"Name":"label","Value":"_content/RadioCabs_BE/uploads/models/model_17_638975461503341403.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"122109"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022weImp41usSuqFo161g/5\u002Bb6U/GWH71YGc9QQjF11MMs=\u0022"},{"Name":"Last-Modified","Value":"Fri, 31 Oct 2025 22:22:30 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/RadioCabs_BE/uploads/models/model_18_638975461999980436.ik1o60kb9y.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\models\model_18_638975461999980436.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ik1o60kb9y"},{"Name":"integrity","Value":"sha256-Dhwa1TRYXDCmDi7CSHkvW748jhKcsSlQMDhLndR/SyQ="},{"Name":"label","Value":"_content/RadioCabs_BE/uploads/models/model_18_638975461999980436.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"83286"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022Dhwa1TRYXDCmDi7CSHkvW748jhKcsSlQMDhLndR/SyQ=\u0022"},{"Name":"Last-Modified","Value":"Fri, 31 Oct 2025 22:23:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/RadioCabs_BE/uploads/models/model_18_638975461999980436.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\models\model_18_638975461999980436.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Dhwa1TRYXDCmDi7CSHkvW748jhKcsSlQMDhLndR/SyQ="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"83286"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022Dhwa1TRYXDCmDi7CSHkvW748jhKcsSlQMDhLndR/SyQ=\u0022"},{"Name":"Last-Modified","Value":"Fri, 31 Oct 2025 22:23:19 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/RadioCabs_BE/uploads/models/model_9_638975143219576303.0p0gasecyz.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\uploads\models\model_9_638975143219576303.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>

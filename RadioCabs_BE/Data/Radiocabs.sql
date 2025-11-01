@@ -5,7 +5,7 @@
 -- Dumped from database version 17.2
 -- Dumped by pg_dump version 17.2
 
--- Started on 2025-10-31 22:55:50
+-- Started on 2025-11-01 06:17:47
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -45,7 +45,8 @@ CREATE TYPE public.active_flag AS ENUM (
     'ACTIVE',
     'INACTIVE',
     'NEW',
-    'REFUSED'
+    'REFUSED',
+    'APPROVE'
 );
 
 
@@ -1221,7 +1222,6 @@ COPY public.account (account_id, company_id, username, password_hash, full_name,
 12	\N	customer002	$2a$10$hash12	Trần Văn Khách Hàng 2	0909999999	customer002@gmail.com	CUSTOMER	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 13	\N	customer003	$2a$10$hash13	Lê Thị Khách Hàng 3	0910000000	customer003@gmail.com	CUSTOMER	ACTIVE	2025-10-22 14:03:47.956554+07	\N	2025-10-22 14:03:47.956554+07
 15	1	testuser123	u+8LdNfyiw3CVGAHbuHnD8VmaR0JDfISDiLXjQMr+I4=	Nguyễn Văn Test	0123456789	test@example.com	CUSTOMER	ACTIVE	2025-10-22 19:04:49.633631+07	2025-10-22 19:06:15.882558+07	\N
-16	1	1	a4ayc/80/OGda4BO/1o/V0etpOqiLx1JwB5S3beHW0s=	string	string	string	ADMIN	ACTIVE	2025-10-23 21:38:13.834925+07	\N	\N
 22	3	22	$2a$11$1lnXJFX/LqzoymEol3XQq.koID41l9sMi4FOJx4gDFxrPKbA9e77e	string	string	string	MANAGER	ACTIVE	2025-10-23 22:36:47.523537+07	\N	\N
 23	3	driver006	$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Nguyen Van F	0967890123	driver006@radiocabs-hn.com	DRIVER	ACTIVE	2025-10-24 20:23:59.550485+07	\N	2025-10-24 20:23:59.550485+07
 24	3	driver007	$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi	Tran Thi G	0978901234	driver007@radiocabs-hn.com	DRIVER	ACTIVE	2025-10-24 20:23:59.550485+07	\N	2025-10-24 20:23:59.550485+07
@@ -1231,12 +1231,20 @@ COPY public.account (account_id, company_id, username, password_hash, full_name,
 27	3	cc	$2a$11$HwQQwtw/ghGr/LtenjPt6uBqZ6mUtUXmMV0u0NJmpp44k5thdzAeu	cc	0987645378	cc@gmail.com	DRIVER	ACTIVE	2025-10-27 14:40:10.116802+07	\N	\N
 28	3	12	$2a$11$bxr52ZbpsVXmehyJ1b0couizJ83k5n3ayMSSBJpx73hX35p9dkUiG	12	098765930	12@gmail.com	DISPATCHER	ACTIVE	2025-10-27 14:56:03.418732+07	\N	\N
 29	3	21	$2a$11$jyKU/yOfvtrnKZ18V7Oase70q0c2P6g2G.R2roL7AxvxOa5HuyqdK	21	0934857223	21@gmail.com	ACCOUNTANT	ACTIVE	2025-10-27 14:59:26.654718+07	\N	\N
+16	1	adminadmin	a4ayc/80/OGda4BO/1o/V0etpOqiLx1JwB5S3beHW0s=	string	string	string	ADMIN	ACTIVE	2025-10-23 21:38:13.834925+07	\N	\N
 17	\N	2	$2a$11$l4McTioNp9VVNKFUIiGTHetLdhXeU1AZovPetkfY55SfIUod6xtuu	string	string	string	MANAGER	ACTIVE	2025-10-23 22:02:57.659396+07	\N	\N
 20	\N	5	$2a$11$rkm0Pwg43p.21ZaX4Og6tOqXqUaSzB2plzeuWinOqpzW9B7ChNZq6	string	string	string	ACCOUNTANT	ACTIVE	2025-10-23 22:07:25.799809+07	\N	\N
-19	\N	4	$2a$11$T6biOX3oT8EzD1cLBG1HeehKTTe.YVTJICoan1yrw7sRT5SJ1rp2W	string	string	string	DISPATCHER	ACTIVE	2025-10-23 22:06:55.479862+07	\N	\N
 18	\N	3	$2a$11$G.5XBOOeNFVr7tV7NQVtLuIc2Pa7ErMDaqj6txfE/tUxjLo/S6YRG	string	string	string	DRIVER	ACTIVE	2025-10-23 22:05:31.404115+07	\N	\N
-30	11	23	$2a$11$Xq1vqc3CGxktRXNN/joAReXug6NrreW8Vi8SB6HNskOfDeSEZnQ72	23	0923465782	23@gmail.com	MANAGER	ACTIVE	2025-10-27 15:10:18.511771+07	2025-10-31 20:14:17.576633+07	\N
 31	\N	33	$2a$11$Nb1XcT/k/lTpDWua.X/HT.l9UvICvvuyvSnLm330ZNnMX2F0Smx62	33	0987685904	33@gmail.com	CUSTOMER	ACTIVE	2025-10-31 20:33:26.133729+07	\N	\N
+30	13	23	$2a$11$Xq1vqc3CGxktRXNN/joAReXug6NrreW8Vi8SB6HNskOfDeSEZnQ72	23	0923465782	23@gmail.com	MANAGER	ACTIVE	2025-10-27 15:10:18.511771+07	2025-10-31 20:14:17.576633+07	\N
+32	\N	qq	$2a$11$Iz8jpFnt1R4BizdSuksfruvZx3Na1qcH9/RP/k0f38AdT02wO0Q26	qq	0923465782	qq@gmail.com	CUSTOMER	ACTIVE	2025-11-01 02:00:28.122+07	\N	\N
+33	\N	ww	$2a$11$mCo04jnGBTGCIoUvMAVr3uwTDOu3iCTAXlxD7vt.zh2Zk4Dn5VODy	ww	0923465782	bkdcdzvkl7@gmail.com	CUSTOMER	ACTIVE	2025-11-01 02:45:40.469234+07	2025-11-01 02:49:36.927301+07	\N
+19	3	4	$2a$11$T6biOX3oT8EzD1cLBG1HeehKTTe.YVTJICoan1yrw7sRT5SJ1rp2W	string	string	string	DISPATCHER	ACTIVE	2025-10-23 22:06:55.479862+07	\N	\N
+34	14	nguyentuankiet	$2a$11$Roga3SawEWx4SsVI7d/gj.0/BzHEljEWuWaryAVMq1BN9bz5WEa7C	nguyentuankiet	0923465782	bkdcdzvkl0@gmail.com	MANAGER	ACTIVE	2025-11-01 05:14:22.30662+07	2025-11-01 05:15:25.834074+07	\N
+35	14	buidaiphu	$2a$11$n.PfAS2uR0xAoUPIqT9WyO/ahyDwC/MCPcn0ak2NbruPjdqKTCiyG	Bùi Đại Phú	0983764892	buidaiphu@gmail.com	DRIVER	ACTIVE	2025-11-01 05:17:34.37023+07	\N	\N
+36	14	trannhatminh	$2a$11$wF3sLw3YRsc/RAwaH2zfZeiiXDq8wnKIG.dCwRZRoCRnfrFetKMvC	Trần Nhật Minh	09876453783	trannhatminh@gmail.com	DRIVER	ACTIVE	2025-11-01 05:18:03.60524+07	\N	\N
+37	14	vuanhkiet	$2a$11$jiSPXnJCH6DOoitta6urLOLFpJHfM5fY9ALKimBc6AGzpJoZtoQ4.	Vũ Anh Kiệt	0987645378	vuanhkiet@gmail.com	DRIVER	ACTIVE	2025-11-01 05:18:29.69887+07	\N	\N
+38	14	leduchieu	$2a$11$B1YsIq8xBwIn7vQ6FGthZu2ctu5x5trD0v8Tlzqvx4L2PsxYyOpUi	Lê Đức Hiếu	0987645378	leduchieu@gmail.com	DISPATCHER	ACTIVE	2025-11-01 05:19:02.092418+07	\N	\N
 \.
 
 
@@ -1250,6 +1258,9 @@ COPY public.auth_email_code (code_id, account_id, email, purpose, code_hash, sen
 1	11	customer001@gmail.com	SIGNUP	$2a$10$verification_hash_1	2024-01-15 10:00:00+07	2024-01-15 11:00:00+07	2024-01-15 10:05:00+07	1	5
 2	12	customer002@gmail.com	PASSWORD_RESET	$2a$10$verification_hash_2	2024-01-15 14:00:00+07	2024-01-15 15:00:00+07	\N	0	5
 3	13	customer003@gmail.com	EMAIL_CHANGE	$2a$10$verification_hash_3	2024-01-16 09:00:00+07	2024-01-16 10:00:00+07	\N	0	5
+4	\N	bkdcdzvkl7@gmail.com	SIGNUP	$2a$11$ZnkYnKwJdqXh7FUhr26K7eyjSRFrMjLzGyzp18Gfcp9UVlpIodvku	2025-11-01 02:45:27.002754+07	2025-11-01 03:00:27.002772+07	2025-11-01 02:45:40.198928+07	0	5
+6	\N	bkdcdzvkl7@gmail.com	PASSWORD_RESET	$2a$11$wVzeccRFjOITzUGaMH4AS.RNOWrgXXQkkUb03wW7BEBVxyye.wYZK	2025-11-01 02:49:19.902903+07	2025-11-01 03:04:19.902925+07	2025-11-01 02:49:36.685048+07	0	5
+7	\N	bkdcdzvkl0@gmail.com	SIGNUP	$2a$11$ChcYGaGthLbf/.k3hUO4geizfp2VPaHxOLu57uRQizjz7c14YFFLC	2025-11-01 05:12:09.22933+07	2025-11-01 05:27:09.229345+07	2025-11-01 05:14:22.108058+07	0	5
 \.
 
 
@@ -1358,6 +1369,42 @@ a0ed0a26-4515-44a5-86f0-b2dd533ae729	30	$2a$11$lhbxaXLeOleGDQGtfvQO.uMUo.H.LqQdJ
 14f36561-8f0d-446f-b08b-a473fa39e8b3	31	$2a$11$BOHY06TcOcV3R1xeh8VobOQzv0YcuO6N9mhe0p3MdmmBHZZ1jsxcO	8a1e1379-b510-4400-a0dd-cf0d0812f097	2025-10-31 20:33:31.221854+07	2025-11-07 20:33:31.221879+07	\N	\N	\N	\N
 a33fec9a-ccd2-4649-8815-ae003ace91d6	22	$2a$11$kku7scJYPrqKPVLQdLpO..5amOL/8PvZfB.K9FCazWPHHhtJi0pNa	222e6a5c-1afb-480a-ac82-9070ba9507c7	2025-10-31 20:35:25.782386+07	2025-11-07 20:35:25.782386+07	\N	\N	\N	\N
 48e1e91f-40ac-48b7-85cc-08c500789d5a	16	$2a$11$ncT1fVGaFjyQiZJqI2khFOMpDCpv/x71Ap7DfUOF7eMHjw4BqfIeW	10ddc638-0755-4c55-a006-33b79acdeeca	2025-10-31 21:35:06.035366+07	2025-11-07 21:35:06.035367+07	\N	\N	\N	\N
+5c0d49ef-a0b6-43a2-a85f-1e65d834ac6f	22	$2a$11$1cLmmbR3TY8rlct7IWm78umY8BKe0NXKXXMqb.mx8XP.tyki9vsIO	aacc6b44-3835-4147-8788-91e88b078568	2025-11-01 01:05:07.392441+07	2025-11-08 01:05:07.392571+07	\N	\N	\N	\N
+49f7aacf-d12e-48bb-aa83-62e1b72accf7	30	$2a$11$riLZRsGELpESjOTpSkHy4OVXDdtsK9h.4sQ5k04lGR0kkPuvHBagi	252d3715-db2b-422a-a2c8-7497dda5e434	2025-11-01 01:24:08.59147+07	2025-11-08 01:24:08.591482+07	\N	\N	\N	\N
+d6fb46f0-5b40-4723-9717-3e307b707e3b	16	$2a$11$v5y.R.mNes2LjF8KUQ3Mw./ChxBZuc3jM2sp8zjg1FqQFY/Xw6JQS	21354c23-9f21-4ed0-bef2-324580fd8f04	2025-11-01 01:31:26.198916+07	2025-11-08 01:31:26.198917+07	\N	\N	\N	\N
+c8a2e1ac-822e-41dd-8449-97f7cfb44108	30	$2a$11$o1jDh6GRbPyBkCZS/YKjIeh01b9WW.YaVy35XJyupI8RBDcgOQdv2	e2803c10-fcf6-4c0f-96fb-3e678829ad73	2025-11-01 01:35:06.959726+07	2025-11-08 01:35:06.959783+07	\N	\N	\N	\N
+9e9e34b9-8721-42ae-b782-f465b462daca	30	$2a$11$c1wEmlW4ZentYd.d1TEK9OB.r7y7qKRBOr2xNqeZgxMIXOLy1hXZ.	93e859c8-797c-4109-9585-045e3990ac23	2025-11-01 01:35:53.549318+07	2025-11-08 01:35:53.549319+07	\N	\N	\N	\N
+e95245a4-c5d0-4ad7-8730-19d9bb20df42	22	$2a$11$YeZjmieNodFvwfQkUetgDuvLCXWqmwZ//J/l4D0cEMaSsP6Ghxue6	501df3f6-d11f-4668-b58c-e24a53eff32d	2025-11-01 01:36:13.440952+07	2025-11-08 01:36:13.440953+07	\N	\N	\N	\N
+f5c73cbb-2e47-4c45-94f5-84de5443d651	30	$2a$11$/Pqea1Hpcfvorl9ZpIFq3u3qLRukvP17e0L9LGUl23YuQ5hOiKTYK	a58e8f63-489b-42c9-91d2-134687bc6251	2025-11-01 01:36:28.434207+07	2025-11-08 01:36:28.434207+07	\N	\N	\N	\N
+85beddf7-f79f-48f6-96ea-957eb25876d3	16	$2a$11$G4TOaEFZxRGw2iw7qe8Khu.VRy3w6JuyiVmbFbArkjmWWQGdCPmgy	970f0937-b316-4bb2-84a8-d237e7a4a090	2025-11-01 01:37:00.199379+07	2025-11-08 01:37:00.199379+07	\N	\N	\N	\N
+2f1fed85-d661-4890-9f55-5b9ab0486e1d	30	$2a$11$55T/wypslctV1UjdHiWR..amini5yDtZvX6Zol4xSqhYitPcuH172	6281c290-2fcc-4657-8414-7ff24eebaf26	2025-11-01 01:38:51.497226+07	2025-11-08 01:38:51.497261+07	\N	\N	\N	\N
+0376536b-1342-443d-887b-ec19bfe4afcc	16	$2a$11$9cNGqRbPdrIuNz4j4k2VnemOJOVNH32umyx9i2AmUZuplRTrfEt8S	1568e13a-50cf-4207-acba-932eb0743df1	2025-11-01 01:39:24.728233+07	2025-11-08 01:39:24.728234+07	\N	\N	\N	\N
+eb617035-945b-47e1-abba-843971d5e2eb	30	$2a$11$DBZA.jRRqL1ZrEQxRKKE4eq5Ww3SOjbCyI3uXcsQ0xTedbEPBsPVm	9a6e9227-406c-4033-987e-b4597b08f9b2	2025-11-01 01:40:14.329769+07	2025-11-08 01:40:14.32977+07	\N	\N	\N	\N
+e51572a8-e71f-4355-8213-4751bd0debd0	30	$2a$11$Je7cfzA4sqvzxh.9a3R8vOkgY2vF5vbFdwFj3EbKqYkc0nCk1USMO	8a88afd3-9a18-42af-9da1-5bfa674d9b85	2025-11-01 01:42:34.328055+07	2025-11-08 01:42:34.328056+07	\N	\N	\N	\N
+b735f919-3d65-459f-a4f8-52e20a3bae9f	32	$2a$11$QyFMT6jQBX9iULWuOhTEyeJd549KNiz1sDAuln1hNVxN1Ic3Q73YC	253d6d62-4904-4cdb-96a1-73c3f661709d	2025-11-01 02:00:32.737711+07	2025-11-08 02:00:32.737723+07	\N	\N	\N	\N
+83127d13-35eb-4a7a-8de2-eb1bb501a55a	33	$2a$11$Mog85N34Yg3bEn5b5vliG.Vb/94XI404DhEUkQVeSl5ooWOUv8XJm	5e6d9a6a-b25c-4cb1-b2ec-1cf0f754eb48	2025-11-01 02:45:48.787466+07	2025-11-08 02:45:48.78748+07	\N	\N	\N	\N
+f01127aa-3227-4ea6-bfde-045f7c55ad6e	33	$2a$11$bCc4fb/Fb4WvZmJsUnIg7eS.pPAt0FXX7BXXZqMrTGw/Xbdc0rSEq	8f04a294-4198-4ef0-acb2-ab0f258edebb	2025-11-01 02:49:43.658236+07	2025-11-08 02:49:43.658249+07	\N	\N	\N	\N
+fea54f1e-ea64-4048-9520-3bc71dab3f77	22	$2a$11$lHQ69Joe6yAfKHYQfKBCy.dVEEzAdo65Fs8tFUcJOudDZJMsdwJEW	47fe2b75-8352-4626-bfdb-a32974e3c09f	2025-11-01 02:56:23.150127+07	2025-11-08 02:56:23.150127+07	\N	\N	\N	\N
+45ad122b-5fce-4038-95e0-48351fc33608	16	$2a$11$iwhhG91ogyQUBAtHU/.iR.Pepy65.JdsPeAiXlmTI94AqDWEFeXQW	b1abae10-1de2-4af6-a04d-a976400d50b9	2025-11-01 03:55:18.511996+07	2025-11-08 03:55:18.512009+07	\N	\N	\N	\N
+0fdc60a5-742f-43a5-a619-499f81f47b54	22	$2a$11$8t/b2ilT2YMDSfxtR4TkDuifDHgU3FxXU37Q7.YQAeW.8DRWoT/CG	7a831ea7-11d5-442f-b496-ea9bb1dfaf33	2025-11-01 04:00:56.927581+07	2025-11-08 04:00:56.927581+07	\N	\N	\N	\N
+c00a96b6-0c49-4908-b452-14aa8a959a77	27	$2a$11$iqJe7NIQK3J/.YbLHXygueyg5/WhWpZKMfVZNSjWwRtHn.zAPd6V6	5a3a3431-0475-45b6-b7d9-ec5437b26e8a	2025-11-01 04:54:52.822539+07	2025-11-08 04:54:52.822551+07	\N	\N	\N	\N
+6b539d53-c537-4199-b068-13da115da3c4	22	$2a$11$i0nf1jBhEQQ.m2D2TYeT4umSV5tgEAGZ0oVN15ajOEoQVagrlwgpK	6fe1b7dc-4c05-43b9-b2c5-a90bfd6802c5	2025-11-01 04:55:10.343212+07	2025-11-08 04:55:10.343212+07	\N	\N	\N	\N
+56f1570a-5f94-4a20-a5a9-1acbdd39b072	33	$2a$11$kxhwqV8bk.kOimXCF6AbiOxWSz8lDZB4I4tC.6Be/1Cz5INkWqq6W	828620ad-f685-4086-afee-ffea699b389a	2025-11-01 04:56:50.901918+07	2025-11-08 04:56:50.901918+07	\N	\N	\N	\N
+4239f65c-e0dc-48fd-a4fe-191580ff26d9	22	$2a$11$hRyJxQ8RXuTBIQMtzM2V6uOrS.ztTfPALUMJ0BovscOLDyZckTaCu	c460e6c7-0f1f-4c75-9bba-fafd782d8db8	2025-11-01 04:57:03.117626+07	2025-11-08 04:57:03.117626+07	\N	\N	\N	\N
+926682fc-74fa-44a4-8651-3a95e90b9e92	19	$2a$11$9J98BgO7PPUAZZYKTTnKU.kO8I4YqU0DR/IgxvOHsCWkUiCmyo.2W	b8429cf7-b27d-4359-946f-81f61e280c1a	2025-11-01 05:00:34.019073+07	2025-11-08 05:00:34.019073+07	\N	\N	\N	\N
+62f85bc1-3b73-4f23-98e4-39aaa6ea411d	22	$2a$11$MOnU6vws/ms/0eXi.GYR9OOxkpiNIfiqYrK.viY/Go4YHxrBYZB46	08adbe55-7664-47e5-9aa3-60423733165f	2025-11-01 05:00:48.301241+07	2025-11-08 05:00:48.301241+07	\N	\N	\N	\N
+3382f633-cc59-44f9-a306-4863673909fd	19	$2a$11$Ub8Gtl9TQ2ppo8nO0CkUR.10Ani2tqLbtDVzu7WIhnwW7gzMvU5i2	047ad1ee-0120-439a-98ca-ffc1e5ff92b7	2025-11-01 05:03:47.900892+07	2025-11-08 05:03:47.900892+07	\N	\N	\N	\N
+c75964f6-a233-4aca-a356-10faaabfcdbc	19	$2a$11$Ukwz/s6OAmBHfEG5KvvZNOuvtiz4jNirO9MxvC5VQy0f6yf66.iMe	1c636c86-4224-46d0-9e71-1ddc72166f3c	2025-11-01 05:06:57.002068+07	2025-11-08 05:06:57.002068+07	\N	\N	\N	\N
+3b2fcc34-f44e-4bc2-bda4-3ddd236c5e65	22	$2a$11$DGzyF2Qjsy0M3ELPqDzZc.tuShI1vdIIlodoZm6ay6s.i.EbFnvFu	8bb7553b-196f-46ee-b046-cbb7a0010802	2025-11-01 05:07:41.870716+07	2025-11-08 05:07:41.870717+07	\N	\N	\N	\N
+e0262d64-ccbf-4a75-8440-1e44d53fde0c	29	$2a$11$T1ml3HE.ahQurFjg05YY6O.kBompEHSSLX73lw8EcyzdvWOppcaYq	b6b5c08d-e517-4fc9-afda-2dd3294c54fa	2025-11-01 05:10:29.166447+07	2025-11-08 05:10:29.166447+07	\N	\N	\N	\N
+95be475c-06f8-4b93-bbc9-a620d635838c	28	$2a$11$aOj0StOgd7CIQ/gIF4Ov3eKuQGZuzQtre4kKW9pq9cYcPHWUHgwbG	b52f9594-1cc6-4b4f-882e-361d8e383834	2025-11-01 05:10:53.984689+07	2025-11-08 05:10:53.984689+07	\N	\N	\N	\N
+a1cd5871-b05d-43f5-9bf6-72322983feb6	34	$2a$11$eTkKXraTbstRISEQM.Cxueh1OrBqBTlrru9JtqDUSxQquJA0phqOK	9d5a6fb4-a3f4-41c7-b7bf-e1ed85dc4c93	2025-11-01 05:14:35.21176+07	2025-11-08 05:14:35.21176+07	\N	\N	\N	\N
+96849c92-9af1-4f97-a3c7-4578355df8d0	16	$2a$11$7UwO2zm9ct235Xt0TUE8FOxWxfertFEYhx0CmOZ1If/G6pqgt36Ze	caf6d218-c86a-416d-ad44-414fa391e392	2025-11-01 05:15:34.541524+07	2025-11-08 05:15:34.541524+07	\N	\N	\N	\N
+d2d7f0ee-d5dc-43d6-b211-c9372df1f0b5	34	$2a$11$LVrYYYf1pKjLXsKq1EFTsu0/jKiAdGLs/.ywPPMHR2vG7sWpXvy/.	7255a059-36a4-4a7c-88a3-e4e66f21159d	2025-11-01 05:15:53.425527+07	2025-11-08 05:15:53.425528+07	\N	\N	\N	\N
+0f298d52-4280-429d-9559-5d0abb05a61b	37	$2a$11$KVus6wsknGh9BUSYKgvqBu9./dZayTMtYG9u0MvKHBJ8QJxRoufpC	396ff38b-360e-4b70-b0c8-aeb77d5c0949	2025-11-01 05:40:07.183993+07	2025-11-08 05:40:07.183993+07	\N	\N	\N	\N
+dd436b55-0443-4b94-a0c2-7b20ef8c91ad	34	$2a$11$xIkc4.VY5UKx7YLFLQtMjOY2r5iL8AbbzeYTVS9rOhsg8Z.20Eeeu	dd8c4961-132a-475d-9cd9-7f1678d01c8c	2025-11-01 05:40:36.490697+07	2025-11-08 05:40:36.490697+07	\N	\N	\N	\N
+43fa0a58-5613-484f-91ce-a6c74e0c9cfe	16	$2a$11$3VnJQRk/FR4zpZTYF.jai.XQHW7Xk5U1ZJGADZ1qm.KJkzTytiYGa	97cccc78-a419-48e6-be33-9462abc019ac	2025-11-01 05:43:45.321464+07	2025-11-08 05:43:45.321465+07	\N	\N	\N	\N
+a3f2cfaf-a8a6-49cd-8561-7fd572d552a0	34	$2a$11$zCgZXh4VN0fnYGIClB7T4u1uvseId57ujK0f7gqXE9twxz40JrPCe	76c6c6ff-42dd-4841-897a-d80f6846d942	2025-11-01 05:45:31.841265+07	2025-11-08 05:45:31.841266+07	\N	\N	\N	\N
 \.
 
 
@@ -1368,10 +1415,11 @@ a33fec9a-ccd2-4649-8815-ae003ace91d6	22	$2a$11$kku7scJYPrqKPVLQdLpO..5amOL/8PvZf
 --
 
 COPY public.company (company_id, name, hotline, email, address, tax_code, status, contact_account_id, created_at, updated_at, fax, url_page) FROM stdin;
-1	RadioCabs Hà Nội	1900-1234	contact@radiocabs-hn.com	123 Lê Lợi, Hoàn Kiếm, Hà Nội	0123456789	ACTIVE	1	2025-10-22 14:03:47.956554+07	\N	024-1234567	\N
-2	Acme Taxi	1900-1234	contact@acme.taxi	123 Main St	0101234567	ACTIVE	2	-infinity	\N		\N
 3	RadioCabs Đà Nẵngd	1900-9999	contact@radiocabs-dn.com	789 Lê Duẩn, Hải Châu, Đà Nẵng	0555666776	ACTIVE	3	2025-10-22 14:03:47.956554+07	2025-10-26 23:16:16.945048+07	0236-123457	\N
-11	ád	0985784567	bkdcdzvkl0@gmail.com	ádf	123213	ACTIVE	30	2025-10-31 19:49:28.851423+07	2025-10-31 20:14:17.539172+07	124123432413	\N
+1	RadioCabs Hà Nội	1900-1234	contact@radiocabs-hn.com	123 Lê Lợi, Hoàn Kiếm, Hà Nội	0123456789	INACTIVE	1	2025-10-22 14:03:47.956554+07	2025-11-01 01:47:43.366556+07	024-1234567	\N
+2	Acme Taxi	1900-1234	contact@acme.taxi	123 Main St	0101234567	INACTIVE	2	-infinity	2025-11-01 01:47:43.372195+07		\N
+13	RadioCabs Đà Nẵngdd	0985784567	23@gmail.com	ádfadsfdafadf	0555666776	INACTIVE	30	2025-11-01 01:39:18.349387+07	2025-11-01 01:57:19.288036+07	124123432413	\N
+14	Taxi Mai Linh Hà Nội	0399486270	bkdcdzvkl7@gmail.com	45 đường Nguyễn Trãi	123213	ACTIVE	34	2025-11-01 05:15:25.813938+07	2025-11-01 05:15:44.322657+07	23441134	\N
 \.
 
 
@@ -1384,7 +1432,6 @@ COPY public.company (company_id, name, hotline, email, address, tax_code, status
 COPY public.driver_schedule (schedule_id, driver_account_id, work_date, start_time, end_time, vehicle_id, status, note, created_at, updated_at) FROM stdin;
 1	6	2024-01-15	06:00:00	18:00:00	1	PLANNED	Ca ngày thứ 2	2025-10-22 14:03:47.956554+07	\N
 2	6	2024-01-16	06:00:00	18:00:00	1	PLANNED	Ca ngày thứ 3	2025-10-22 14:03:47.956554+07	\N
-3	6	2024-01-17	06:00:00	18:00:00	1	ON	Ca ngày thứ 4 - Đang làm việc	2025-10-22 14:03:47.956554+07	\N
 4	6	2024-01-18	06:00:00	18:00:00	1	PLANNED	Ca ngày thứ 5	2025-10-22 14:03:47.956554+07	\N
 5	6	2024-01-19	06:00:00	18:00:00	1	PLANNED	Ca ngày thứ 6	2025-10-22 14:03:47.956554+07	\N
 6	7	2024-01-13	08:00:00	20:00:00	2	COMPLETED	Ca cuối tuần thứ 7	2025-10-22 14:03:47.956554+07	\N
@@ -1454,10 +1501,52 @@ COPY public.driver_schedule (schedule_id, driver_account_id, work_date, start_ti
 73	10	2025-10-27	02:08:00	17:08:00	18	PLANNED	\N	2025-10-27 14:08:42.638544+07	\N
 75	23	2025-10-29	00:03:00	12:03:00	11	ON	\N	2025-10-29 22:03:40.190225+07	\N
 76	27	2025-10-29	17:04:00	23:04:00	11	ON	\N	2025-10-29 22:05:04.269898+07	\N
+118	36	2025-11-21	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.538926+07	\N
 74	27	2025-10-27	08:41:00	20:41:00	10	ON	\N	2025-10-27 14:41:13.466902+07	2025-10-27 14:41:53.876631+07
 77	27	2025-10-30	02:21:00	16:21:00	11	ON	\N	2025-10-30 14:21:19.467577+07	\N
+119	36	2025-11-26	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.5391+07	\N
 79	23	2025-10-31	03:53:00	17:53:00	16	ON	\N	2025-10-31 15:53:28.081206+07	\N
 78	27	2025-10-31	15:25:00	17:25:00	10	ON	\N	2025-10-31 15:25:39.671505+07	\N
+80	24	2025-10-27	03:03:00	15:03:00	17	PLANNED	\N	2025-11-01 03:03:17.748432+07	\N
+81	10	2025-11-03	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.457861+07	\N
+82	10	2025-11-14	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458054+07	\N
+83	10	2025-11-25	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458323+07	\N
+84	10	2025-11-04	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458254+07	\N
+87	10	2025-11-13	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458376+07	\N
+86	10	2025-11-20	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458535+07	\N
+88	10	2025-11-12	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458392+07	\N
+89	10	2025-11-24	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458243+07	\N
+90	10	2025-11-27	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458262+07	\N
+91	10	2025-11-18	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458398+07	\N
+92	10	2025-11-28	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458248+07	\N
+93	10	2025-11-11	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.457862+07	\N
+94	10	2025-11-21	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458106+07	\N
+95	10	2025-11-15	15:05:00	17:05:00	11	PLANNED	Auto from template	2025-11-01 03:29:48.458476+07	\N
+96	10	2025-11-26	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458559+07	\N
+97	10	2025-11-07	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.457936+07	\N
+98	10	2025-11-29	15:05:00	17:05:00	11	PLANNED	Auto from template	2025-11-01 03:29:48.458473+07	\N
+99	10	2025-11-10	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458127+07	\N
+100	10	2025-11-22	15:05:00	17:05:00	11	PLANNED	Auto from template	2025-11-01 03:29:48.458379+07	\N
+101	10	2025-11-08	15:05:00	17:05:00	11	PLANNED	Auto from template	2025-11-01 03:29:48.458113+07	\N
+102	10	2025-11-19	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458201+07	\N
+103	10	2025-11-17	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458119+07	\N
+104	10	2025-11-05	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.457857+07	\N
+105	10	2025-11-06	06:30:00	18:30:00	10	PLANNED	Auto from template	2025-11-01 03:29:48.458003+07	\N
+106	27	2025-11-01	04:34:00	16:35:00	10	ON	\N	2025-11-01 04:35:44.777557+07	2025-11-01 04:38:06.592565+07
+85	10	2025-11-01	03:05:00	05:05:00	11	COMPLETED	Auto from template	2025-11-01 03:29:48.457852+07	2025-11-01 05:05:07.010424+07
+107	36	2025-11-01	05:34:00	17:34:00	21	ON	\N	2025-11-01 05:34:19.80801+07	\N
+108	35	2025-11-01	05:34:00	17:34:00	20	ON	\N	2025-11-01 05:34:38.252812+07	\N
+110	36	2025-11-12	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.538101+07	\N
+111	36	2025-11-28	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.539071+07	\N
+112	35	2025-11-04	05:51:00	17:51:00	20	PLANNED	Auto from template	2025-11-01 05:52:52.538101+07	\N
+113	36	2025-11-19	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.538732+07	\N
+114	35	2025-11-18	05:51:00	17:51:00	20	PLANNED	Auto from template	2025-11-01 05:52:52.539105+07	\N
+115	36	2025-11-14	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.538497+07	\N
+116	36	2025-11-07	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.539955+07	\N
+117	35	2025-11-11	05:51:00	17:51:00	20	PLANNED	Auto from template	2025-11-01 05:52:52.539083+07	\N
+120	35	2025-11-25	05:51:00	17:51:00	20	PLANNED	Auto from template	2025-11-01 05:52:52.539535+07	\N
+121	36	2025-11-05	05:52:00	17:52:00	23	PLANNED	Auto from template	2025-11-01 05:52:52.539755+07	\N
+109	37	2025-11-01	05:55:00	17:34:00	22	ON	\N	2025-11-01 05:34:55.028729+07	2025-11-01 05:59:59.108625+07
 \.
 
 
@@ -1482,11 +1571,6 @@ COPY public.driver_schedule_template (template_id, driver_account_id, start_date
 12	8	2024-01-01	2024-12-31	5	07:00:00	19:00:00	6	Ca ngày thứ 2-6	t
 13	9	2024-01-01	2024-12-31	0	09:00:00	21:00:00	7	Ca cuối tuần	t
 14	9	2024-01-01	2024-12-31	6	09:00:00	21:00:00	7	Ca cuối tuần	t
-15	10	2024-01-01	2024-12-31	1	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
-16	10	2024-01-01	2024-12-31	2	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
-17	10	2024-01-01	2024-12-31	3	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
-18	10	2024-01-01	2024-12-31	4	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
-19	10	2024-01-01	2024-12-31	5	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
 21	23	2024-12-01	2024-12-31	2	06:00:00	14:00:00	3	Ca sáng thứ 3	t
 23	24	2024-12-01	2024-12-31	1	14:00:00	22:00:00	4	Ca chiều thứ 2	t
 24	24	2024-12-01	2024-12-31	2	14:00:00	22:00:00	4	Ca chiều thứ 3	t
@@ -1498,11 +1582,19 @@ COPY public.driver_schedule_template (template_id, driver_account_id, start_date
 32	24	2026-01-01	2026-12-31	5	14:00:00	22:00:00	4	Ca chiều thứ 6	t
 33	25	2026-01-01	2026-12-31	4	08:00:00	16:00:00	5	Ca ngày thứ 5	t
 34	25	2026-01-01	2026-12-31	5	08:00:00	16:00:00	5	Ca ngày thứ 6	t
-36	10	2025-10-02	2025-10-24	6	15:05:00	17:05:00	11	\N	t
 20	23	2024-12-01	2024-12-31	1	06:00:00	20:00:00	18	Ca sáng thứ 2	t
 30	23	2026-01-01	2026-12-31	5	06:00:00	20:00:00	16	Ca sáng thứ 6	t
 29	23	2026-01-01	2026-12-31	4	06:00:00	21:00:00	10	Ca sáng thứ 5	t
 22	23	2024-12-01	2024-12-31	3	06:00:00	14:00:00	16	Ca sáng thứ 4	t
+19	10	2024-01-01	2025-12-31	5	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+18	10	2024-01-01	2025-12-31	4	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+17	10	2024-01-01	2025-12-31	3	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+16	10	2024-01-01	2025-12-31	2	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+15	10	2024-01-01	2025-12-31	1	06:30:00	18:30:00	10	Ca ngày thứ 2-6	t
+36	10	2025-10-02	2025-12-24	6	15:05:00	17:05:00	11	\N	t
+38	35	2025-01-01	2025-12-31	2	05:51:00	17:51:00	20	\N	t
+39	36	2025-10-29	2025-12-06	3	05:52:00	17:52:00	23	\N	t
+40	36	2025-01-01	2025-12-01	5	05:52:00	17:52:00	23	\N	t
 \.
 
 
@@ -1529,6 +1621,11 @@ COPY public.driver_vehicle_assignment (assignment_id, driver_account_id, vehicle
 15	27	10	2025-10-08 07:00:00+07	2025-10-31 07:00:00+07
 16	27	11	2025-10-15 07:00:00+07	2025-10-31 07:00:00+07
 17	23	16	2025-10-02 07:00:00+07	2025-11-01 07:00:00+07
+18	35	20	2025-01-01 07:00:00+07	2025-12-31 07:00:00+07
+19	36	21	2025-01-01 07:00:00+07	2025-11-30 07:00:00+07
+20	37	22	2025-01-01 07:00:00+07	2025-12-31 07:00:00+07
+21	35	23	2025-01-01 07:00:00+07	2025-11-30 07:00:00+07
+22	36	23	2025-01-01 07:00:00+07	2025-12-31 07:00:00+07
 \.
 
 
@@ -1542,12 +1639,14 @@ COPY public.driving_order (order_id, company_id, customer_account_id, vehicle_id
 29	3	22	10	27	8	10	3	3	Ga Hà Nội	Hồ Gươm	2025-10-31 16:17:06.286+07	2025-10-31 16:20:37.653621+07	DONE	1.70	1.70	0.00	0.00	f	0	14000.00	0.00	0.00	0.00	14000.00	0.00	0.00	32700.00	\N	CARD	\N	2025-10-31 15:45:32.801236+07	2025-10-31 16:20:37.661949+07	78
 19	3	22	11	27	9	12	3	3	Chợ Đồng Xuân	Vincom Center	2025-10-30 14:24:45.174+07	2025-10-30 14:24:59.274916+07	DONE	3.90	3.90	0.00	0.00	f	0	170000.00	0.00	0.00	0.00	150000.00	0.00	0.00	0.00	\N	CASH	\N	2025-10-30 14:20:54.514248+07	2025-10-30 14:24:59.301457+07	77
 30	3	27	10	27	8	11	3	3	Hồ Gươm	Chợ Đồng Xuân	\N	\N	ASSIGNED	1.50	1.50	0.00	0.00	f	0	19000.00	0.00	0.00	0.00	17000.00	0.00	0.00	52360.00	\N	\N	\N	2025-10-31 16:20:55.641499+07	2025-10-31 16:21:13.906586+07	78
+31	3	22	11	10	9	12	3	3	Số 53, Ngõ 24 Ngọc Lâm, Ngọc Lâm, Hà Nội, Hà Nội, 11811	Chợ Đồng Xuân	\N	\N	ASSIGNED	5.80	5.80	0.00	0.00	f	0	170000.00	0.00	0.00	0.00	150000.00	0.00	0.00	1067070.00	\N	\N	\N	2025-11-01 04:29:23.390359+07	2025-11-01 04:32:03.477543+07	85
 1	3	11	1	6	1	1	1	1	123 Lê Lợi, Hoàn Kiếm, Hà Nội	456 Nguyễn Huệ, Hai Bà Trưng, Hà Nội	2024-01-15 08:00:00+07	2024-01-15 08:30:00+07	DONE	8.50	8.50	0.00	2.00	f	5	15000.00	2000.00	4000.00	0.00	15000.00	0.00	0.00	19000.00	{"base_fare": 15000, "traffic_fee": 4000}	CASH	2024-01-15 08:35:00+07	2024-01-15 07:45:00+07	\N	\N
 2	3	12	2	7	2	3	1	1	789 Trần Hưng Đạo, Hoàn Kiếm, Hà Nội	321 Cầu Giấy, Cầu Giấy, Hà Nội	2024-01-15 14:00:00+07	2024-01-15 14:45:00+07	ONGOING	15.20	15.20	0.00	3.50	t	0	18000.00	2500.00	8750.00	5000.00	16000.00	0.00	0.00	31750.00	{"rain_fee": 5000, "base_fare": 18000, "traffic_fee": 8750}	\N	\N	2024-01-15 13:30:00+07	\N	\N
 3	3	13	6	8	5	6	2	2	111 Nguyễn Huệ, Quận 1, TP.HCM	222 Lê Văn Việt, Quận 9, TP.HCM	2024-01-16 09:00:00+07	\N	ASSIGNED	25.80	25.80	0.00	5.20	f	0	16000.00	2200.00	11440.00	0.00	16000.00	0.00	0.00	27440.00	{"base_fare": 16000, "traffic_fee": 11440}	\N	\N	2024-01-16 08:30:00+07	\N	\N
 4	3	11	7	9	6	8	2	2	333 Điện Biên Phủ, Bình Thạnh, TP.HCM	444 Nguyễn Thị Thập, Quận 7, TP.HCM	2024-01-16 16:00:00+07	2024-01-16 16:50:00+07	DONE	18.70	18.70	0.00	4.10	f	10	19000.00	2700.00	11070.00	0.00	17000.00	0.00	0.00	30070.00	{"base_fare": 19000, "traffic_fee": 11070}	CARD	2024-01-16 17:00:00+07	2024-01-16 15:30:00+07	\N	23
 5	3	12	10	10	8	10	3	3	555 Lê Duẩn, Hải Châu, Đà Nẵng	666 Ngũ Hành Sơn, Ngũ Hành Sơn, Đà Nẵng	2024-01-17 10:00:00+07	\N	NEW	12.30	12.30	0.00	2.80	f	0	14000.00	1800.00	5040.00	0.00	14000.00	0.00	0.00	19040.00	{"base_fare": 14000, "traffic_fee": 5040}	\N	\N	2024-01-17 09:30:00+07	\N	25
 6	3	2	\N	\N	5	9	1	2	updated	456 Đường XYZ, Quận 2, TP.HCM	2024-01-15 15:00:00+07	2025-10-22 19:40:15.666542+07	CANCELLED	12334.00	123132.00	233.00	2323.00	t	23	0.00	0.00	0.00	0.00	0.00	0.00	0.00	0.00	\N	CASH	\N	2025-10-22 19:34:42.642924+07	2025-10-22 19:41:43.771671+07	24
+32	3	22	10	27	8	10	3	3	Chợ Đồng Xuân	Vincom Center	\N	\N	ASSIGNED	3.90	3.90	0.00	0.00	f	0	14000.00	0.00	0.00	0.00	14000.00	0.00	0.00	74785.00	\N	\N	\N	2025-11-01 04:54:32.155776+07	2025-11-01 04:54:41.671505+07	106
 11	3	\N	17	24	15	15	3	3	abc	xyz	\N	\N	CANCELLED	3.00	3.00	0.00	0.00	f	0	62000.00	0.00	0.00	0.00	25000.00	0.00	0.00	62000.00	\N	\N	\N	2025-10-27 14:21:29.066375+07	2025-10-27 14:38:20.782297+07	72
 12	3	30	10	27	8	10	3	3	abc	xyz	\N	2025-10-27 14:47:50.22956+07	DONE	4.00	0.00	0.00	0.00	f	0	58000.00	0.00	0.00	0.00	14000.00	0.00	0.00	14000.00	\N	CASH	\N	2025-10-27 14:41:34.415061+07	2025-10-27 14:47:50.272023+07	74
 14	1	\N	\N	\N	4	5	1	1	Vị trí hiện tại	Phố Hàng Chiếu, Đồng Xuân, Hoàn Kiếm, Hà Nội, Hà Nội, 11009	\N	\N	NEW	2.80	2.80	0.00	0.00	f	0	30000.00	0.00	0.00	0.00	25000.00	0.00	0.00	102610.00	\N	\N	\N	2025-10-27 17:48:54.10764+07	\N	\N
@@ -1564,6 +1663,8 @@ COPY public.driving_order (order_id, company_id, customer_account_id, vehicle_id
 26	3	30	11	27	9	12	3	3	Bệnh viện Bạch Mai	Chợ Đồng Xuân	2025-10-30 15:54:17.07+07	2025-10-30 15:54:19.427462+07	DONE	4.80	4.80	0.00	0.00	f	0	170000.00	0.00	0.00	0.00	150000.00	0.00	0.00	794000.00	\N	CASH	2025-10-30 15:54:19.456+07	2025-10-30 15:53:49.374577+07	2025-10-30 15:54:19.461397+07	77
 27	3	30	10	27	8	10	3	3	Số 13, Phố Lê Thanh Nghị, Bạch Mai, Hai Bà Trưng, Hà Nội, Hà Nội, 11618	Chợ Đồng Xuân	2025-10-31 15:26:00.525+07	2025-10-31 15:26:02.886665+07	DONE	5.80	5.80	0.00	0.00	f	0	14000.00	0.00	0.00	0.00	14000.00	0.00	0.00	77800.00	\N	CASH	2025-10-31 15:26:02.904+07	2025-10-31 15:24:49.26246+07	2025-10-31 15:26:02.909049+07	78
 28	3	22	10	27	8	10	3	3	Số 13, Phố Lê Thanh Nghị, Bạch Mai, Hai Bà Trưng, Hà Nội, Hà Nội, 11618	Chợ Đồng Xuân	\N	\N	CANCELLED	5.80	5.80	0.00	0.00	f	0	14000.00	0.00	0.00	0.00	14000.00	0.00	0.00	0.00	\N	\N	\N	2025-10-31 15:36:24.261728+07	2025-10-31 15:45:15.441675+07	78
+33	14	34	22	37	17	17	1	1	Số 53, Ngõ 24 Ngọc Lâm, Ngọc Lâm, Hà Nội, Hà Nội, 11811	Chợ Đồng Xuân	2025-11-01 05:40:18.266+07	2025-11-01 05:40:23.145626+07	DONE	5.80	5.80	0.00	0.00	f	0	8000.00	0.00	0.00	0.00	25000.00	0.00	0.00	95000.00	\N	CASH	2025-11-01 05:40:23.157+07	2025-11-01 05:39:38.500726+07	2025-11-01 05:40:23.161388+07	109
+34	14	34	20	35	18	16	1	1	Chợ Đồng Xuân	Bệnh viện Bạch Mai	\N	\N	ASSIGNED	4.70	4.70	0.00	0.00	f	0	9000.00	0.00	0.00	0.00	20000.00	0.00	0.00	99130.00	\N	\N	\N	2025-11-01 05:50:56.037941+07	2025-11-01 05:51:13.894239+07	108
 \.
 
 
@@ -1593,6 +1694,9 @@ COPY public.membership_order (membership_order_id, company_id, payer_account_id,
 12	3	1	12	800000.00	9600000.00	2024-01-01	20255-12-31	2025-01-01 07:00:00+07	BANK	Nâng cấp lên gói cao cấp	2	TXN202401010003
 13	3	5	6	600000.00	3600000.00	2024-02-01	20255-07-31	2025-02-02 07:00:00+07	CARD	Đăng ký gói tiêu chuẩn	2	CC202402010001
 14	3	8	6	450000.00	2700000.00	2024-03-01	2024-08-31	2025-02-03 07:00:00+07	CARD	Chờ thanh toán gói cơ bản	2	CC2099402010001
+15	3	22	2	1200000.00	2400000.00	2025-10-31	2025-12-31	2025-11-01 01:22:37.633131+07	BANK	GIAHAN 2024 2T CTY 3	3	\N
+16	3	22	123	1200000.00	147600000.00	2025-10-31	2036-01-31	2025-11-01 01:23:20.323932+07	BANK	GIAHAN 2024 123T CTY 3	3	\N
+19	14	34	4	1200000.00	4800000.00	2025-10-31	2026-02-28	2025-11-01 05:16:07.099054+07	BANK	GIAHAN 2024 4T CTY 14	3	\N
 \.
 
 
@@ -1616,6 +1720,8 @@ COPY public.model_price_province (model_price_id, company_id, province_id, model
 12	3	3	9	170000.00	130000.00	10000.00	23000.00	40000.00	150000.00	06:00:00	22:00:00	\N	2024-01-01	2024-12-31	f	Giá Honda City
 11	3	3	8	19000.00	14000.00	11000.00	2800.00	4000.00	17000.00	22:00:00	06:00:00	10	2024-01-01	2024-12-31	f	Giá ban đêm
 15	3	3	15	2000.00	20000.00	200000.00	20000.00	2000.00	25000.00	\N	\N	\N	2025-10-20	2026-10-27	t	\N
+16	14	1	18	9000.00	13000.00	11000.00	3000.00	13000.00	20000.00	\N	\N	\N	2025-01-01	2025-11-01	t	\N
+17	14	1	17	8000.00	15000.00	18000.00	15000.00	15000.00	25000.00	\N	\N	\N	2025-01-01	2026-10-31	t	\N
 \.
 
 
@@ -1656,6 +1762,10 @@ COPY public.vehicle (vehicle_id, company_id, model_id, plate_number, vin, color,
 16	3	8	29K2-03701	1HCADSLSL1HCAD	Đen	2222	-infinity	2	ACTIVE
 17	3	15	43A-99988	43A-99988	Trắng	2009	-infinity	200	ACTIVE
 18	3	16	29K2-03733	29K2-03733	Đen	2030	-infinity	2000	ACTIVE
+20	14	18	29K2-03702	abc	Đỏ	2019	-infinity	10000	ACTIVE
+21	14	18	29K2-03703	ASDASDF	Đen	2020	-infinity	2000	ACTIVE
+22	14	17	29K2-03704	abcxyz321	Đen	2023	-infinity	300000	ACTIVE
+23	14	17	29K2-03705	1HCADSLSL1HCAD	Vàng	2017	-infinity	30000	ACTIVE
 \.
 
 
@@ -1698,6 +1808,8 @@ COPY public.vehicle_model (model_id, company_id, segment_id, brand, model_name, 
 15	3	6	VinFest	VKL7	EV	SEDAN_5			t
 16	3	6	Xel	xel	GASOLINE	SUV_7			t
 9	3	6	Honda	City	GASOLINE	HATCHBACK_5	model_9_638975143219576303.png	Xe sedan 4 chỗ, động cơ 1.5L	t
+17	14	22	Toyota	Vios	GASOLINE	SUV_5	model_17_638975461503341403.png	Xe nổi tiếng của toyota	t
+18	14	21	Kia	Morning	GASOLINE	SUV_5	model_18_638975461999980436.png	Xe nổi tiếng của Kia\n	t
 \.
 
 
@@ -1715,6 +1827,8 @@ COPY public.vehicle_segment (segment_id, company_id, code, name, description, is
 5	2	COMFORT	Hạng Tiện Nghi	Xe 4-5 chỗ, tiện nghi cao	t
 6	3	ECONOMY	Hạng Phổ Thông	Xe 4-5 chỗ, tiết kiệm nhiên liệu	t
 20	3	ssAAA	AA	ssAA	t
+21	14	REGULAR	Phổ thông	Giá cả phải chăng	t
+22	14	COMFORT	Cao cấp	Chất lượng cao	t
 \.
 
 
@@ -1749,6 +1863,8 @@ COPY public.vehicle_zone_preference (vehicle_id, zone_id, priority) FROM stdin;
 11	8	15
 18	8	100
 17	8	100
+20	14	100
+23	15	100
 \.
 
 
@@ -1793,6 +1909,8 @@ COPY public.zone (zone_id, company_id, province_id, code, name, description, is_
 8	3	3	DN_AIRPORT	Sân Bay Đà Nẵng	Khu vực sân bay Đà Nẵng	t
 7	3	3	DN_CENTER	Trung Tâm Đà Nẵng	Khu vực trung tâm thành phố dn	t
 13	3	3	sdg	sdfg	dsg	t
+14	14	1	100002	Nội Thành	Nội thành Hà Nội	t
+15	14	2	232111	Ngoại Thành 	Ngoại thành hà nội	t
 \.
 
 
@@ -1822,6 +1940,8 @@ COPY public.zone_ward (zone_id, ward_id) FROM stdin;
 8	14
 8	15
 7	11
+14	3
+14	4
 \.
 
 
@@ -1831,7 +1951,7 @@ COPY public.zone_ward (zone_id, ward_id) FROM stdin;
 -- Name: account_account_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.account_account_id_seq', 31, true);
+SELECT pg_catalog.setval('public.account_account_id_seq', 38, true);
 
 
 --
@@ -1840,7 +1960,7 @@ SELECT pg_catalog.setval('public.account_account_id_seq', 31, true);
 -- Name: auth_email_code_code_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.auth_email_code_code_id_seq', 3, true);
+SELECT pg_catalog.setval('public.auth_email_code_code_id_seq', 7, true);
 
 
 --
@@ -1849,7 +1969,7 @@ SELECT pg_catalog.setval('public.auth_email_code_code_id_seq', 3, true);
 -- Name: company_company_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.company_company_id_seq', 11, true);
+SELECT pg_catalog.setval('public.company_company_id_seq', 14, true);
 
 
 --
@@ -1858,7 +1978,7 @@ SELECT pg_catalog.setval('public.company_company_id_seq', 11, true);
 -- Name: driver_schedule_schedule_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_schedule_schedule_id_seq', 79, true);
+SELECT pg_catalog.setval('public.driver_schedule_schedule_id_seq', 121, true);
 
 
 --
@@ -1867,7 +1987,7 @@ SELECT pg_catalog.setval('public.driver_schedule_schedule_id_seq', 79, true);
 -- Name: driver_schedule_template_template_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_schedule_template_template_id_seq', 36, true);
+SELECT pg_catalog.setval('public.driver_schedule_template_template_id_seq', 40, true);
 
 
 --
@@ -1876,7 +1996,7 @@ SELECT pg_catalog.setval('public.driver_schedule_template_template_id_seq', 36, 
 -- Name: driver_vehicle_assignment_assignment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driver_vehicle_assignment_assignment_id_seq', 17, true);
+SELECT pg_catalog.setval('public.driver_vehicle_assignment_assignment_id_seq', 22, true);
 
 
 --
@@ -1885,7 +2005,7 @@ SELECT pg_catalog.setval('public.driver_vehicle_assignment_assignment_id_seq', 1
 -- Name: driving_order_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.driving_order_order_id_seq', 30, true);
+SELECT pg_catalog.setval('public.driving_order_order_id_seq', 34, true);
 
 
 --
@@ -1903,7 +2023,7 @@ SELECT pg_catalog.setval('public.membership_membership_id_seq', 4, true);
 -- Name: membership_order_membership_order_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.membership_order_membership_order_id_seq', 14, true);
+SELECT pg_catalog.setval('public.membership_order_membership_order_id_seq', 19, true);
 
 
 --
@@ -1912,7 +2032,7 @@ SELECT pg_catalog.setval('public.membership_order_membership_order_id_seq', 14, 
 -- Name: model_price_province_model_price_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.model_price_province_model_price_id_seq', 15, true);
+SELECT pg_catalog.setval('public.model_price_province_model_price_id_seq', 17, true);
 
 
 --
@@ -1930,7 +2050,7 @@ SELECT pg_catalog.setval('public.province_province_id_seq', 5, true);
 -- Name: vehicle_model_model_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_model_model_id_seq', 16, true);
+SELECT pg_catalog.setval('public.vehicle_model_model_id_seq', 18, true);
 
 
 --
@@ -1939,7 +2059,7 @@ SELECT pg_catalog.setval('public.vehicle_model_model_id_seq', 16, true);
 -- Name: vehicle_segment_segment_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_segment_segment_id_seq', 20, true);
+SELECT pg_catalog.setval('public.vehicle_segment_segment_id_seq', 22, true);
 
 
 --
@@ -1948,7 +2068,7 @@ SELECT pg_catalog.setval('public.vehicle_segment_segment_id_seq', 20, true);
 -- Name: vehicle_vehicle_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.vehicle_vehicle_id_seq', 18, true);
+SELECT pg_catalog.setval('public.vehicle_vehicle_id_seq', 23, true);
 
 
 --
@@ -1966,7 +2086,7 @@ SELECT pg_catalog.setval('public.ward_ward_id_seq', 15, true);
 -- Name: zone_zone_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.zone_zone_id_seq', 13, true);
+SELECT pg_catalog.setval('public.zone_zone_id_seq', 15, true);
 
 
 --
@@ -2743,7 +2863,7 @@ ALTER TABLE ONLY public.zone_ward
     ADD CONSTRAINT zone_ward_zone_id_fkey FOREIGN KEY (zone_id) REFERENCES public.zone(zone_id) ON DELETE CASCADE;
 
 
--- Completed on 2025-10-31 22:55:50
+-- Completed on 2025-11-01 06:17:47
 
 --
 -- PostgreSQL database dump complete

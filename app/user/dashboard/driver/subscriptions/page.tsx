@@ -1,77 +1,62 @@
 "use client"
-
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { 
-  CreditCard, 
-  Calendar, 
-  CheckCircle, 
-  AlertCircle,
-  Clock,
-  Star,
-  DollarSign,
-  Shield
-} from "lucide-react"
-
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../../components/ui/card"
+import { Button } from "../../../../../components/ui/button"
+import { Badge } from "../../../../../components/ui/badge"
+import { CreditCard, CheckCircle, AlertCircle, Clock } from "lucide-react"
 interface Subscription {
-  subscription_id: number;
-  plan_name: string;
-  plan_type: 'basic' | 'premium' | 'enterprise';
+  subscriptionId: number;
+  planName: string;
+  planType: 'basic' | 'premium' | 'enterprise';
   price: number;
-  duration: number; // months
+  duration: number;
   features: string[];
   status: 'active' | 'expired' | 'cancelled' | 'pending';
-  start_date: Date;
-  end_date: Date;
-  auto_renew: boolean;
+  startDate: Date;
+  endDate: Date;
+  autoRenew: boolean;
 }
-
 export default function DriverSubscriptionsPage() {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([])
   const [loading, setLoading] = useState(true)
-
-  // Mock data
   const mockSubscriptions: Subscription[] = [
     {
-      subscription_id: 1,
-      plan_name: "Basic Monthly",
-      plan_type: "basic",
+      subscriptionId: 1,
+      planName: "Basic Monthly",
+      planType: "basic",
       price: 500000,
       duration: 1,
       features: [
-        "Hiển thị hồ sơ cơ bản",
-        "Ứng tuyển tối đa 5 công ty/tháng",
-        "Hỗ trợ email",
-        "Báo cáo cơ bản"
+        "Basic Profile Display",
+        "Apply To Maximum 5 Companies/Month",
+        "Email Support",
+        "Basic Reports"
       ],
       status: "active",
-      start_date: new Date("2024-11-20"),
-      end_date: new Date("2024-12-20"),
-      auto_renew: true
+      startDate: new Date("2024-11-20"),
+      endDate: new Date("2024-12-20"),
+      autoRenew: true
     },
     {
-      subscription_id: 2,
-      plan_name: "Premium Monthly",
-      plan_type: "premium",
+      subscriptionId: 2,
+      planName: "Premium Monthly",
+      planType: "premium",
       price: 1500000,
       duration: 1,
       features: [
-        "Hiển thị hồ sơ nổi bật",
-        "Ứng tuyển không giới hạn",
-        "Ưu tiên hiển thị",
-        "Hỗ trợ 24/7",
-        "Báo cáo chi tiết",
-        "Tư vấn nghề nghiệp"
+        "Featured Profile Display",
+        "Unlimited Applications",
+        "Priority Display",
+        "24/7 Support",
+        "Detailed Reports",
+        "Career Consulting"
       ],
       status: "pending",
-      start_date: new Date("2024-12-21"),
-      end_date: new Date("2025-01-21"),
-      auto_renew: false
+      startDate: new Date("2024-12-21"),
+      endDate: new Date("2025-01-21"),
+      autoRenew: false
     }
   ]
-
   useEffect(() => {
     const fetchSubscriptions = async () => {
       setLoading(true)
@@ -81,22 +66,20 @@ export default function DriverSubscriptionsPage() {
     }
     fetchSubscriptions()
   }, [])
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
-        return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="h-3 w-3 mr-1" /> Đang hoạt động</Badge>
+        return <Badge variant="default" className="bg-green-100 text-green-800"><CheckCircle className="h-3 w-3 mr-1" /> Active</Badge>
       case "pending":
-        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Clock className="h-3 w-3 mr-1" /> Chờ thanh toán</Badge>
+        return <Badge variant="secondary" className="bg-yellow-100 text-yellow-800"><Clock className="h-3 w-3 mr-1" /> Pending Payment</Badge>
       case "expired":
-        return <Badge variant="destructive" className="bg-red-100 text-red-800"><AlertCircle className="h-3 w-3 mr-1" /> Hết hạn</Badge>
+        return <Badge variant="destructive" className="bg-red-100 text-red-800"><AlertCircle className="h-3 w-3 mr-1" /> Expired</Badge>
       case "cancelled":
-        return <Badge variant="outline" className="bg-gray-100 text-gray-800">Đã hủy</Badge>
+        return <Badge variant="outline" className="bg-gray-100 text-gray-800">Cancelled</Badge>
       default:
         return <Badge variant="outline">{status}</Badge>
     }
   }
-
   const getPlanTypeColor = (type: string) => {
     switch (type) {
       case "basic":
@@ -109,50 +92,46 @@ export default function DriverSubscriptionsPage() {
         return "bg-gray-100 text-gray-800"
     }
   }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
-          <p className="mt-2 text-muted-foreground">Đang tải dữ liệu...</p>
+          <p className="mt-2 text-muted-foreground">Loading Data...</p>
         </div>
       </div>
     )
   }
-
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Gói đăng ký</h1>
+        <h1 className="text-3xl font-bold text-foreground">Subscription Packages</h1>
         <p className="text-muted-foreground mt-2">
-          Quản lý các gói đăng ký và thanh toán của bạn
+          Manage Your Subscription Packages And Payments
         </p>
       </div>
-
-      {/* Current Subscription */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className="h-5 w-5" />
-            Gói hiện tại
+            Current Package
           </CardTitle>
           <CardDescription>
-            Thông tin gói đăng ký đang sử dụng
+            Information About Current Subscription Package
           </CardDescription>
         </CardHeader>
         <CardContent>
           {subscriptions.filter(sub => sub.status === "active").map((subscription) => (
-            <div key={subscription.subscription_id} className="p-6 border rounded-lg bg-muted/50">
+            <div key={subscription.subscriptionId} className="p-6 border rounded-lg bg-muted/50">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-primary/10 rounded-lg">
                     <CreditCard className="h-6 w-6 text-primary" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold">{subscription.plan_name}</h3>
+                    <h3 className="text-xl font-semibold">{subscription.planName}</h3>
                     <p className="text-sm text-muted-foreground">
-                      {subscription.duration} tháng • Tự động gia hạn: {subscription.auto_renew ? "Có" : "Không"}
+                      {subscription.duration} Month • Auto Renew: {subscription.autoRenew ? "Yes" : "No"}
                     </p>
                   </div>
                 </div>
@@ -163,10 +142,9 @@ export default function DriverSubscriptionsPage() {
                   {getStatusBadge(subscription.status)}
                 </div>
               </div>
-              
               <div className="grid gap-4 md:grid-cols-2">
                 <div>
-                  <h4 className="font-medium mb-2">Tính năng bao gồm:</h4>
+                  <h4 className="font-medium mb-2">Features Included:</h4>
                   <ul className="space-y-1">
                     {subscription.features.map((feature, index) => (
                       <li key={index} className="text-sm text-muted-foreground flex items-center gap-2">
@@ -176,22 +154,21 @@ export default function DriverSubscriptionsPage() {
                     ))}
                   </ul>
                 </div>
-                
                 <div>
-                  <h4 className="font-medium mb-2">Thông tin thời gian:</h4>
+                  <h4 className="font-medium mb-2">Time Information:</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>Bắt đầu:</span>
-                      <span>{subscription.start_date.toLocaleDateString('vi-VN')}</span>
+                      <span>Start:</span>
+                      <span>{subscription.startDate.toLocaleDateString('en-US')}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Hết hạn:</span>
-                      <span>{subscription.end_date.toLocaleDateString('vi-VN')}</span>
+                      <span>Expires:</span>
+                      <span>{subscription.endDate.toLocaleDateString('en-US')}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Còn lại:</span>
+                      <span>Remaining:</span>
                       <span className="text-primary font-medium">
-                        {Math.ceil((subscription.end_date.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} ngày
+                        {Math.ceil((subscription.endDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))} Days
                       </span>
                     </div>
                   </div>
@@ -201,148 +178,139 @@ export default function DriverSubscriptionsPage() {
           ))}
         </CardContent>
       </Card>
-
-      {/* Available Plans */}
       <Card>
         <CardHeader>
-          <CardTitle>Gói đăng ký có sẵn</CardTitle>
+          <CardTitle>Available Subscription Packages</CardTitle>
           <CardDescription>
-            Nâng cấp gói để có thêm tính năng
+            Upgrade Package For More Features
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-3">
-            {/* Basic Plan */}
             <div className="p-6 border rounded-lg">
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">Basic</h3>
                 <div className="text-3xl font-bold text-primary mt-2">500,000 VND</div>
-                <p className="text-sm text-muted-foreground">/tháng</p>
+                <p className="text-sm text-muted-foreground">/Month</p>
               </div>
               <ul className="space-y-2 mb-6">
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Hiển thị hồ sơ cơ bản
+                  Basic Profile Display
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Ứng tuyển tối đa 5 công ty/tháng
+                  Apply To Maximum 5 Companies/Month
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Hỗ trợ email
+                  Email Support
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Báo cáo cơ bản
+                  Basic Reports
                 </li>
               </ul>
               <Button variant="outline" className="w-full">
-                Chọn gói này
+                Select This Package
               </Button>
             </div>
-
-            {/* Premium Plan */}
             <div className="p-6 border rounded-lg border-primary bg-primary/5">
               <div className="text-center mb-4">
-                <Badge className="mb-2">Phổ biến</Badge>
+                <Badge className="mb-2">Popular</Badge>
                 <h3 className="text-xl font-semibold">Premium</h3>
                 <div className="text-3xl font-bold text-primary mt-2">1,500,000 VND</div>
-                <p className="text-sm text-muted-foreground">/tháng</p>
+                <p className="text-sm text-muted-foreground">/Month</p>
               </div>
               <ul className="space-y-2 mb-6">
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Hiển thị hồ sơ nổi bật
+                  Featured Profile Display
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Ứng tuyển không giới hạn
+                  Unlimited Applications
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Ưu tiên hiển thị
+                  Priority Display
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Hỗ trợ 24/7
+                  24/7 Support
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Báo cáo chi tiết
+                  Detailed Reports
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Tư vấn nghề nghiệp
+                  Career Consulting
                 </li>
               </ul>
               <Button className="w-full">
-                Nâng cấp lên Premium
+                Upgrade To Premium
               </Button>
             </div>
-
-            {/* Enterprise Plan */}
             <div className="p-6 border rounded-lg">
               <div className="text-center mb-4">
                 <h3 className="text-xl font-semibold">Enterprise</h3>
                 <div className="text-3xl font-bold text-primary mt-2">3,000,000 VND</div>
-                <p className="text-sm text-muted-foreground">/tháng</p>
+                <p className="text-sm text-muted-foreground">/Month</p>
               </div>
               <ul className="space-y-2 mb-6">
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Tất cả tính năng Premium
+                  All Premium Features
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  API tích hợp
+                  API Integration
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Hỗ trợ chuyên biệt
+                  Dedicated Support
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Tùy chỉnh giao diện
+                  Custom Interface
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Báo cáo nâng cao
+                  Advanced Reports
                 </li>
                 <li className="text-sm flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  Đào tạo chuyên sâu
+                  In-Depth Training
                 </li>
               </ul>
               <Button variant="outline" className="w-full">
-                Liên hệ để biết thêm
+                Contact For More Info
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
-
-      {/* Subscription History */}
       <Card>
         <CardHeader>
-          <CardTitle>Lịch sử đăng ký</CardTitle>
+          <CardTitle>Subscription History</CardTitle>
           <CardDescription>
-            Tất cả các gói đăng ký của bạn
+            All Your Subscription Packages
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {subscriptions.map((subscription) => (
-              <div key={subscription.subscription_id} className="p-4 border rounded-lg">
+              <div key={subscription.subscriptionId} className="p-4 border rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-2 bg-muted rounded-lg">
                       <CreditCard className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="font-medium">{subscription.plan_name}</h4>
+                      <h4 className="font-medium">{subscription.planName}</h4>
                       <p className="text-sm text-muted-foreground">
-                        {subscription.start_date.toLocaleDateString('vi-VN')} - {subscription.end_date.toLocaleDateString('vi-VN')}
+                        {subscription.startDate.toLocaleDateString('en-US')} - {subscription.endDate.toLocaleDateString('en-US')}
                       </p>
                     </div>
                   </div>
@@ -359,5 +327,3 @@ export default function DriverSubscriptionsPage() {
     </div>
   )
 }
-
-

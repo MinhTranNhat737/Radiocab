@@ -1,46 +1,29 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { 
-  Building2, 
-  User, 
-  Eye,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  TrendingUp,
-  DollarSign,
-  Users,
-  Star,
-  Calendar,
-  CreditCard
-} from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Button } from "../../../components/ui/button"
+import { Badge } from "../../../components/ui/badge"
+import { Building2, User, Eye, Clock, CheckCircle, AlertCircle, Users, Star, CreditCard } from "lucide-react"
 import Link from "next/link"
-import type { CompanyDashboardData, DriverDashboardData, Company, Driver, Subscription, Payment } from "@/lib/types/database"
-
+import type { CompanyDashboardData, DriverDashboardData } from "../../../lib/types/database"
 export default function UserDashboardPage() {
-  // Mock user role - sẽ được lấy từ context/state
   const userRole: 'company' | 'driver' = 'company'
-  
-  // Mock data based on database schema
   const companyData: CompanyDashboardData = {
     company: {
-      company_id: 1,
-      company_code: "CAB001",
+      companyId: 1,
+      companyCode: "CAB001",
       name: "ABC Taxi Company",
-      contact_person: "Nguyễn Văn A",
-      designation: "Giám đốc",
-      address_line: "123 Đường ABC, Quận 1, TP.HCM",
-      city_id: 1,
+      contactPerson: "Nguyen Van A",
+      designation: "Director",
+      addressLine: "123 ABC Street, District 1, HCMC",
+      cityId: 1,
       mobile: "0123-456-789",
       telephone: "028-1234-5678",
-      fax_number: "028-1234-5679",
+      faxNumber: "028-1234-5679",
       email: "contact@abctaxi.com",
-      membership_type_id: 1, // Premium
-      owner_user_id: 2,
+      membershipTypeId: 1,
+      ownerUserId: 2,
       status: "active",
-      created_at: new Date("2024-03-15"),
-      updated_at: new Date("2024-12-20")
+      createdAt: new Date("2024-03-15"),
+      updatedAt: new Date("2024-12-20")
     },
     stats: {
       profileViews: 1247,
@@ -58,47 +41,46 @@ export default function UserDashboardPage() {
       {
         id: 1,
         type: "lead",
-        title: "Lead mới",
-        description: "Khách hàng yêu cầu taxi sân bay",
-        time: "2 giờ trước",
+        title: "New Lead",
+        description: "Customer Requested Airport Taxi",
+        time: "2 Hours Ago",
         status: "new"
       },
       {
         id: 2,
         type: "payment",
-        title: "Thanh toán thành công",
-        description: "Gói Premium Monthly - Tháng 12/2024",
-        time: "1 ngày trước",
+        title: "Payment Successful",
+        description: "Premium Monthly Package - December 2024",
+        time: "1 Day Ago",
         status: "success"
       },
       {
         id: 3,
         type: "review",
-        title: "Đánh giá mới",
-        description: "Khách hàng đánh giá 5 sao",
-        time: "2 ngày trước",
+        title: "New Review",
+        description: "Customer Rated 5 Stars",
+        time: "2 Days Ago",
         status: "success"
       }
     ]
   }
-
   const driverData: DriverDashboardData = {
     driver: {
-      driver_id: 1,
-      driver_code: "DRV001",
-      name: "Nguyễn Văn A",
-      contact_person: "Self",
-      address_line: "123 Đường XYZ, Quận 1, TP.HCM",
-      city_id: 1,
+      driverId: 1,
+      driverCode: "DRV001",
+      name: "Nguyen Van A",
+      contactPerson: "Self",
+      addressLine: "123 XYZ Street, District 1, HCMC",
+      cityId: 1,
       mobile: "0987-654-321",
       telephone: null,
       email: "nguyenvana@email.com",
-      experience_years: 5,
-      description: "Tài xế có kinh nghiệm, lái xe an toàn",
-      owner_user_id: 3,
+      experienceYears: 5,
+      description: "Experienced Driver, Safe Driving",
+      ownerUserId: 3,
       status: "active",
-      created_at: new Date("2024-11-20"),
-      updated_at: new Date("2024-12-20")
+      createdAt: new Date("2024-11-20"),
+      updatedAt: new Date("2024-12-20")
     },
     stats: {
       profileViews: 0,
@@ -117,24 +99,22 @@ export default function UserDashboardPage() {
       {
         id: 1,
         type: "application",
-        title: "Ứng tuyển mới",
-        description: "Công ty ABC Taxi liên hệ",
-        time: "3 giờ trước",
+        title: "New Application",
+        description: "ABC Taxi Company Contacted",
+        time: "3 Hours Ago",
         status: "new"
       },
       {
         id: 2,
         type: "payment",
-        title: "Thanh toán thành công",
-        description: "Gói Basic Monthly - Tháng 11/2024",
-        time: "1 ngày trước",
+        title: "Payment Successful",
+        description: "Basic Monthly Package - November 2024",
+        time: "1 Day Ago",
         status: "success"
       }
     ]
   }
-
-  const currentData = userRole === 'company' ? companyData : driverData
-
+  const currentData: CompanyDashboardData = companyData
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "active":
@@ -151,21 +131,17 @@ export default function UserDashboardPage() {
         return <Badge variant="outline">{status}</Badge>
     }
   }
-
   const recentActivity = currentData.recentActivity
-
   return (
-    <div className="space-y-8 page-enter">
-      <div className="fade-in-scale">
+    <div className="space-y-8 pageEnter">
+      <div className="fadeInScale">
         <h1 className="text-3xl font-bold text-foreground">
           {userRole === 'company' ? 'Company' : 'Driver'} Dashboard
         </h1>
         <p className="text-muted-foreground mt-2">
-          Quản lý {userRole === 'company' ? 'công ty' : 'hồ sơ tài xế'} của bạn
+          Manage Your {userRole === 'company' ? 'Company' : 'Driver Profile'}
         </p>
       </div>
-
-      {/* Profile Overview */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -178,18 +154,13 @@ export default function UserDashboardPage() {
                 )}
               </div>
               <div>
-                <CardTitle className="text-2xl">
-                  {userRole === 'company' ? currentData.company.name : currentData.driver.name}
-                </CardTitle>
+                <CardTitle className="text-2xl">{currentData.company.name}</CardTitle>
                 <CardDescription>
-                  {userRole === 'company' 
-                    ? `Mã công ty: ${currentData.company.company_code} • Thành viên từ ${currentData.company.created_at.toLocaleDateString('vi-VN')}`
-                    : `Mã tài xế: ${currentData.driver.driver_code} • Kinh nghiệm ${currentData.driver.experience_years} năm`
-                  }
+                  Company Code: {currentData.company.companyCode} • Member Since {currentData.company.createdAt.toLocaleDateString('en-US')}
                 </CardDescription>
               </div>
             </div>
-            {getStatusBadge(userRole === 'company' ? currentData.company.status : currentData.driver.status)}
+            {getStatusBadge(currentData.company.status)}
           </div>
         </CardHeader>
         <CardContent>
@@ -197,36 +168,20 @@ export default function UserDashboardPage() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <span className="font-medium">Email:</span>
-                <span>{userRole === 'company' ? currentData.company.email : currentData.driver.email}</span>
+                <span>{currentData.company.email}</span>
               </div>
-              {userRole === 'company' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Liên hệ:</span>
-                  <span>{currentData.company.contact_person}</span>
-                </div>
-              )}
-              {userRole === 'driver' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Số điện thoại:</span>
-                  <span>{currentData.driver.mobile}</span>
-                </div>
-              )}
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Contact:</span>
+                <span>{currentData.company.contactPerson}</span>
+              </div>
             </div>
             <div className="space-y-3">
-              {userRole === 'company' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Địa chỉ:</span>
-                  <span>{currentData.company.address_line}</span>
-                </div>
-              )}
-              {userRole === 'driver' && (
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">Kinh nghiệm:</span>
-                  <span>{currentData.driver.experience_years} năm</span>
-                </div>
-              )}
               <div className="flex items-center gap-2">
-                <span className="font-medium">Đánh giá:</span>
+                <span className="font-medium">Address:</span>
+                <span>{currentData.company.addressLine}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Rating:</span>
                 <div className="flex items-center gap-1">
                   <Star className="h-4 w-4 text-yellow-500" />
                   <span>{currentData.stats.averageRating}/5.0</span>
@@ -236,74 +191,67 @@ export default function UserDashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Stats Grid */}
       <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Lượt xem hồ sơ</CardTitle>
+            <CardTitle className="text-sm font-medium">Profile Views</CardTitle>
             <Eye className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{currentData.stats.profileViews}</div>
             <p className="text-xs text-muted-foreground">
-              {userRole === 'company' ? 'Lượt xem hồ sơ công ty' : 'Lượt xem hồ sơ tài xế'}
+              {userRole === 'company' ? 'Company Profile Views' : 'Driver Profile Views'}
             </p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">
-              {userRole === 'company' ? 'Leads mới' : 'Ứng tuyển'}
+              {userRole === 'company' ? 'New Leads' : 'Applications'}
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {userRole === 'company' ? currentData.stats.totalLeads : currentData.stats.totalApplications}
+              {currentData.stats.totalLeads}
             </div>
             <p className="text-xs text-muted-foreground">
-              {userRole === 'company' ? 'Khách hàng tiềm năng' : 'Đơn ứng tuyển'}
+              {userRole === 'company' ? 'Potential Customers' : 'Job Applications'}
             </p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Đánh giá</CardTitle>
+            <CardTitle className="text-sm font-medium">Reviews</CardTitle>
             <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{currentData.stats.totalReviews}</div>
             <p className="text-xs text-muted-foreground">
-              Tổng số đánh giá nhận được
+              Total Reviews Received
             </p>
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Thanh toán tiếp theo</CardTitle>
+            <CardTitle className="text-sm font-medium">Next Payment</CardTitle>
             <CreditCard className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{currentData.subscription.amount}</div>
             <p className="text-xs text-muted-foreground">
-              Hạn thanh toán: {currentData.subscription.nextPayment}
+              Payment Due: {currentData.subscription.nextPayment}
             </p>
           </CardContent>
         </Card>
       </div>
-
-      {/* Subscription Status */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Trạng thái đăng ký</CardTitle>
+            <CardTitle>Subscription Status</CardTitle>
             <Link href={`/user/dashboard/${userRole}/subscriptions`}>
               <Button variant="outline" size="sm">
-                Xem chi tiết
+                View Details
               </Button>
             </Link>
           </div>
@@ -313,7 +261,7 @@ export default function UserDashboardPage() {
             <div>
               <h4 className="font-medium">{currentData.subscription.plan}</h4>
               <p className="text-sm text-muted-foreground">
-                Thanh toán tiếp theo: {currentData.subscription.nextPayment}
+                Next Payment: {currentData.subscription.nextPayment}
               </p>
             </div>
             <div className="text-right">
@@ -323,24 +271,21 @@ export default function UserDashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Hoạt động gần đây</CardTitle>
+          <CardTitle>Recent Activity</CardTitle>
           <CardDescription>
-            Lịch sử các thao tác của bạn
+            Your Recent Actions History
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {recentActivity.map((activity) => (
               <div key={activity.id} className="flex items-center gap-4 p-4 rounded-lg border">
-                <div className={`p-2 rounded-full ${
-                  activity.status === "success" 
-                    ? "bg-green-100 text-green-600" 
-                    : "bg-blue-100 text-blue-600"
-                }`}>
+                <div className={`p-2 rounded-full ${activity.status === "success"
+                  ? "bg-green-100 text-green-600"
+                  : "bg-blue-100 text-blue-600"
+                  }`}>
                   {activity.type === "payment" ? (
                     <CreditCard className="h-4 w-4" />
                   ) : activity.type === "lead" ? (
@@ -361,13 +306,11 @@ export default function UserDashboardPage() {
           </div>
         </CardContent>
       </Card>
-
-      {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Thao tác nhanh</CardTitle>
+          <CardTitle>Quick Actions</CardTitle>
           <CardDescription>
-            Truy cập nhanh các chức năng chính
+            Quick Access To Main Features
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -377,37 +320,35 @@ export default function UserDashboardPage() {
                 {userRole === 'company' ? (
                   <>
                     <Building2 className="h-6 w-6" />
-                    <span>Chỉnh sửa hồ sơ</span>
+                    <span>Edit Profile</span>
                   </>
                 ) : (
                   <>
                     <User className="h-6 w-6" />
-                    <span>Chỉnh sửa hồ sơ</span>
+                    <span>Edit Profile</span>
                   </>
                 )}
               </Button>
             </Link>
-            
             {userRole === 'company' ? (
               <Link href="/user/dashboard/company/leads">
                 <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
                   <Users className="h-6 w-6" />
-                  <span>Quản lý Leads</span>
+                  <span>Manage Leads</span>
                 </Button>
               </Link>
             ) : (
               <Link href="/user/dashboard/driver/applications">
                 <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
                   <Users className="h-6 w-6" />
-                  <span>Ứng tuyển</span>
+                  <span>Applications</span>
                 </Button>
               </Link>
             )}
-
             <Link href={`/user/dashboard/${userRole}/payments`}>
               <Button variant="outline" className="w-full h-20 flex flex-col gap-2">
                 <CreditCard className="h-6 w-6" />
-                <span>Thanh toán</span>
+                <span>Payments</span>
               </Button>
             </Link>
           </div>

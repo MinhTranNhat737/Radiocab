@@ -1,48 +1,42 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter, Roboto, Open_Sans } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
-import { ThemeProvider } from "@/components/theme-provider"
-import { LanguageProvider } from "@/contexts/LanguageContext"
-import Footer from "@/components/Footer"
-import SmoothTransition from "@/components/SmoothTransition"
+import { ThemeProvider } from "../components/themeProvider"
+import { LanguageProvider } from "../components/languageContext"
+import { Toaster } from "../components/ui/toaster"
+import Header from "../components/header"
+import Footer from "../components/footer"
+import SmoothTransition from "../components/smoothTransition"
 import "./globals.css"
-
-// Font configurations
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
   variable: "--font-inter",
   display: "swap",
 })
-
 const roboto = Roboto({
   subsets: ["latin", "latin-ext"],
   weight: ["300", "400", "500", "700", "900"],
   variable: "--font-roboto",
   display: "swap",
 })
-
 const openSans = Open_Sans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-open-sans",
   display: "swap",
 })
-
 export const metadata: Metadata = {
-  title: "RadioCabs.in - Cổng Thông Tin Taxi Hàng Đầu Việt Nam",
-  description:
-    "Kết nối công ty taxi, tài xế và khách hàng. Đăng ký dịch vụ, tìm kiếm thông tin taxi và gửi phản hồi dễ dàng.",
-  generator: "RadioCabs.in",
+  title: "RadioCabs - Leading Taxi Information Portal In Vietnam",
+  description: "Connecting Taxi Companies, Drivers & Customers. Register Services, Search Taxi Information & Send Feedback Easily!",
+  generator: "RadioCabs",
 }
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
-    <html lang="vi" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className={`font-sans ${inter.variable} ${roboto.variable} ${openSans.variable}`}>
         <ThemeProvider
           attribute="class"
@@ -51,6 +45,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
+            <Header />
             <SmoothTransition>
               <Suspense fallback={
                 <div className="min-h-screen flex items-center justify-center">
@@ -61,8 +56,8 @@ export default function RootLayout({
               </Suspense>
             </SmoothTransition>
             <Footer />
+            <Toaster />
           </LanguageProvider>
-          <Analytics />
         </ThemeProvider>
       </body>
     </html>

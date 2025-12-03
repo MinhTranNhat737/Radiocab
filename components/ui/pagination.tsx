@@ -1,13 +1,7 @@
 import * as React from 'react'
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  MoreHorizontalIcon,
-} from 'lucide-react'
-
-import { cn } from '@/lib/utils'
-import { Button, buttonVariants } from '@/components/ui/button'
-
+import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from 'lucide-react'
+import { cn } from '../../lib/utils'
+import { Button, buttonVariants } from './button'
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
     <nav
@@ -19,7 +13,6 @@ function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
     />
   )
 }
-
 function PaginationContent({
   className,
   ...props
@@ -32,16 +25,13 @@ function PaginationContent({
     />
   )
 }
-
 function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
   return <li data-slot="pagination-item" {...props} />
 }
-
 type PaginationLinkProps = {
   isActive?: boolean
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
   React.ComponentProps<'a'>
-
 function PaginationLink({
   className,
   isActive,
@@ -64,7 +54,6 @@ function PaginationLink({
     />
   )
 }
-
 function PaginationPrevious({
   className,
   ...props
@@ -81,7 +70,6 @@ function PaginationPrevious({
     </PaginationLink>
   )
 }
-
 function PaginationNext({
   className,
   ...props
@@ -98,7 +86,6 @@ function PaginationNext({
     </PaginationLink>
   )
 }
-
 function PaginationEllipsis({
   className,
   ...props
@@ -111,11 +98,10 @@ function PaginationEllipsis({
       {...props}
     >
       <MoreHorizontalIcon className="size-4" />
-      <span className="sr-only">More pages</span>
+      <span className="sr-only">More Pages</span>
     </span>
   )
 }
-
 export {
   Pagination,
   PaginationContent,

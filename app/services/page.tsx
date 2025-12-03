@@ -1,126 +1,98 @@
 "use client"
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import Header from "@/components/Header"
-import {
-  Info,
-  Building2,
-  Car,
-  Megaphone,
-  MessageSquare,
-  Shield,
-  Clock,
-  Phone,
-  Mail,
-  MapPin,
-  CheckCircle,
-  Star,
-  Users,
-  Zap,
-  Globe,
-} from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
+import { Button } from "../../components/ui/button"
+import { Badge } from "../../components/ui/badge"
+import { Building2, Car, MessageSquare, Shield, Clock, Phone, Mail, MapPin, CheckCircle, Star, Users, Zap, Globe } from "lucide-react"
 import Link from "next/link"
-
 export default function ServicesPage() {
   const services = [
     {
       icon: Building2,
-      title: "Đăng ký Công ty Taxi",
-      description: "Đăng ký công ty taxi của bạn lên hệ thống để tiếp cận nhiều khách hàng hơn",
-      features: ["Hiển thị thông tin công ty", "Quản lý đội xe", "Theo dõi đơn hàng", "Báo cáo doanh thu"],
-      pricing: "Từ 200,000 VNĐ/tháng",
+      title: "Register Taxi Company",
+      description: "Register Your Taxi Company On The System To Reach More Customers",
+      features: ["Display Company Information", "Manage Fleet", "Track Orders", "Revenue Reports"],
+      pricing: "From 200,000 VND/Month",
       link: "/listing",
     },
     {
       icon: Car,
-      title: "Đăng ký Tài xế",
-      description: "Tham gia mạng lưới tài xế chuyên nghiệp và tìm kiếm cơ hội việc làm",
-      features: ["Hồ sơ tài xế chuyên nghiệp", "Kết nối với công ty", "Đánh giá từ khách hàng", "Hỗ trợ 24/7"],
-      pricing: "150,000 VNĐ/tháng",
+      title: "Register Driver",
+      description: "Join The Professional Driver Network And Find Job Opportunities",
+      features: ["Professional Driver Profile", "Connect With Companies", "Customer Reviews", "24/7 Support"],
+      pricing: "150,000 VND/Month",
       link: "/drivers",
     },
     {
       icon: MessageSquare,
-      title: "Hỗ trợ Khách hàng",
-      description: "Hệ thống hỗ trợ và góp ý toàn diện cho mọi người dùng",
-      features: ["Hỗ trợ 24/7", "Xử lý khiếu nại", "Tư vấn dịch vụ", "Phản hồi nhanh chóng"],
-      pricing: "Miễn phí",
+      title: "Customer Support",
+      description: "Comprehensive Support And Feedback System For All Users",
+      features: ["24/7 Support", "Complaint Handling", "Service Consulting", "Quick Response"],
+      pricing: "Free",
       link: "/feedback",
     },
   ]
-
   const benefits = [
     {
       icon: Globe,
-      title: "Mạng lưới rộng khắp",
-      description: "Kết nối toàn quốc với hàng nghìn công ty taxi và tài xế",
+      title: "Nationwide Network",
+      description: "Connect Nationwide With Thousands Of Taxi Companies And Drivers",
     },
     {
       icon: Shield,
-      title: "Bảo mật tuyệt đối",
-      description: "Thông tin được mã hóa và bảo vệ theo tiêu chuẩn quốc tế",
+      title: "Absolute Security",
+      description: "Information Is Encrypted And Protected According To International Standards",
     },
     {
       icon: Zap,
-      title: "Công nghệ hiện đại",
-      description: "Nền tảng công nghệ tiên tiến, giao diện thân thiện",
+      title: "Modern Technology",
+      description: "Advanced Technology Platform, User-Friendly Interface",
     },
     {
       icon: Users,
-      title: "Cộng đồng lớn",
-      description: "Hơn 10,000 thành viên đang sử dụng dịch vụ",
+      title: "Large Community",
+      description: "Over 10,000 Members Currently Using The Service",
     },
   ]
-
   const stats = [
-    { number: "500+", label: "Công ty taxi" },
-    { number: "2,000+", label: "Tài xế" },
-    { number: "50,000+", label: "Khách hàng" },
-    { number: "99.9%", label: "Thời gian hoạt động" },
+    { number: "500+", label: "Taxi Companies" },
+    { number: "2,000+", label: "Drivers" },
+    { number: "50,000+", label: "Customers" },
+    { number: "99.9%", label: "Uptime" },
   ]
-
   const testimonials = [
     {
-      name: "Nguyễn Văn A",
-      role: "Giám đốc Taxi Mai Linh",
-      content: "RadioCabs.in đã giúp chúng tôi mở rộng khách hàng đáng kể. Hệ thống dễ sử dụng và hỗ trợ tốt.",
+      name: "Nguyen Van A",
+      role: "Director Of Mai Linh Taxi",
+      content: "RadioCabs.In Has Helped Us Expand Our Customer Base Significantly. The System Is Easy To Use And Well Supported.",
       rating: 5,
     },
     {
-      name: "Trần Thị B",
-      role: "Tài xế độc lập",
-      content: "Tôi đã tìm được nhiều cơ hội việc làm tốt thông qua nền tảng này. Rất hài lòng với dịch vụ.",
+      name: "Tran Thi B",
+      role: "Independent Driver",
+      content: "I Have Found Many Good Job Opportunities Through This Platform. Very Satisfied With The Service.",
       rating: 5,
     },
     {
-      name: "Lê Văn C",
-      role: "Chủ công ty vận tải",
-      content: "Dịch vụ quảng cáo hiệu quả, giúp tăng độ nhận biết thương hiệu và thu hút khách hàng mới.",
+      name: "Le Van C",
+      role: "Transport Company Owner",
+      content: "Effective Advertising Service, Helps Increase Brand Awareness And Attract New Customers.",
       rating: 4,
     },
   ]
-
   return (
-    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400 page-enter">
-      <Header />
-
-      {/* Hero Section */}
-      <section className="hero-section py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fade-in-scale">
+    <div className="min-h-screen bg-black text-yellow-400 bg-gradient-to-br from-yellow-50 via-yellow-100 to-yellow-200 text-gray-900 dark:bg-black dark:text-yellow-400 pageEnter">
+      <section className="heroSection py-20 bg-gradient-to-br from-yellow-100 via-yellow-200 to-yellow-300 dark:from-black dark:via-yellow-900/10 dark:to-black relative overflow-hidden fadeInScale">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_60%,rgba(255,193,7,0.1),transparent_50%)]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-6 text-black dark:bg-gradient-to-r dark:from-yellow-400 dark:via-yellow-300 dark:to-yellow-500 dark:bg-clip-text dark:text-transparent animate-pulse">
-            Dịch vụ & Thông tin
+            Services & Information
           </h1>
           <p className="text-xl text-gray-700 dark:text-yellow-200 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Khám phá các dịch vụ toàn diện của RadioCabs.in - nền tảng kết nối hàng đầu trong ngành taxi tại Việt Nam
+            Discover RadioCabs.In's Comprehensive Services - The Leading Connection Platform In Vietnam's Taxi Industry
           </p>
         </div>
       </section>
-
-      {/* Stats Section */}
-      <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black slide-in-right">
+      <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black slideInRight">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
@@ -132,11 +104,9 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* Services Section */}
-      <section className="py-16 slide-in-left">
+      <section className="py-16 slideInLeft">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Các dịch vụ của chúng tôi</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Our Services</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {services.map((service, index) => (
               <Card
@@ -160,7 +130,7 @@ export default function ServicesPage() {
                 <CardContent>
                   <div className="space-y-4">
                     <div>
-                      <h4 className="text-gray-900 dark:text-yellow-400 font-semibold mb-2">Tính năng chính:</h4>
+                      <h4 className="text-gray-900 dark:text-yellow-400 font-semibold mb-2">Main Features:</h4>
                       <ul className="space-y-2">
                         {service.features.map((feature, idx) => (
                           <li key={idx} className="flex items-center space-x-2 text-gray-600 dark:text-yellow-200">
@@ -174,7 +144,7 @@ export default function ServicesPage() {
                       asChild
                       className="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-black font-semibold shadow-lg shadow-yellow-500/25 hover:shadow-yellow-500/40 transition-all duration-300"
                     >
-                      <Link href={service.link}>Tìm hiểu thêm</Link>
+                      <Link href={service.link}>Learn More</Link>
                     </Button>
                   </div>
                 </CardContent>
@@ -183,11 +153,9 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* Benefits Section */}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Tại sao chọn RadioCabs.in?</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Why Choose RadioCabs.In?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {benefits.map((benefit, index) => (
               <Card
@@ -206,11 +174,9 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* Testimonials Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Khách hàng nói gì về chúng tôi</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">What Our Customers Say</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <Card key={index} className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
@@ -234,52 +200,48 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
-      {/* How it Works Section */}
       <section className="py-16 bg-gradient-to-r from-yellow-900/10 to-black">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">Cách thức hoạt động</h2>
+          <h2 className="text-4xl font-bold text-center text-gray-900 dark:text-yellow-400 mb-12">How It Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">1</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Đăng ký</h3>
-              <p className="text-gray-600 dark:text-yellow-200 text-sm">Tạo tài khoản và điền thông tin cần thiết</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Register</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Create An Account And Fill In Required Information</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">2</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Xác thực</h3>
-              <p className="text-gray-600 dark:text-yellow-200 text-sm">Chúng tôi xác thực thông tin và phê duyệt</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Verify</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">We Verify Information And Approve</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">3</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Kích hoạt</h3>
-              <p className="text-gray-600 dark:text-yellow-200 text-sm">Tài khoản được kích hoạt và sẵn sàng sử dụng</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Activate</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Account Is Activated And Ready To Use</p>
             </div>
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl font-bold text-black">4</span>
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Kết nối</h3>
-              <p className="text-gray-600 dark:text-yellow-200 text-sm">Bắt đầu kết nối và sử dụng dịch vụ</p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-yellow-400 mb-2">Connect</h3>
+              <p className="text-gray-600 dark:text-yellow-200 text-sm">Start Connecting And Using Services</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Contact Section */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 dark:text-yellow-400 mb-6">Liên hệ với chúng tôi</h2>
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-yellow-400 mb-6">Contact Us</h2>
               <p className="text-gray-600 dark:text-yellow-200 mb-8 text-lg">
-                Có câu hỏi hoặc cần hỗ trợ? Đội ngũ chuyên gia của chúng tôi luôn sẵn sàng giúp đỡ bạn 24/7.
+                Have Questions Or Need Support? Our Team Of Experts Is Always Ready To Help You 24/7.
               </p>
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
@@ -288,7 +250,7 @@ export default function ServicesPage() {
                   </div>
                   <div>
                     <p className="text-gray-900 dark:text-yellow-400 font-semibold">Hotline</p>
-                    <p className="text-gray-600 dark:text-yellow-200">1900-xxxx (24/7)</p>
+                    <p className="text-gray-600 dark:text-yellow-200">1900-Xxxx (24/7)</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -305,8 +267,8 @@ export default function ServicesPage() {
                     <MapPin className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Địa chỉ</p>
-                    <p className="text-gray-600 dark:text-yellow-200">123 Đường ABC, Quận 1, TP.HCM</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Address</p>
+                    <p className="text-gray-600 dark:text-yellow-200">123 ABC Street, District 1, HCMC</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4">
@@ -314,17 +276,16 @@ export default function ServicesPage() {
                     <Clock className="w-6 h-6 text-black" />
                   </div>
                   <div>
-                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Giờ làm việc</p>
-                    <p className="text-gray-600 dark:text-yellow-200">24/7 - Hỗ trợ không ngừng nghỉ</p>
+                    <p className="text-gray-900 dark:text-yellow-400 font-semibold">Working Hours</p>
+                    <p className="text-gray-600 dark:text-yellow-200">24/7 - Non-Stop Support</p>
                   </div>
                 </div>
               </div>
             </div>
-
             <Card className="bg-gradient-to-br from-yellow-900/20 to-black border-yellow-500/30">
               <CardHeader>
-                <CardTitle className="text-2xl text-gray-900 dark:text-yellow-400">Bắt đầu ngay hôm nay</CardTitle>
-                <CardDescription className="text-gray-600 dark:text-yellow-200">Chọn dịch vụ phù hợp với nhu cầu của bạn</CardDescription>
+                <CardTitle className="text-2xl text-gray-900 dark:text-yellow-400">Start Today</CardTitle>
+                <CardDescription className="text-gray-600 dark:text-yellow-200">Choose A Service That Suits Your Needs</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Button
@@ -333,7 +294,7 @@ export default function ServicesPage() {
                 >
                   <Link href="/listing">
                     <Building2 className="w-4 h-4 mr-2" />
-                    Đăng ký Công ty
+                    Register Company
                   </Link>
                 </Button>
                 <Button
@@ -342,7 +303,7 @@ export default function ServicesPage() {
                 >
                   <Link href="/drivers">
                     <Car className="w-4 h-4 mr-2" />
-                    Đăng ký Tài xế
+                    Register Driver
                   </Link>
                 </Button>
                 <Button
@@ -352,7 +313,7 @@ export default function ServicesPage() {
                 >
                   <Link href="/feedback">
                     <MessageSquare className="w-4 h-4 mr-2" />
-                    Gửi Góp ý
+                    Send Feedback
                   </Link>
                 </Button>
               </CardContent>
@@ -360,7 +321,6 @@ export default function ServicesPage() {
           </div>
         </div>
       </section>
-
     </div>
   )
 }

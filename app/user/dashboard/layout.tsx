@@ -1,36 +1,9 @@
 "use client"
-
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { 
-  Building2, 
-  User, 
-  Megaphone, 
-  CreditCard,
-  Home,
-  ChevronLeft,
-  Menu,
-  X,
-  LogOut,
-  Bell,
-  Settings,
-  Users,
-  FileText
-} from "lucide-react"
-
-const userNavigation = [
-  { name: "Dashboard", href: "/user/dashboard", icon: Home },
-  { name: "Profile", href: "/user/dashboard/profile", icon: User },
-  { name: "Subscriptions", href: "/user/dashboard/subscriptions", icon: CreditCard },
-  { name: "Payments", href: "/user/dashboard/payments", icon: CreditCard },
-  { name: "Leads", href: "/user/dashboard/leads", icon: Users },
-  { name: "Reviews", href: "/user/dashboard/reviews", icon: FileText },
-  { name: "Settings", href: "/user/dashboard/settings", icon: Settings },
-]
-
-// Dynamic navigation based on user role
+import { Button } from "../../../components/ui/button"
+import { Building2, User, CreditCard, Home, Menu, X, LogOut, Bell, Settings, Users, FileText } from "lucide-react"
 const getNavigationByRole = (role: 'company' | 'driver') => {
   const baseNav = [
     { name: "Dashboard", href: "/user/dashboard", icon: Home },
@@ -38,7 +11,6 @@ const getNavigationByRole = (role: 'company' | 'driver') => {
     { name: "Subscriptions", href: `/user/dashboard/${role}/subscriptions`, icon: CreditCard },
     { name: "Payments", href: `/user/dashboard/${role}/payments`, icon: CreditCard },
   ]
-
   if (role === 'company') {
     baseNav.push(
       { name: "Leads", href: "/user/dashboard/company/leads", icon: Users },
@@ -50,12 +22,9 @@ const getNavigationByRole = (role: 'company' | 'driver') => {
       { name: "Reviews", href: "/user/dashboard/driver/reviews", icon: FileText }
     )
   }
-
   baseNav.push({ name: "Settings", href: "/user/dashboard/settings", icon: Settings })
-
   return baseNav
 }
-
 export default function UserDashboardLayout({
   children,
 }: {
@@ -64,30 +33,20 @@ export default function UserDashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
-  
-  // Mock user role - sẽ được lấy từ context/state
-  // Tạm thời set thành 'driver' để test driver dashboard
-  const userRole: 'company' | 'driver' = 'driver'
+  const userRole: 'company' | 'driver' = 'company'
   const navigation = getNavigationByRole(userRole)
-
   const handleLogout = () => {
-    // Clear any stored authentication data
     if (typeof window !== 'undefined') {
-      localStorage.removeItem('auth_token')
-      localStorage.removeItem('user_token')
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('userToken')
       sessionStorage.clear()
     }
-    
-    // Show confirmation message
-    if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-      // Redirect to login page
+    if (confirm('Are You Sure You Want To Logout?')) {
       router.push('/login')
     }
   }
-
   return (
     <div className="min-h-screen bg-background">
-      {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
         <div className="fixed inset-0 bg-black/50" onClick={() => setSidebarOpen(false)} />
         <div className="fixed left-0 top-0 h-full w-64 bg-card border-r border-border">
@@ -119,11 +78,10 @@ export default function UserDashboardLayout({
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  }`}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${isActive
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    }`}
                   onClick={() => setSidebarOpen(false)}
                 >
                   <item.icon className="h-4 w-4" />
@@ -135,13 +93,11 @@ export default function UserDashboardLayout({
           <div className="absolute bottom-4 left-4 right-4">
             <Button variant="outline" className="w-full" onClick={handleLogout}>
               <LogOut className="h-4 w-4 mr-2" />
-              Đăng xuất
+              Logout
             </Button>
           </div>
         </div>
       </div>
-
-      {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
         <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-card border-r border-border px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
@@ -171,11 +127,10 @@ export default function UserDashboardLayout({
                       <li key={item.name}>
                         <Link
                           href={item.href}
-                          className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold transition-colors ${
-                            isActive
-                              ? "bg-primary text-primary-foreground"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                          }`}
+                          className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold transition-colors ${isActive
+                            ? "bg-primary text-primary-foreground"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                            }`}
                         >
                           <item.icon className="h-5 w-5 shrink-0" />
                           {item.name}
@@ -188,17 +143,14 @@ export default function UserDashboardLayout({
               <li className="mt-auto">
                 <Button variant="outline" className="w-full" onClick={handleLogout}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Đăng xuất
+                  Logout
                 </Button>
               </li>
             </ul>
           </nav>
         </div>
       </div>
-
-      {/* Main content */}
       <div className="lg:pl-64">
-        {/* Top bar */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-border bg-background px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <Button
             variant="ghost"
@@ -208,7 +160,6 @@ export default function UserDashboardLayout({
           >
             <Menu className="h-5 w-5" />
           </Button>
-
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             <div className="flex flex-1"></div>
             <div className="flex items-center gap-x-4 lg:gap-x-6">
@@ -228,8 +179,6 @@ export default function UserDashboardLayout({
             </div>
           </div>
         </div>
-
-        {/* Page content */}
         <main className="py-10">
           <div className="px-4 sm:px-6 lg:px-8">
             {children}

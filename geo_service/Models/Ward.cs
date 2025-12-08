@@ -1,4 +1,4 @@
-namespace RadioCabs_BE.Models
+namespace geo_service.Models
 {
     public class Ward
     {
@@ -9,6 +9,6 @@ namespace RadioCabs_BE.Models
 
         // Navigation properties
         public Province Province { get; set; } = null!;
-        public ICollection<ZoneWard> ZoneWards { get; set; } = new List<ZoneWard>();
+
     }
 }

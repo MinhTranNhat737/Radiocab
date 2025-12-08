@@ -1,4 +1,4 @@
-namespace RadioCabs_BE.Models
+namespace geo_service.Models
 {
     public class ZoneWard
     {

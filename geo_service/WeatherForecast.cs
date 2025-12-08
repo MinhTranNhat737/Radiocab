@@ -1,4 +1,4 @@
-namespace RadioCabs_BE
+namespace company_service
 {
     public class WeatherForecast
     {

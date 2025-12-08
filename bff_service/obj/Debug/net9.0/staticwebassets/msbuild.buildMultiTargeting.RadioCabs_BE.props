@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\RadioCabs_BE.props" />
-</Project>

@@ -1,81 +1,78 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Npgsql;
-using RadioCabs_BE.Data;
-using RadioCabs_BE.Models;
-using System.Text.Json.Serialization;
+﻿using common.Data;
+using common.Models;
+using common.Repositories;
+using geo_service.Data;
+using geo_service.Services;
+using geo_service.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
-// Repositories & Services
-using RadioCabs_BE.Repositories;
-using RadioCabs_BE.Services;
-using RadioCabs_BE.Services.Interfaces;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ===== Connection string =====
-var connStr = builder.Configuration.GetConnectionString("Postgres");
+var connStr = builder.Configuration.GetConnectionString("Postgres")
+    ?? throw new Exception("Postgres connection string missing");
 
 // ===== DbContext với enum mapping =====
-builder.Services.AddDbContext<RadiocabsDbContext>(opt =>
-{
-    opt.UseNpgsql(connStr, npgsqlOpt =>
-    {
-        npgsqlOpt.MapEnum<RoleType>("role_type");
-        npgsqlOpt.MapEnum<ActiveFlag>("active_flag");
-        npgsqlOpt.MapEnum<PaymentMethod>("payment_method");
-        npgsqlOpt.MapEnum<OrderStatus>("order_status");
-        npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
-        npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
-        npgsqlOpt.MapEnum<ShiftStatus>("shift_status");
-    });
-    opt.UseSnakeCaseNamingConvention();
-});
+builder.Services.AddDbContext<geo_serviceDbContext>(opt =>
+    opt.UseNpgsql(connStr, o => o.MapAllEnums())
+       .UseSnakeCaseNamingConvention()
+);
+
+builder.Services.AddScoped<DbContext>(sp =>
+    sp.GetRequiredService<geo_serviceDbContext>());
 
 // ===== HealthChecks =====
-builder.Services.AddHealthChecks().AddNpgSql(connStr!, name: "postgres");
+builder.Services.AddHealthChecks().AddNpgSql(connStr, name: "postgres");
 
 // ===== CORS =====
+// Nếu service nội bộ: chỉ cho phép origin của gateway
+var gatewayOrigin = builder.Configuration["Gateway:Origin"] ?? "https://localhost:5000";
 builder.Services.AddCors(o =>
 {
-    o.AddDefaultPolicy(p => p.AllowAnyOrigin()
-                             .AllowAnyHeader()
-                             .AllowAnyMethod());
+    o.AddDefaultPolicy(p => p
+        .WithOrigins(gatewayOrigin)
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials());
 });
 
 // ===== JWT Authentication =====
-var jwtSecretKey = builder.Configuration["Jwt:SecretKey"] ?? "your-secret-key-here-must-be-at-least-32-characters-long";
+var jwtSecretKey = builder.Configuration["Jwt:SecretKey"] ?? throw new Exception("Jwt secret missing");
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "RadioCabs";
-var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "RadioCabs";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "company_service";
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = true; // production true
+    options.SaveToken = false;
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSecretKey)),
-            ValidateIssuer = true,
-            ValidIssuer = jwtIssuer,
-            ValidateAudience = true,
-            ValidAudience = jwtAudience,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero
-        };
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecretKey)),
+        ValidateIssuer = true,
+        ValidIssuer = jwtIssuer,
+        ValidateAudience = true,
+        ValidAudience = jwtAudience,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
+    };
+});
 
 builder.Services.AddAuthorization();
 
 // ===== DI =====
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-builder.Services.AddScoped<IAccountService, AccountService>();
-builder.Services.AddScoped<ICompanyService, CompanyService>();
-builder.Services.AddScoped<IVehicleService, VehicleService>();
-builder.Services.AddScoped<IDrivingOrderService, DrivingOrderService>();
+builder.Services.AddScoped<IUnitOfWork<geo_serviceDbContext>, UnitOfWork<geo_serviceDbContext>>();
+builder.Services.AddScoped<IGeoService, GeoService>();
 
 // ===== MVC / Swagger =====
 builder.Services.AddControllers()
@@ -84,26 +81,34 @@ builder.Services.AddControllers()
         o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         o.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
     });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// Dev-only swagger
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors();
+// Correct middleware order
 app.UseHttpsRedirection();
+
+app.UseRouting();
+
+// CORS must be after Routing and before Auth
+app.UseCors();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Health + DB ping
 app.MapHealthChecks("/healthz", new HealthCheckOptions());
 
-app.MapGet("/ping-db", async (RadiocabsDbContext db) =>
+app.MapGet("/ping-db", async (geo_serviceDbContext db) =>
 {
     var can = await db.Database.CanConnectAsync();
     var now = await db.Database

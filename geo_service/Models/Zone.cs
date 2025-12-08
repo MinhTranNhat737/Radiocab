@@ -1,4 +1,4 @@
-namespace RadioCabs_BE.Models
+namespace geo_service.Models
 {
     public class Zone
     {
@@ -11,9 +11,7 @@ namespace RadioCabs_BE.Models
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
-        public Company Company { get; set; } = null!;
         public Province Province { get; set; } = null!;
         public ICollection<ZoneWard> ZoneWards { get; set; } = new List<ZoneWard>();
-        public ICollection<VehicleZonePreference> VehicleZonePreferences { get; set; } = new List<VehicleZonePreference>();
     }
 }

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "driving_service", "..\drivi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vehicle_service", "..\vehicle_service\vehicle_service.csproj", "{AA603A87-85B7-586F-9B1A-E4A06FEF2EDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "geo_service", "..\geo_service\geo_service.csproj", "{7E30BAEC-21EE-1484-4FB5-F2D31FAB2509}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{AA603A87-85B7-586F-9B1A-E4A06FEF2EDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AA603A87-85B7-586F-9B1A-E4A06FEF2EDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AA603A87-85B7-586F-9B1A-E4A06FEF2EDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E30BAEC-21EE-1484-4FB5-F2D31FAB2509}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E30BAEC-21EE-1484-4FB5-F2D31FAB2509}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E30BAEC-21EE-1484-4FB5-F2D31FAB2509}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E30BAEC-21EE-1484-4FB5-F2D31FAB2509}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

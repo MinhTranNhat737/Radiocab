@@ -1,4 +1,4 @@
-namespace RadioCabs_BE.DTOs
+namespace geo_service.DTOs
 {
     public class PageRequest
     {

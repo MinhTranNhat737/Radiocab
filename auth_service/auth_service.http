@@ -1,0 +1,6 @@
+@auth_service = https://localhost:5001
+
+GET {{auth_service}}/weatherforecast/
+Accept: application/json
+
+###

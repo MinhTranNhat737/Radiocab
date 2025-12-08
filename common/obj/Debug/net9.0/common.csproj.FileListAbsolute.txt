@@ -1,0 +1,14 @@
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\bin\Debug\net9.0\common.deps.json
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\bin\Debug\net9.0\common.runtimeconfig.json
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\bin\Debug\net9.0\common.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\bin\Debug\net9.0\common.pdb
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.csproj.AssemblyReference.cache
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.AssemblyInfoInputs.cache
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.AssemblyInfo.cs
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.csproj.CoreCompileInputs.cache
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\refint\common.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.pdb
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.genruntimeconfig.cache
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\ref\common.dll

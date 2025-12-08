@@ -1,0 +1,1435 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "driving_service",
+    "version": "1.0"
+  },
+  "paths": {
+    "/ping-db": {
+      "get": {
+        "tags": [
+          "driving_service"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/{id}": {
+      "get": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrivingOrderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrivingOrderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateDrivingOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders": {
+      "get": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortDescending",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "CompanyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Role",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ProvinceId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ZoneId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "WardId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DriverId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Weekday",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "WorkDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrivingOrderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrivingOrderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDrivingOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/driver/{driverId}": {
+      "get": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "driverId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortDescending",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "CompanyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Role",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ProvinceId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ZoneId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "WardId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DriverId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Weekday",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "WorkDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/customer/{customerId}": {
+      "get": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "PageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortBy",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SortDescending",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "CompanyId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Role",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ProvinceId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "ZoneId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "WardId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "DriverId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "Weekday",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "WorkDate",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDtoPagedResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/{id}/assign-driver": {
+      "post": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignDriverDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignDriverDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignDriverDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/{id}/status": {
+      "post": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/{id}/complete": {
+      "post": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteOrderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteOrderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompleteOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/DrivingOrders/{id}/cancel": {
+      "post": {
+        "tags": [
+          "DrivingOrders"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelOrderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelOrderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DrivingOrderDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AssignDriverDto": {
+        "type": "object",
+        "properties": {
+          "driverId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "vehicleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "driverScheduleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CancelOrderDto": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompleteOrderDto": {
+        "type": "object",
+        "properties": {
+          "totalKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerCityKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "intercityKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "trafficKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "isRaining": {
+            "type": "boolean"
+          },
+          "waitMinutes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreateDrivingOrderDto": {
+        "required": [
+          "companyId",
+          "fromProvinceId",
+          "modelId",
+          "toProvinceId"
+        ],
+        "type": "object",
+        "properties": {
+          "companyId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerAccountId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "vehicleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "driverAccountId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "modelId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "priceRefId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "driverScheduleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "fromProvinceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toProvinceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pickupAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "dropoffAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "pickupTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "totalKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerCityKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isRaining": {
+            "type": "boolean"
+          },
+          "waitMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baseFare": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficUnitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rainFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityUnitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "otherFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DriverScheduleDto": {
+        "type": "object",
+        "properties": {
+          "scheduleId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "driverAccountId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "workDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "startTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "endTime": {
+            "type": "string",
+            "format": "time"
+          },
+          "vehicleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/ShiftStatus"
+          },
+          "note": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "DrivingOrderDto": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "companyId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "customerAccountId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "vehicleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "driverAccountId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "modelId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "priceRefId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "driverScheduleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "fromProvinceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "toProvinceId": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "pickupAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "dropoffAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "pickupTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dropoffTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "totalKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "innerCityKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "intercityKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "trafficKm": {
+            "type": "number",
+            "format": "double"
+          },
+          "isRaining": {
+            "type": "boolean"
+          },
+          "waitMinutes": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "baseFare": {
+            "type": "number",
+            "format": "double"
+          },
+          "trafficUnitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "trafficFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "rainFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "intercityUnitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "intercityFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "otherFee": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double"
+          },
+          "fareBreakdown": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "driverSchedule": {
+            "$ref": "#/components/schemas/DriverScheduleDto"
+          }
+        },
+        "additionalProperties": false
+      },
+      "DrivingOrderDtoPagedResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DrivingOrderDto"
+            },
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "page": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          },
+          "hasPreviousPage": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "hasNextPage": {
+            "type": "boolean",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OrderStatus": {
+        "enum": [
+          "NEW",
+          "ASSIGNED",
+          "ONGOING",
+          "DONE",
+          "CANCELLED",
+          "FAILED"
+        ],
+        "type": "string"
+      },
+      "PaymentMethod": {
+        "enum": [
+          "CASH",
+          "CARD",
+          "WALLET",
+          "BANK"
+        ],
+        "type": "string"
+      },
+      "ShiftStatus": {
+        "enum": [
+          "PLANNED",
+          "ON",
+          "OFF",
+          "CANCELLED",
+          "COMPLETED"
+        ],
+        "type": "string"
+      },
+      "UpdateDrivingOrderDto": {
+        "type": "object",
+        "properties": {
+          "vehicleId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "driverAccountId": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "pickupAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "dropoffAddress": {
+            "type": "string",
+            "nullable": true
+          },
+          "pickupTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "dropoffTime": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          },
+          "totalKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "innerCityKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficKm": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "isRaining": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "waitMinutes": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "baseFare": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficUnitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "trafficFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "rainFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityUnitPrice": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "intercityFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "otherFee": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "totalAmount": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "fareBreakdown": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentMethod": {
+            "$ref": "#/components/schemas/PaymentMethod"
+          },
+          "paidAt": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UpdateStatusDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "$ref": "#/components/schemas/OrderStatus"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

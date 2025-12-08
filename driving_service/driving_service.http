@@ -1,0 +1,6 @@
+@driving_service = http://localhost:5001
+
+GET {{driving_service}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,6 @@
+@RadioCabs_BE_HostAddress = http://localhost:5253
+
+GET {{RadioCabs_BE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

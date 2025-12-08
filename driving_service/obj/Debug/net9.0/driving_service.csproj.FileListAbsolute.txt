@@ -146,3 +146,4 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\driving_service\obj\Debug\net9.0
 C:\Users\bkdcd\Documents\Project3_Group1\server\driving_service\obj\Debug\net9.0\driving_service.genruntimeconfig.cache
 C:\Users\bkdcd\Documents\Project3_Group1\server\driving_service\obj\Debug\net9.0\ref\driving_service.dll
 C:\Users\bkdcd\Documents\Project3_Group1\server\driving_service\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\Users\bkdcd\Documents\Project3_Group1\server\driving_service\obj\Debug\net9.0\driving_service.sourcelink.json

@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using vehicle_service.Data;
+﻿using common.Data;
 using common.Models;
-using System.Text.Json.Serialization;
+using common.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using common.Repositories;
+using System.Text.Json.Serialization;
+using vehicle_service.Data;
 using vehicle_service.Services;
 using vehicle_service.Services.Interfaces;
 
@@ -18,19 +19,9 @@ var connStr = builder.Configuration.GetConnectionString("Postgres")
 
 // ===== DbContext với enum mapping =====
 builder.Services.AddDbContext<vehicle_serviceDBContext>(opt =>
-{
-    opt.UseNpgsql(connStr, npgsqlOpt =>
-    {
-        npgsqlOpt.MapEnum<RoleType>("role_type");
-        npgsqlOpt.MapEnum<ActiveFlag>("active_flag");
-        npgsqlOpt.MapEnum<PaymentMethod>("payment_method");
-        npgsqlOpt.MapEnum<OrderStatus>("order_status");
-        npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
-        npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
-        npgsqlOpt.MapEnum<ShiftStatus>("shift_status");
-    });
-    opt.UseSnakeCaseNamingConvention();
-});
+    opt.UseNpgsql(connStr, o => o.MapAllEnums())
+       .UseSnakeCaseNamingConvention()
+);
 builder.Services.AddScoped<DbContext>(sp =>
     sp.GetRequiredService<vehicle_serviceDBContext>());
 
@@ -79,8 +70,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // ===== DI =====
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork<vehicle_serviceDBContext>, UnitOfWork<vehicle_serviceDBContext> >();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
 // ===== MVC / Swagger =====

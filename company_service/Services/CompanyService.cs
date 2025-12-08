@@ -1,18 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+using common.Models;
+using common.Repositories;
+using company_service.Data;
 using company_service.DTOs;
 using company_service.Models;
-using common.Repositories;
 using company_service.Services.Interfaces;
-using common.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace company_service.Services
 {
     public class CompanyService : ICompanyService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<company_serviceDbContext> _unitOfWork;
         private readonly ILogger<CompanyService> _logger;
 
-        public CompanyService(IUnitOfWork unitOfWork, ILogger<CompanyService> logger)
+        public CompanyService(IUnitOfWork<company_serviceDbContext> unitOfWork, ILogger<CompanyService> logger)
         {
             _unitOfWork = unitOfWork;
             _logger = logger;

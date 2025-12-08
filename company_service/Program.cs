@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using company_service.Data;
+﻿using common.Data;
 using common.Models;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using common.Repositories;
+using company_service.Data;
 using company_service.Services;
 using company_service.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,19 +19,9 @@ var connStr = builder.Configuration.GetConnectionString("Postgres")
 
 // ===== DbContext với enum mapping =====
 builder.Services.AddDbContext<company_serviceDbContext>(opt =>
-{
-    opt.UseNpgsql(connStr, npgsqlOpt =>
-    {
-        npgsqlOpt.MapEnum<RoleType>("role_type");
-        npgsqlOpt.MapEnum<ActiveFlag>("active_flag");
-        npgsqlOpt.MapEnum<PaymentMethod>("payment_method");
-        npgsqlOpt.MapEnum<OrderStatus>("order_status");
-        npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
-        npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
-        npgsqlOpt.MapEnum<ShiftStatus>("shift_status");
-    });
-    opt.UseSnakeCaseNamingConvention();
-});
+    opt.UseNpgsql(connStr, o => o.MapAllEnums())
+       .UseSnakeCaseNamingConvention()
+);
 
 builder.Services.AddScoped<DbContext>(sp =>
     sp.GetRequiredService<company_serviceDbContext>());
@@ -80,8 +71,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization();
 
 // ===== DI =====
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<IUnitOfWork<company_serviceDbContext>, UnitOfWork<company_serviceDbContext>>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 // ===== MVC / Swagger =====

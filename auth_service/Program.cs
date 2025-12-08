@@ -1,14 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using auth_service.Data;
-using common.Models;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using common.Repositories;
+﻿using auth_service.Data;
 using auth_service.Services;
 using auth_service.Services.Interfaces;
+using common.Data;
+using common.Models;
+using common.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,27 +19,9 @@ var connStr = builder.Configuration.GetConnectionString("Postgres")
 
 // ===== DbContext với enum mapping =====
 builder.Services.AddDbContext<auth_serviceDBContext>(opt =>
-    opt.UseNpgsql(connStr)
+    opt.UseNpgsql(connStr, o => o.MapAllEnums())
        .UseSnakeCaseNamingConvention()
 );
-builder.Services.AddDbContext<CommonDbContext>(opt =>
-{
-
-    opt.UseNpgsql(connStr, npgsqlOpt =>
-    {
-        npgsqlOpt.MapEnum<RoleType>("role_type");
-        npgsqlOpt.MapEnum<ActiveFlag>("active_flag");
-        npgsqlOpt.MapEnum<PaymentMethod>("payment_method");
-        npgsqlOpt.MapEnum<OrderStatus>("order_status");
-        npgsqlOpt.MapEnum<FuelType>("fuel_type_enum");
-        npgsqlOpt.MapEnum<VehicleCategory>("vehicle_category_enum");
-        npgsqlOpt.MapEnum<ShiftStatus>("shift_status");
-    });
-    opt.UseSnakeCaseNamingConvention();
-}
-);
-
-
 // ===== HealthChecks =====
 builder.Services.AddHealthChecks().AddNpgSql(connStr, name: "postgres");
 
@@ -85,7 +68,6 @@ builder.Services.AddAuthorization();
 
 // ===== DI =====
 builder.Services.AddScoped<IUnitOfWork<auth_serviceDBContext>, UnitOfWork<auth_serviceDBContext>>();
-builder.Services.AddScoped(typeof(IUnitOfWork<CommonDbContext>), typeof(UnitOfWork<CommonDbContext>));
 builder.Services.AddScoped<IAccountService, AccountService>();
 
 // ===== MVC / Swagger =====

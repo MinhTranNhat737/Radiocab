@@ -12,11 +12,11 @@ namespace vehicle_service.Services
 {
     public class VehicleService : IVehicleService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<vehicle_serviceDBContext> _unitOfWork;
         private readonly DbContext _context;
         private readonly ILogger<VehicleService> _logger;
 
-        public VehicleService(IUnitOfWork unitOfWork, DbContext context, ILogger<VehicleService> logger)
+        public VehicleService(IUnitOfWork<vehicle_serviceDBContext> unitOfWork, DbContext context, ILogger<VehicleService> logger)
         {
             _unitOfWork = unitOfWork;
             _context = context;

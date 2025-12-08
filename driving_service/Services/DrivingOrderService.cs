@@ -1,17 +1,18 @@
-using Microsoft.EntityFrameworkCore;
+using common.Models;
+using common.Repositories;
+using driving_service.Data;
 using driving_service.DTOs;
 using driving_service.Models;
-using common.Repositories;
 using driving_service.Services.Interfaces;
-using common.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace driving_service.Services
 {
     public class DrivingOrderService : IDrivingOrderService
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork<driving_serviceDBContext> _unitOfWork;
 
-        public DrivingOrderService(IUnitOfWork unitOfWork)
+        public DrivingOrderService(IUnitOfWork<driving_serviceDBContext> unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

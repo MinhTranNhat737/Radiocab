@@ -12,3 +12,4 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\refint\c
 C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.pdb
 C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.genruntimeconfig.cache
 C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\ref\common.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\common\obj\Debug\net9.0\common.sourcelink.json

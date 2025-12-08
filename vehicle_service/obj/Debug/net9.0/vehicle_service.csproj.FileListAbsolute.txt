@@ -146,3 +146,4 @@ C:\Users\bkdcd\Documents\Project3_Group1\server\vehicle_service\obj\Debug\net9.0
 C:\Users\bkdcd\Documents\Project3_Group1\server\vehicle_service\obj\Debug\net9.0\vehicle_servicec.pdb
 C:\Users\bkdcd\Documents\Project3_Group1\server\vehicle_service\obj\Debug\net9.0\vehicle_service.genruntimeconfig.cache
 C:\Users\bkdcd\Documents\Project3_Group1\server\vehicle_service\obj\Debug\net9.0\ref\vehicle_servicec.dll
+C:\Users\bkdcd\Documents\Project3_Group1\server\vehicle_service\obj\Debug\net9.0\vehicle_service.sourcelink.json
